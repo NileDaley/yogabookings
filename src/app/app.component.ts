@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { DataService } from './data.service'
+import { DataService } from './services/data.service'
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,10 +8,10 @@ import { DataService } from './data.service'
 })
 export class AppComponent {
   users: Array<any>;
-  title = 'app';
 
   constructor(private _dataService: DataService) {
     this._dataService.getUsers()
       .subscribe(res => this.users = res);
   }
+
 }
