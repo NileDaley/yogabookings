@@ -1,5 +1,20 @@
-<h1>Our MongoDb is Working!</h1>
+<app-navbar></app-navbar>
+<section class="hero is-medium has-bg-image">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title has-text-white">
+        Primary bold title
+      </h1>
+      <h2 class="subtitle has-text-white">
+        Primary bold subtitle
+      </h2>
+    </div>
+  </div>
+</section>
 
+
+<h1 *ngIf="users" class="title">Our MongoDb is Working!<i class="fa fa-thumbs-o-up"></i></h1>
+<h1 ngElse class="title">Our MongoDb is Broken!<i class="fa fa-thumbs-o-down"></i></h1>
 <ul>
   <li *ngFor="let user of users">{{user.name}}</li>
 </ul>

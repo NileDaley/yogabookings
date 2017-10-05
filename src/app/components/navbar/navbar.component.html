@@ -1,0 +1,35 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      YogaBookings
+    </a>
+
+    <button class="button navbar-burger" [ngClass]="{'is-active': navActive}" (click)="toggleNav()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="navbar-menu" [ngClass]="{'is-active': navActive}">
+    <div class="navbar-start">
+      <a href="/" class="navbar-item">
+        <i class="fa fa-home"></i> Home
+      </a>
+      <a href="/about" class="navbar-item">
+        <i class="fa fa-search"></i> Browse
+      </a>
+      <a href="/contact" class="navbar-item">
+        <i class="fa fa-phone"></i> Contact
+      </a>
+      <a href="/" class="navbar-item"></a>
+    </div>
+    <div class="navbar-end">
+      <a class="navbar-item" href="/login">
+          <i class="fa fa-sign-in"></i> Login
+        </a>
+      <a class="navbar-item" href="/register">
+          <i class="fa fa-user"></i> Register
+        </a>
+    </div>
+  </div>
+</nav>
