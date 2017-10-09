@@ -1,0 +1,20 @@
+<section class="hero is-medium is-info is-bold">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title has-text-white">
+        Primary bold title
+      </h1>
+      <h2 class="subtitle has-text-white">
+        Primary bold subtitle
+      </h2>
+    </div>
+  </div>
+</section>
+
+<h1 class="title">
+  Our MongoDb is {{users ? 'Working' : 'Broken'}}
+  <i class="fa" [ngClass]="{'fa-thumbs-o-up': users, 'fa-thumbs-o-down': !users}"></i>
+</h1>
+<ul>
+  <li *ngFor="let user of users">{{user.name}}</li>
+</ul>

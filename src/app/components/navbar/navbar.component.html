@@ -12,22 +12,21 @@
   </div>
   <div class="navbar-menu" [ngClass]="{'is-active': navActive}">
     <div class="navbar-start">
-      <a href="/" class="navbar-item">
+      <a routerLink="/" routerLinkActive="has-text-info" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
         <i class="fa fa-home"></i> Home
       </a>
-      <a href="/about" class="navbar-item">
+      <a routerLink="/about" routerLinkActive="has-text-info" class="navbar-item">
         <i class="fa fa-search"></i> Browse
       </a>
-      <a href="/contact" class="navbar-item">
+      <a routerLink="/contact" routerLinkActive="has-text-info" class="navbar-item">
         <i class="fa fa-phone"></i> Contact
       </a>
-      <a href="/" class="navbar-item"></a>
     </div>
     <div class="navbar-end">
-      <a class="navbar-item" href="/login">
+      <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-info">
           <i class="fa fa-sign-in"></i> Login
         </a>
-      <a class="navbar-item" href="/register">
+      <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-info">
           <i class="fa fa-user"></i> Register
         </a>
     </div>
