@@ -30,7 +30,7 @@ let response = {
 router.get('/users', (req, res) => {
   connection((db) => {
     db.collection('users')
-      .find()
+      .find({"role": 0})
       .toArray()
       .then((users) => {
         response.data = users
@@ -38,6 +38,20 @@ router.get('/users', (req, res) => {
       })
       .catch((err) => {
         sendError(err, res)
+      })
+  })
+})
+
+router.get('/locations', (req,res) => {
+  connection((db) => {
+    db.collection('locations')
+      .find()
+      .toArray()
+      .then((locations) => {
+        response.data = locations
+        res.json(response)
+      }).catch((err) => {
+        sendError(err,res)
       })
   })
 })

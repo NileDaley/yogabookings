@@ -8,7 +8,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "watch": "ng build --watch"
+    "watch": "ng build --watch",
+    "dev": "npm run watch & npm start"
   },
   "private": true,
   "dependencies": {

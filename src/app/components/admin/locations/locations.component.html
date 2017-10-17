@@ -1,0 +1,43 @@
+<div class="columns">
+  <div class="column" *ngFor="let loc of locations">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{loc.name}}
+        </p>
+      </header>
+      <div class="card-content">
+        <div class="columns">
+          <p class="label column is-4">Address</p>
+          <div class="column is-8">
+            <p *ngFor="let line of prettifyAddress(loc.address)">
+              {{line}}
+            </p>
+          </div>
+        </div>
+        <div class="columns ">
+          <p class="label column is-4 ">Email Address</p>
+          <div class="column is-8 ">
+            {{loc.email}}
+          </div>
+        </div>
+        <div class="columns ">
+          <p class="label column is-4 ">Phone Number</p>
+          <div class="column is-8 ">
+            {{loc.phone}}
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer ">
+        <a href="tel:{{loc.phone}} " class="card-footer-item has-text-info ">
+          <span class="icon "><i class="fa fa-phone "></i></span>
+          Phone
+        </a>
+        <a href="mailto:{{loc.email}} " class="card-footer-item has-text-info ">
+          <span class="icon "><i class="fa fa-envelope "></i></span>
+          Email
+        </a>
+      </footer>
+    </div>
+  </div>
+</div>
