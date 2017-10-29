@@ -11,12 +11,12 @@ export class DataService {
   constructor(private _http: Http) { }
 
   getCustomers() {
-    return this._http.get("/api/users")
+    return this._http.get('/api/users')
       .map(result => this.result = result.json().data);
   }
 
   getLocations() {
-    return this._http.get("api/locations")
+    return this._http.get('api/locations')
       .map(result => this.result = result.json().data);
   }
 

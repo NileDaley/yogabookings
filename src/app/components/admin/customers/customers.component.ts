@@ -5,7 +5,7 @@ import { DataService } from 'app/services/data.service';
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
-export class CustomersComponent{
+export class CustomersComponent {
 
   customers: Array<any>;
   constructor(private _dataService: DataService) {
