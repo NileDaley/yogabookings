@@ -1,23 +1,20 @@
 import { Injectable } from '@angular/core';
-
-import { Http, Headers, RequestOptions } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class DataService {
 
-  result: any;
-
-  constructor(private _http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getCustomers() {
-    return this._http.get('/api/users')
-      .map(result => this.result = result.json().data);
+    return this.http.get('/api/users');
   }
 
   getLocations() {
-    return this._http.get('api/locations')
-      .map(result => this.result = result.json().data);
+    return this.http.get('/api/locations');
   }
 
+  updateLocation(location) {
+    return this.http.post('/api/locations/update', location);
+  }
 }

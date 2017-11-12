@@ -9,6 +9,6 @@ export class CustomersComponent {
 
   customers: Array<any>;
   constructor(private _dataService: DataService) {
-    this._dataService.getCustomers().subscribe(res => this.customers = res)
+    this._dataService.getCustomers().subscribe(res => this.customers = res['data']);
   }
 }
