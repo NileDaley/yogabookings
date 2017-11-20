@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.scss']
 })
 
-export class NavbarComponent{
+export class NavbarComponent {
 
   title = 'app';
   navActive = false;
