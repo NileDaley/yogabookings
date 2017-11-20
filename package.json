@@ -13,7 +13,7 @@
     "watch": "ng build --watch",
     "dev": "npm run all",
     "all": "run-p watch start",
-    "postinstall": "ng build"
+    "postinstall": "ng build --aot --env=prod"
   },
   "engines": {
     "node": "8.8.1"
@@ -21,6 +21,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^4.4.6",
+    "@angular/cli": "^1.5.2",
     "@angular/common": "^4.4.6",
     "@angular/compiler": "^4.4.6",
     "@angular/core": "^4.4.6",
@@ -37,11 +38,10 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "1.1.3",
     "@angular/compiler-cli": "^4.4.6",
     "@angular/language-service": "^4.4.6",
     "@types/jasmine": "2.5.45",
-    "@types/node": "^6.0.90",
+    "@types/node": "^6.0.92",
     "codelyzer": "~3.0.1",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
