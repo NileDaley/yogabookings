@@ -1,3 +1,15 @@
+<div *ngIf="messages.length > 0">
+  <article *ngFor="let m of messages" [ngClass]="{'is-danger': m.type === 'error', 'is-success': m.type === 'success'}" class="message">
+    <div class="message-header">
+      <p></p>
+      <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    </div>
+    <div class="message-body">
+      <p>{{m.message}}</p>
+    </div>
+  </article>
+</div>
+
 <div class="columns">
 
   <div class="column" *ngIf="loading">

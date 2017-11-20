@@ -1,10 +1,9 @@
-export class Location {
+export class Pristine {
   _id: String;
   name: String;
   address: String;
   email: String;
   phone: String;
-  editing: Boolean = false;
 
   constructor(id, name, address, email, phone) {
     this._id = id;
