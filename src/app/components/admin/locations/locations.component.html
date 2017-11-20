@@ -1,0 +1,94 @@
+<div *ngIf="messages.length > 0">
+  <article *ngFor="let m of messages" [ngClass]="{'is-danger': m.type === 'error', 'is-success': m.type === 'success'}" class="message">
+    <div class="message-header">
+      <p></p>
+      <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    </div>
+    <div class="message-body">
+      <p>{{m.message}}</p>
+    </div>
+  </article>
+</div>
+
+<div class="columns">
+
+  <div class="column" *ngIf="loading">
+    <div class="section has-text-centered">
+      <h1 class="title has-text-info">Loading...</h1>
+      <span class="icon"><i class="fa fa-spinner fa-spin fa-3x has-text-info"></i></span>
+    </div>
+  </div>
+
+  <div class="column" *ngFor="let loc of locations">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{loc.name}}
+        </p>
+      </header>
+
+      <div class="card-content" *ngIf="!loc.editing; else editing">
+        <div class="columns">
+          <p class="label column is-4">Address</p>
+          <div class="column is-8">
+            <p *ngFor="let line of prettifyAddress(loc.address)">
+              {{line}}
+            </p>
+          </div>
+        </div>
+        <div class="columns ">
+          <p class="label column is-4 ">Email Address</p>
+          <div class="column is-8 ">
+            {{loc.email}}
+          </div>
+        </div>
+        <div class="columns ">
+          <p class="label column is-4 ">Phone Number</p>
+          <div class="column is-8 ">
+            {{loc.phone}}
+          </div>
+        </div>
+      </div>
+
+      <ng-template #editing class="card-content">
+        <div class="card-content">
+          <form (submit)="log($event)"></form>
+          <div class="columns">
+            <p class="label column is-4">Address</p>
+            <div class="column is-8">
+              <input class="input form-control" type="text" [value]="line.trim()" *ngFor="let line of prettifyAddress(loc.address)"/>
+            </div>
+          </div>
+          <div class="columns">
+            <p class="label column is-4 ">Email Address</p>
+            <div class="column is-8 ">
+              <input class="input form-control" type="email" [value]="loc.email" [(ngModel)]="loc.email" />
+            </div>
+          </div>
+          <div class="columns">
+            <p class="label column is-4 ">Phone Number</p>
+            <div class="column is-8 ">
+              <input class="input form-control" type="phone" [value]="loc.phone">
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <footer class="card-footer">
+        <a *ngIf="!loc.editing" (click)="toggleEdit(loc._id)" class="card-footer-item has-text-info">
+          <span class="icon "><i class="fa fa-edit "></i></span>
+          Edit
+        </a>
+        <a *ngIf="loc.editing" (click)="discardEdit(loc._id)" class="card-footer-item has-text-danger">
+          <span class="icon "><i class="fa fa-times"></i></span>
+          Discard
+        </a>
+        <a (click)="updateLocation(loc._id)" *ngIf="loc.editing" class="card-footer-item has-text-success">
+          <span class="icon "><i class="fa fa-check "></i></span>
+          Save
+        </a>
+      </footer>
+
+    </div>
+  </div>
+</div>

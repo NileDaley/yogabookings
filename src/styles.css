@@ -1,3 +1,8 @@
 .fa{
   margin: .5em;
 }
+
+/* Center card header title */
+.card-header-title{
+  flex-direction: column;
+}
