@@ -2,6 +2,7 @@
   "name": "yoga",
   "version": "0.0.0",
   "license": "MIT",
+  "main": "server.js",
   "scripts": {
     "ng": "ng",
     "start": "serve",
@@ -13,7 +14,7 @@
     "watch": "ng build --watch",
     "dev": "npm run all",
     "all": "run-p watch start",
-    "postinstall": "ng build --env=prod"
+    "postinstall": "ng build --aot --env=prod"
   },
   "engines": {
     "node": "8.8.1"
@@ -24,6 +25,7 @@
     "@angular/cli": "^1.5.2",
     "@angular/common": "^4.4.6",
     "@angular/compiler": "^4.4.6",
+    "@angular/compiler-cli": "^4.4.6",
     "@angular/core": "^4.4.6",
     "@angular/forms": "^4.4.6",
     "@angular/http": "^4.4.6",
@@ -38,7 +40,6 @@
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "^4.4.6",
     "@angular/language-service": "^4.4.6",
     "@types/jasmine": "2.5.45",
     "@types/node": "^6.0.92",
