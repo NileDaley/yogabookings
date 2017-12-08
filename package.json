@@ -22,7 +22,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^4.4.6",
-    "@angular/cli": "^1.5.2",
+    "@angular/cli": "^1.5.5",
     "@angular/common": "^4.4.6",
     "@angular/compiler": "^4.4.6",
     "@angular/compiler-cli": "^4.4.6",
@@ -36,7 +36,7 @@
     "core-js": "^2.4.1",
     "express": "^4.16.2",
     "mongodb": "^2.2.33",
-    "rxjs": "^5.5.2",
+    "rxjs": "^5.5.3",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "karma-chrome-launcher": "~2.1.1",
     "karma-cli": "~1.0.1",
     "karma-coverage-istanbul-reporter": "^1.2.1",
-    "karma-jasmine": "~1.1.0",
+    "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "npm-run-all": "^4.1.2",
     "ts-node": "~3.0.4",
