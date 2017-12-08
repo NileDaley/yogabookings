@@ -1,11 +1,11 @@
 export class Pristine {
-  _id: String;
-  name: String;
-  address: String;
-  email: String;
-  phone: String;
+  _id: string;
+  name: string;
+  address: Array<string>;
+  email: string;
+  phone: string;
 
-  constructor(id, name, address, email, phone) {
+  constructor(id: string, name: string, address: Array<string>, email: string, phone: string) {
     this._id = id;
     this.name = name;
     this.address = address;

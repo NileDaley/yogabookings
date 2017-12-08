@@ -12,47 +12,43 @@ export class LocationsComponent {
 
   locations: Array<Location> = [];
   pristineLocations: Array<Pristine> = [];
-  loading: Boolean = true;
+  loading = true;
   messages = [];
 
   constructor(private _dataService: DataService) {
     this._dataService.getLocations().subscribe(res => {
       const data: Array<any> = res['data'];
-      data.forEach(el => {
-        const pristine = new Pristine(el._id, el.name, el.address, el.email, el.phone);
-        const location = new Location(el._id, el.name, el.address, el.email, el.phone);
-        this.pristineLocations.push(pristine);
-        this.locations.push(location);
-      });
+      this.pristineLocations = data.map(p =>
+        new Pristine(p._id, p.name, p.address, p.email, p.phone)
+      );
+      this.locations = this.pristineLocations.map(l =>
+        new Location(l._id, l.name, l.address, l.email, l.phone)
+      );
       this.loading = false;
     });
   }
 
-  prettifyAddress(address: String): Array<String> {
-    return address.split(',');
+  getLocation(list: Array<any>, loc_id: string) {
+    return list.find(l => l._id === loc_id);
   }
 
-  getLocation(loc_id: String) {
-    return this.locations.find(l => l._id === loc_id);
-  }
-
-  toggleEdit(loc_id: String) {
-    const loc = this.getLocation(loc_id);
+  toggleEdit(loc_id: string) {
+    const loc = this.getLocation(this.locations, loc_id);
     loc.editing = !loc.editing;
   }
 
-  discardEdit(loc_id) {
+  discardEdit(loc_id: string) {
     this.toggleEdit(loc_id);
-    const pristine = this.pristineLocations.find(el => el._id === loc_id);
-    const loc = this.getLocation(loc_id);
+    const pristine = this.getLocation(this.pristineLocations, loc_id);
+    const loc = this.getLocation(this.locations, loc_id);
     loc.address = pristine.address;
     loc.email = pristine.email;
     loc.phone = pristine.phone;
     loc.editing = false;
   }
 
-  updateLocation(loc_id) {
-    const loc = this.getLocation(loc_id);
+  updateLocation(loc_id: string) {
+    const loc = this.getLocation(this.locations, loc_id);
     const newLoc = {
       _id: loc._id,
       name: loc.name,
@@ -64,7 +60,7 @@ export class LocationsComponent {
 
       if (res['matched'] > 0) {
 
-        const pristine = this.pristineLocations.find(l => l._id === newLoc._id);
+        const pristine = this.getLocation(this.pristineLocations, newLoc._id);
         pristine.address = newLoc.address;
         pristine.email = newLoc.email;
         pristine.phone = newLoc.phone;
@@ -75,14 +71,11 @@ export class LocationsComponent {
             'message': `${newLoc.name} was updated successfully`,
             'type': 'success'
           });
-
         } else {
-
           this.messages.push({
-            'message': `${newLoc.name} was not changed`,
-            'type': 'success'
+            'message': `None of the details for ${newLoc.name} were changed`,
+            'type': 'warning'
           });
-
         }
 
       } else {

@@ -1,13 +1,8 @@
 <div *ngIf="messages.length > 0">
-  <article *ngFor="let m of messages" [ngClass]="{'is-danger': m.type === 'error', 'is-success': m.type === 'success'}" class="message">
-    <div class="message-header">
-      <p></p>
-      <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
-    </div>
-    <div class="message-body">
-      <p>{{m.message}}</p>
-    </div>
-  </article>
+  <div *ngFor="let m of messages" [ngClass]="{'is-danger': m.type === 'error', 'is-success': m.type === 'success', 'is-warning': m.type === 'warning'}" class="notification">
+    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    {{m.message}}
+  </div>
 </div>
 
 <div class="columns">
@@ -31,7 +26,7 @@
         <div class="columns">
           <p class="label column is-4">Address</p>
           <div class="column is-8">
-            <p *ngFor="let line of prettifyAddress(loc.address)">
+            <p *ngFor="let line of loc.address">
               {{line}}
             </p>
           </div>
@@ -56,19 +51,19 @@
           <div class="columns">
             <p class="label column is-4">Address</p>
             <div class="column is-8">
-              <input class="input form-control" type="text" [value]="line.trim()" *ngFor="let line of prettifyAddress(loc.address)"/>
+              <input class="input form-control" type="text" [(ngModel)]="loc.address[i]" *ngFor="let line of loc.address; let i = index"/>
             </div>
           </div>
           <div class="columns">
             <p class="label column is-4 ">Email Address</p>
             <div class="column is-8 ">
-              <input class="input form-control" type="email" [value]="loc.email" [(ngModel)]="loc.email" />
+              <input class="input form-control" type="email" [(ngModel)]="loc.email" />
             </div>
           </div>
           <div class="columns">
             <p class="label column is-4 ">Phone Number</p>
             <div class="column is-8 ">
-              <input class="input form-control" type="phone" [value]="loc.phone">
+              <input class="input form-control" type="phone" [(ngModel)]="loc.phone">
             </div>
           </div>
         </div>

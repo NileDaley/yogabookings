@@ -5,15 +5,14 @@
   "main": "server.js",
   "scripts": {
     "ng": "ng",
-    "start": "serve",
+    "start": "npm run serve",
     "serve": "node server",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "tslint": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
     "watch": "ng build --watch",
-    "dev": "npm run all",
-    "all": "run-p watch start",
+    "dev": "run-p watch start",
     "postinstall": "ng build --aot --env=prod"
   },
   "engines": {
@@ -22,7 +21,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^4.4.6",
-    "@angular/cli": "^1.5.5",
+    "@angular/cli": "^1.6.0",
     "@angular/common": "^4.4.6",
     "@angular/compiler": "^4.4.6",
     "@angular/compiler-cli": "^4.4.6",
@@ -36,7 +35,7 @@
     "core-js": "^2.4.1",
     "express": "^4.16.2",
     "mongodb": "^2.2.33",
-    "rxjs": "^5.5.3",
+    "rxjs": "^5.5.5",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {

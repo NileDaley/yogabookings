@@ -1,4 +1,4 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" routerLink="/">
       YogaBookings
@@ -12,21 +12,21 @@
   </div>
   <div class="navbar-menu" [ngClass]="{'is-active': navActive}">
     <div class="navbar-start">
-      <a routerLink="/" routerLinkActive="has-text-info" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
+      <a routerLink="/" routerLinkActive="has-text-warning" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
         <span class="icon"><i class="fa fa-home"></i></span> Home
       </a>
-      <a routerLink="/about" routerLinkActive="has-text-info" class="navbar-item">
+      <a routerLink="/about" routerLinkActive="has-text-warning" class="navbar-item">
         <span class="icon"><i class="fa fa-search"></i></span> Browse
       </a>
-      <a routerLink="/contact" routerLinkActive="has-text-info" class="navbar-item">
+      <a routerLink="/contact" routerLinkActive="has-text-warning" class="navbar-item">
         <span class="icon"><i class="fa fa-phone"></i></span> Contact
       </a>
     </div>
     <div class="navbar-end">
-      <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-info">
+      <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-warning">
         <span class="icon"><i class="fa fa-sign-in"></i></span> Login
       </a>
-      <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-info">
+      <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-warning">
         <span class="icon"><i class="fa fa-user"></i></span> Register
       </a>
     </div>
