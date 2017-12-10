@@ -4,7 +4,7 @@
       YogaBookings
     </a>
 
-    <button class="button navbar-burger" [ngClass]="{'is-active': navActive}" (click)="toggleNav()">
+    <button class="button navbar-burger is-dark" [ngClass]="{'is-active': navActive}" (click)="toggleNav()">
       <span></span>
       <span></span>
       <span></span>
@@ -12,21 +12,32 @@
   </div>
   <div class="navbar-menu" [ngClass]="{'is-active': navActive}">
     <div class="navbar-start">
-      <a routerLink="/" routerLinkActive="has-text-warning" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
+      <a routerLink="/" routerLinkActive="has-text-primary" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
         <span class="icon"><i class="fa fa-home"></i></span> Home
       </a>
-      <a routerLink="/about" routerLinkActive="has-text-warning" class="navbar-item">
+      <a routerLink="/about" routerLinkActive="has-text-primary" class="navbar-item">
         <span class="icon"><i class="fa fa-search"></i></span> Browse
       </a>
-      <a routerLink="/contact" routerLinkActive="has-text-warning" class="navbar-item">
+      <a routerLink="/contact" routerLinkActive="has-text-primary" class="navbar-item">
         <span class="icon"><i class="fa fa-phone"></i></span> Contact
       </a>
+      <div *ngIf="showAdminButtons" class="navbar-item has-dropdown is-hoverable">
+        <a routerLink="/admin" routerLinkActive="has-text-primary" class="navbar-link">
+          <span class="icon"><i class="fa fa-lock"></i></span> Admin
+        </a>
+        <div class="navbar-dropdown">
+          <a routerLink="/admin/customers" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-users"></i></span> Customers</a>
+          <a routerLink="/admin/tutors" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-graduation-cap"></i></span>Tutors</a>
+          <a routerLink="/admin/classes" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-calendar"></i></span> Classes</a>
+          <a routerLink="/admin/locations" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-building"></i></span> Locations</a>
+        </div>
+      </div>
     </div>
     <div class="navbar-end">
-      <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-warning">
+      <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-primary">
         <span class="icon"><i class="fa fa-sign-in"></i></span> Login
       </a>
-      <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-warning">
+      <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-primary">
         <span class="icon"><i class="fa fa-user"></i></span> Register
       </a>
     </div>

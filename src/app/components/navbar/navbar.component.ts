@@ -10,6 +10,7 @@ export class NavbarComponent {
 
   title = 'app';
   navActive = false;
+  showAdminButtons = true;
 
   toggleNav() {
     this.navActive = !this.navActive;

@@ -43,6 +43,7 @@ export class LocationsComponent implements OnInit {
     this.toggleEdit(loc_id);
     const pristine = this.findLocation(this.pristineLocations, loc_id);
     const loc = this.findLocation(this.locations, loc_id);
+    loc.name = pristine.name;
     loc.address = pristine.address;
     loc.email = pristine.email;
     loc.phone = pristine.phone;
