@@ -6,6 +6,7 @@ import { LoginComponent } from 'app/components/login/login.component';
 
 import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.component';
 import { AdminRoutingModule } from 'app/routing/admin-routing.module';
+import { StatusComponent } from 'app/components/status/status.component';
 
 const appRoutes: Routes = [
   {
@@ -13,6 +14,9 @@ const appRoutes: Routes = [
   },
   {
     path: 'login', component: LoginComponent
+  },
+  {
+    path: 'status', component: StatusComponent
   },
   {
     path: '**', component: PagenotfoundComponent

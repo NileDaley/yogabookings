@@ -1,0 +1,7 @@
+<h1 class="title">
+  Database is {{users ? 'working' : 'broken'}}
+  <i class="fa" [ngClass]="{'fa-thumbs-o-up': users, 'fa-thumbs-o-down': !users}"></i>
+</h1>
+<ul>
+  <li *ngFor="let user of users">{{user.name}}</li>
+</ul>
