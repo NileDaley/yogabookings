@@ -7,6 +7,7 @@ import { LoginComponent } from 'app/components/login/login.component';
 import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.component';
 import { AdminRoutingModule } from 'app/routing/admin-routing.module';
 import { StatusComponent } from 'app/components/status/status.component';
+import { LocationsComponent } from 'app/components/guest/locations/locations.component';
 
 const appRoutes: Routes = [
   {
@@ -14,6 +15,9 @@ const appRoutes: Routes = [
   },
   {
     path: 'login', component: LoginComponent
+  },
+  {
+    path: 'locations', component: LocationsComponent
   },
   {
     path: 'status', component: StatusComponent

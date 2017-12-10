@@ -18,6 +18,7 @@ import { LocationsComponent as AdminLocations } from 'app/components/admin/locat
 
 import { DataService } from 'app/services/data.service';
 import { StatusComponent } from './components/status/status.component';
+import { LocationsComponent } from './components/guest/locations/locations.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { StatusComponent } from './components/status/status.component';
     AdminDashboard,
     AdminAllCustomers,
     AdminLocations,
-    StatusComponent
+    StatusComponent,
+    LocationsComponent
   ],
   imports: [
     BrowserModule,

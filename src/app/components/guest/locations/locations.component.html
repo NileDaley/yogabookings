@@ -1,0 +1,63 @@
+<section class="section">
+  <div class="columns">
+
+    <div class="column" *ngIf="loading">
+      <div class="section has-text-centered">
+        <h1 class="title has-text-primary">Loading...</h1>
+        <span class="icon">
+          <i class="fa fa-spinner fa-spin fa-3x has-text-primary"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="column" *ngFor="let loc of locations">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            {{loc.name}}
+          </p>
+        </header>
+
+        <div class="card-content">
+          <div class="columns">
+            <p class="label column is-4">Address</p>
+            <div class="column is-8">
+              <p *ngFor="let line of loc.address">
+                {{line}}
+              </p>
+            </div>
+          </div>
+          <div class="columns ">
+            <p class="label column is-4 ">Email Address</p>
+            <div class="column is-8 ">
+              {{loc.email}}
+            </div>
+          </div>
+          <div class="columns ">
+            <p class="label column is-4 ">Phone Number</p>
+            <div class="column is-8 ">
+              {{loc.phone}}
+            </div>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+          <a class="card-footer-item has-text-link" href="sendto:{{loc.email}}">
+            <span class="icon">
+              <i class="fa fa-envelope "></i>
+            </span>
+            Email
+          </a>
+          <a class="card-footer-item has-text-link" href="tel:{{loc.phone}}">
+            <span class="icon">
+              <i class="fa fa-phone"></i>
+            </span>
+            Call
+          </a>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+</section>
+
