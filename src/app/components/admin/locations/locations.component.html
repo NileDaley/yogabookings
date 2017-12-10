@@ -47,7 +47,12 @@
 
       <ng-template #editing class="card-content">
         <div class="card-content">
-          <form (submit)="log($event)"></form>
+          <div class="columns">
+            <p class="label column is-4 ">Name</p>
+            <div class="column is-8 ">
+              <input class="input form-control" type="text" [(ngModel)]="loc.name" />
+            </div>
+          </div>
           <div class="columns">
             <p class="label column is-4">Address</p>
             <div class="column is-8">

@@ -6,6 +6,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from 'app/app.component';
 import { NavbarComponent } from 'app/components/navbar/navbar.component';
+
+import { AppRoutingModule } from 'app/routing/app-routing.module';
+
 import { LoginComponent } from 'app/components/login/login.component';
 import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.component';
 import { IndexComponent } from 'app/components/index/index.component';
@@ -14,31 +17,6 @@ import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/cu
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
 
 import { DataService } from 'app/services/data.service';
-
-const routes: Routes = [
-  {
-    path: '', component: IndexComponent
-  },
-  {
-    path: 'login', component: LoginComponent
-  },
-  {
-    path: 'admin', component: AdminDashboard,
-    children: [
-      {
-        path: 'customers',
-        component: AdminAllCustomers
-      },
-      {
-        path: 'locations',
-        component: AdminLocations
-      }
-    ]
-  },
-  {
-    path: '**', component: PagenotfoundComponent
-  }
-];
 
 @NgModule({
   declarations: [
@@ -54,8 +32,8 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes),
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
