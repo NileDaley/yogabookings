@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Location } from './location';
 import { Pristine } from './pristine';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-locations',
@@ -30,35 +31,27 @@ export class LocationsComponent implements OnInit {
     });
   }
 
-  findLocation(list: Array<any>, loc_id: string) {
-    return list.find(l => l._id === loc_id);
-  }
-
-  toggleEdit(loc_id: string) {
-    const loc = this.findLocation(this.locations, loc_id);
+  toggleEdit(loc_id: string): void {
+    const loc = _.find(this.locations, { _id: loc_id });
     loc.editing = !loc.editing;
   }
 
-  discardEdit(loc_id: string) {
-    this.toggleEdit(loc_id);
-    const pristine = this.findLocation(this.pristineLocations, loc_id);
-    const loc = this.findLocation(this.locations, loc_id);
+  discardEdit(loc_id: string): void {
+
+    const pristine: Pristine = _.find(this.pristineLocations, { _id: loc_id });
+    const loc: Location = _.find(this.locations, { _id: loc_id });
     loc.name = pristine.name;
     loc.address = pristine.address;
     loc.email = pristine.email;
     loc.phone = pristine.phone;
-    loc.editing = false;
+    this.toggleEdit(loc_id);
+
   }
 
-  updateLocation(loc_id: string) {
-    const loc = this.findLocation(this.locations, loc_id);
-    const newLoc = {
-      _id: loc._id,
-      name: loc.name,
-      address: loc.address,
-      email: loc.email,
-      phone: loc.phone
-    };
+  updateLocation(loc_id: string): void {
+    const loc = _.find(this.locations, { _id: loc_id });
+    const newLoc = _.pick(loc, ['_id', 'name', 'address', 'email', 'phone']);
+
     this._dataService.updateLocation(newLoc).subscribe(res => {
 
       let message, type;
@@ -67,26 +60,24 @@ export class LocationsComponent implements OnInit {
         message = `${newLoc.name} could not be found in the database, please refresh the page and try again.`;
         type = 'error';
       } else {
-
-        const newPristine = new Pristine(newLoc._id, newLoc.name, newLoc.address, newLoc.email, newLoc.email);
-        this.updatePristine(newPristine);
-        this.toggleEdit(loc._id);
-
         if (res['modified'] === 0) {
           message = `None of the details for ${newLoc.name} were changed`;
           type = 'warning';
         } else {
+          this.updatePristine(new Pristine(newLoc._id, newLoc.name, newLoc.address, newLoc.email, newLoc.email));
           message = `${newLoc.name} was updated successfully`;
           type = 'success';
         }
-
       }
+
+      this.toggleEdit(loc._id);
       this.messages.push({ 'message': message, 'type': type });
+
     });
   }
 
-  updatePristine(p: Pristine) {
-    let pristine = this.findLocation(this.pristineLocations, p._id);
+  updatePristine(p: Pristine): void {
+    let pristine = _.find(this.pristineLocations, { _id: p._id });
     pristine = p;
   }
 
