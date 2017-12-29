@@ -1,98 +1,84 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Location } from './location';
-import { Pristine } from './pristine';
+import { EditableLocation as Editable} from './editable-location';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-locations',
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss']
 })
-export class LocationsComponent {
+export class LocationsComponent implements OnInit {
 
-  locations: Array<Location> = [];
-  pristineLocations: Array<Pristine> = [];
-  loading: Boolean = true;
+  locations: Array<Editable> = [];
+  pristineLocations: Array<Location> = [];
+  loading = true;
   messages = [];
 
-  constructor(private _dataService: DataService) {
+  constructor(private _dataService: DataService) {}
+
+  ngOnInit() {
     this._dataService.getLocations().subscribe(res => {
       const data: Array<any> = res['data'];
-      data.forEach(el => {
-        const pristine = new Pristine(el._id, el.name, el.address, el.email, el.phone);
-        const location = new Location(el._id, el.name, el.address, el.email, el.phone);
-        this.pristineLocations.push(pristine);
-        this.locations.push(location);
-      });
+      this.pristineLocations = data.map(l =>
+        new Location(l._id, l.name, l.address, l.email, l.phone)
+      );
+      this.locations = this.pristineLocations.map(l =>
+        new Editable(l._id, l.name, l.address, l.email, l.phone)
+      );
       this.loading = false;
     });
   }
 
-  prettifyAddress(address: String): Array<String> {
-    return address.split(',');
-  }
-
-  getLocation(loc_id: String) {
-    return this.locations.find(l => l._id === loc_id);
-  }
-
-  toggleEdit(loc_id: String) {
-    const loc = this.getLocation(loc_id);
+  toggleEdit(loc_id: string): void {
+    const loc = _.find(this.locations, { _id: loc_id });
     loc.editing = !loc.editing;
   }
 
-  discardEdit(loc_id) {
-    this.toggleEdit(loc_id);
-    const pristine = this.pristineLocations.find(el => el._id === loc_id);
-    const loc = this.getLocation(loc_id);
-    loc.address = pristine.address;
-    loc.email = pristine.email;
-    loc.phone = pristine.phone;
+  discardEdit(loc_id: string): void {
+
+    const pristine: Location = _.find(this.pristineLocations, { _id: loc_id });
+    const loc: Editable = _.find(this.locations, { _id: loc_id });
+
+    const { name, address, email, phone } = pristine;
+    loc.update({ name, address, phone, email });
     loc.editing = false;
+
   }
 
-  updateLocation(loc_id) {
-    const loc = this.getLocation(loc_id);
-    const newLoc = {
-      _id: loc._id,
-      name: loc.name,
-      address: loc.address,
-      email: loc.email,
-      phone: loc.phone
-    };
-    this._dataService.updateLocation(newLoc).subscribe(res => {
+  updateLocation(loc_id: string): void {
+    const loc: Editable = _.find(this.locations, { _id: loc_id });
+    const newLoc = _.pick(loc, ['name', 'address', 'email', 'phone']);
 
-      if (res['matched'] > 0) {
+    this._dataService.updateLocation(loc_id, newLoc).subscribe(res => {
 
-        const pristine = this.pristineLocations.find(l => l._id === newLoc._id);
-        pristine.address = newLoc.address;
-        pristine.email = newLoc.email;
-        pristine.phone = newLoc.phone;
-        loc.editing = false;
+      let message, type;
 
-        if (res['modified'] > 0) {
-          this.messages.push({
-            'message': `${newLoc.name} was updated successfully`,
-            'type': 'success'
-          });
-
-        } else {
-
-          this.messages.push({
-            'message': `${newLoc.name} was not changed`,
-            'type': 'success'
-          });
-
-        }
-
+      if (res['matched'] === 0) {
+        message = `${newLoc.name} could not be found in the database, please refresh the page and try again.`;
+        type = 'error';
       } else {
-        this.messages.push({
-          'message': `${newLoc.name} could not be found in the database, please refresh the page and try again.`,
-          'type': 'error'
-        });
+        if (res['modified'] === 0) {
+          message = `None of the details for ${newLoc.name} were changed`;
+          type = 'warning';
+        } else {
+          const pristine: Location = _.find(this.pristineLocations, { _id: loc_id });
+          pristine.update(newLoc);
+          message = `${newLoc.name} was updated successfully`;
+          type = 'success';
+        }
       }
 
+      loc.editing = false;
+      this.messages.push({ 'message': message, 'type': type });
+
     });
+  }
+
+  updatePristine(p: Location): void {
+    let pristine = _.find(this.pristineLocations, { _id: p._id });
+    pristine = p;
   }
 
 }

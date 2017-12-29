@@ -1,17 +1,23 @@
-export class Location {
-  _id: String;
-  name: String;
-  address: String;
-  email: String;
-  phone: String;
-  editing: Boolean = false;
+import * as _ from 'lodash';
 
-  constructor(id, name, address, email, phone) {
+export class Location {
+  _id: string;
+  name: string;
+  address: Array<string>;
+  email: string;
+  phone: string;
+
+  constructor(id: string, name: string, address: Array<string>, email: string, phone: string) {
     this._id = id;
     this.name = name;
     this.address = address;
     this.email = email;
     this.phone = phone;
+  }
+
+  // Assign each of the fields passed to the object to the location
+  update(fields: Object) {
+    _.assign(this, fields);
   }
 
 }
