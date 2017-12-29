@@ -5,12 +5,10 @@
   "main": "server.js",
   "scripts": {
     "ng": "ng",
-    "start": "npm run serve",
-    "serve": "node server",
+    "start": "nodemon server",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "tslint": "./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
     "watch": "ng build --watch",
     "dev": "run-p watch start",
     "postinstall": "ng build --aot --env=prod"
@@ -36,6 +34,7 @@
     "express": "^4.16.2",
     "lodash": "^4.17.4",
     "mongodb": "^2.2.33",
+    "nodemon": "^1.14.6",
     "rxjs": "^5.5.5",
     "zone.js": "^0.8.4"
   },

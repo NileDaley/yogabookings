@@ -14,7 +14,7 @@ export class DataService {
     return this.http.get('/api/locations');
   }
 
-  updateLocation(location) {
-    return this.http.post('/api/locations/update', location);
+  updateLocation(_id, values) {
+    return this.http.patch(`/api/locations/update/${_id}`, values);
   }
 }
