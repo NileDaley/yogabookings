@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Location } from './location';
-import { Pristine } from './pristine';
+import { EditableLocation as Editable} from './editable-location';
 import * as _ from 'lodash';
 
 @Component({
@@ -11,8 +11,8 @@ import * as _ from 'lodash';
 })
 export class LocationsComponent implements OnInit {
 
-  locations: Array<Location> = [];
-  pristineLocations: Array<Pristine> = [];
+  locations: Array<Editable> = [];
+  pristineLocations: Array<Location> = [];
   loading = true;
   messages = [];
 
@@ -21,11 +21,11 @@ export class LocationsComponent implements OnInit {
   ngOnInit() {
     this._dataService.getLocations().subscribe(res => {
       const data: Array<any> = res['data'];
-      this.pristineLocations = data.map(p =>
-        new Pristine(p._id, p.name, p.address, p.email, p.phone)
+      this.pristineLocations = data.map(l =>
+        new Location(l._id, l.name, l.address, l.email, l.phone)
       );
       this.locations = this.pristineLocations.map(l =>
-        new Location(l._id, l.name, l.address, l.email, l.phone)
+        new Editable(l._id, l.name, l.address, l.email, l.phone)
       );
       this.loading = false;
     });
@@ -38,21 +38,20 @@ export class LocationsComponent implements OnInit {
 
   discardEdit(loc_id: string): void {
 
-    const pristine: Pristine = _.find(this.pristineLocations, { _id: loc_id });
-    const loc: Location = _.find(this.locations, { _id: loc_id });
-    loc.name = pristine.name;
-    loc.address = pristine.address;
-    loc.email = pristine.email;
-    loc.phone = pristine.phone;
-    this.toggleEdit(loc_id);
+    const pristine: Location = _.find(this.pristineLocations, { _id: loc_id });
+    const loc: Editable = _.find(this.locations, { _id: loc_id });
+
+    const { name, address, email, phone } = pristine;
+    loc.update({ name, address, phone, email });
+    loc.editing = false;
 
   }
 
   updateLocation(loc_id: string): void {
-    const loc = _.find(this.locations, { _id: loc_id });
-    const newLoc = _.pick(loc, ['_id', 'name', 'address', 'email', 'phone']);
+    const loc: Editable = _.find(this.locations, { _id: loc_id });
+    const newLoc = _.pick(loc, ['name', 'address', 'email', 'phone']);
 
-    this._dataService.updateLocation(newLoc).subscribe(res => {
+    this._dataService.updateLocation(loc_id, newLoc).subscribe(res => {
 
       let message, type;
 
@@ -64,19 +63,20 @@ export class LocationsComponent implements OnInit {
           message = `None of the details for ${newLoc.name} were changed`;
           type = 'warning';
         } else {
-          this.updatePristine(new Pristine(newLoc._id, newLoc.name, newLoc.address, newLoc.email, newLoc.email));
+          const pristine: Location = _.find(this.pristineLocations, { _id: loc_id });
+          pristine.update(newLoc);
           message = `${newLoc.name} was updated successfully`;
           type = 'success';
         }
       }
 
-      this.toggleEdit(loc._id);
+      loc.editing = false;
       this.messages.push({ 'message': message, 'type': type });
 
     });
   }
 
-  updatePristine(p: Pristine): void {
+  updatePristine(p: Location): void {
     let pristine = _.find(this.pristineLocations, { _id: p._id });
     pristine = p;
   }

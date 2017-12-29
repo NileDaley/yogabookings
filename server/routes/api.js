@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
+const _ = require('lodash');
 
 // Connect
 const connection = closure => {
@@ -55,13 +56,16 @@ router.get('/locations', (req,res) => {
   })
 })
 
-router.post('/locations/update', (req, res) => {
-  const newLoc = req.body;
-  newLoc._id = ObjectID(newLoc._id);
+router.patch('/locations/update/:_id', (req, res) => {
+  const location = req.body;
+  const _id = ObjectID(req.params._id);
 
   connection(db => {
     db.collection('locations')
-      .replaceOne( { "_id": newLoc._id }, newLoc )
+      .update(
+        { "_id": _id },
+        { $set: location }
+      )
       .then(data => {
         data = data.result;
         const result = {
@@ -72,10 +76,9 @@ router.post('/locations/update', (req, res) => {
         res.send(result);
       })
       .catch(err => {
-        console.log("An error occured while trying to update the location");
+        console.log(`An error occured while trying to update the location: ${err}`);
       })
   })
-
 })
 
 module.exports = router
