@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import {assign} from 'lodash';
 
 export class Location {
   _id: string;
@@ -17,7 +17,7 @@ export class Location {
 
   // Assign each of the fields passed to the object to the location
   update(fields: Object) {
-    _.assign(this, fields);
+    assign(this, fields);
   }
 
 }

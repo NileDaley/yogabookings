@@ -9,9 +9,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "watch": "ng build --watch",
+    "watch": "ng build --watch --no-progress",
     "dev": "run-p watch start",
-    "postinstall": "ng build --aot --env=prod"
+    "postinstall": "ng build --aot --env=prod --no-progress"
   },
   "engines": {
     "node": "8.8.1"
