@@ -13,34 +13,34 @@
   <div class="navbar-menu" [ngClass]="{'is-active': navActive}">
     <div class="navbar-start">
       <a routerLink="/" routerLinkActive="has-text-primary" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
-        <span class="icon"><i class="fa fa-home"></i></span> Home
+        <span class="icon"><i class="fas fa-home"></i></span> Home
       </a>
       <a routerLink="/classes" routerLinkActive="has-text-primary" class="navbar-item">
-        <span class="icon"><i class="fa fa-search"></i></span> Browse
+        <span class="icon"><i class="fas fa-search"></i></span> Browse
       </a>
       <a routerLink="/locations" routerLinkActive="has-text-primary" class="navbar-item">
-        <span class="icon"><i class="fa fa-building"></i></span> Locations
+        <span class="icon"><i class="fas fa-building"></i></span> Locations
       </a>
       <div *ngIf="showAdminButtons" class="navbar-item has-dropdown is-hoverable">
         <a routerLink="/admin" routerLinkActive="has-text-primary" class="navbar-link">
-          <span class="icon"><i class="fa fa-lock"></i></span> Admin
+          <span class="icon"><i class="fas fa-lock"></i></span> Admin
         </a>
         <div class="navbar-dropdown">
-          <a routerLink="/admin/customers" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-users"></i></span> Customers</a>
-          <a routerLink="/admin/tutors" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-graduation-cap"></i></span>Tutors</a>
-          <a routerLink="/admin/classes" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-calendar"></i></span> Classes</a>
+          <a routerLink="/admin/customers" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fas fa-users"></i></span> Customers</a>
+          <a routerLink="/admin/tutors" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fas fa-graduation-cap"></i></span>Tutors</a>
+          <a routerLink="/admin/classes" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fas fa-calendar-alt"></i></span> Classes</a>
           <a routerLink="/admin/locations" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-building"></i></span> Locations</a>
           <hr class="navbar-divider">
-          <a routerLink="/status" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fa fa-tachometer"></i></span> System Status</a>
+          <a routerLink="/status" routerLinkActive="has-text-primary" class="navbar-item"><span class="icon"><i class="fas fa-tachometer-alt"></i></span> System Status</a>
         </div>
       </div>
     </div>
     <div class="navbar-end">
       <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-primary">
-        <span class="icon"><i class="fa fa-sign-in"></i></span> Login
+        <span class="icon"><i class="fas fa-sign-in-alt"></i></span> Login
       </a>
       <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-primary">
-        <span class="icon"><i class="fa fa-user"></i></span> Register
+        <span class="icon"><i class="fas fa-user"></i></span> Register
       </a>
     </div>
   </div>

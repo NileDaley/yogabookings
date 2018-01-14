@@ -9,7 +9,7 @@
           <li *ngFor="let link of item.links">
             <a [routerLink]=link.url routerLinkActive="has-text-info">
               <span class="icon">
-                <i class="fa fa-{{link.icon}}"></i>
+                <i class="{{link.icon.style}} fa-{{link.icon.code}}"></i>
               </span>
               {{link.text}}
             </a>
