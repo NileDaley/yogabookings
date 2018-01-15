@@ -54,12 +54,13 @@ export class LocationsComponent implements OnInit {
     this._dataService.updateLocation(loc_id, newLoc).subscribe(res => {
 
       let message, type;
+      console.log(res);
 
-      if (res['matched'] === 0) {
+      if (res['data']['matched'] === 0) {
         message = `${newLoc.name} could not be found in the database, please refresh the page and try again.`;
         type = 'error';
       } else {
-        if (res['modified'] === 0) {
+        if (res['data']['modified'] === 0) {
           message = `None of the details for ${newLoc.name} were changed`;
           type = 'warning';
         } else {
