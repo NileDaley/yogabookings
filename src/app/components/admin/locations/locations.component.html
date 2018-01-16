@@ -1,5 +1,10 @@
+<!-- Notifications -->
 <div *ngIf="messages.length > 0">
-  <div *ngFor="let m of messages" [ngClass]="{'is-danger': m.type === 'error', 'is-success': m.type === 'success', 'is-warning': m.type === 'warning'}" class="notification">
+  <div *ngFor="let m of messages" class="notification" [ngClass]="{
+      'is-danger': m.type === 'error',
+      'is-success': m.type === 'success',
+      'is-warning': m.type === 'warning'}"
+  >
     <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
     {{m.message}}
   </div>
@@ -7,10 +12,13 @@
 
 <div class="columns">
 
+  <!-- Loading spinner -->
   <div class="column" *ngIf="loading">
     <div class="section has-text-centered">
-      <h1 class="title has-text-primary">Loading...</h1>
-      <span class="icon"><i class="fa fa-spinner fa-spin fa-3x has-text-primary"></i></span>
+      <h1 class="title has-text-info">Loading...</h1>
+      <span class="icon">
+        <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
+      </span>
     </div>
   </div>
 
@@ -56,7 +64,10 @@
           <div class="columns">
             <p class="label column is-4">Address</p>
             <div class="column is-8">
-              <input class="input form-control" type="text" [(ngModel)]="loc.address[i]" *ngFor="let line of loc.address; let i = index"/>
+              <input class="input form-control" type="text"
+                [(ngModel)]="loc.address[i]"
+                *ngFor="let line of loc.address; let i = index"
+              />
             </div>
           </div>
           <div class="columns">
@@ -76,15 +87,21 @@
 
       <footer class="card-footer">
         <a *ngIf="!loc.editing" (click)="toggleEdit(loc._id)" class="card-footer-item has-text-info">
-          <span class="icon "><i class="fa fa-edit "></i></span>
+          <span class="icon ">
+            <i class="fa fa-edit "></i>
+          </span>
           Edit
         </a>
         <a *ngIf="loc.editing" (click)="discardEdit(loc._id)" class="card-footer-item has-text-danger">
-          <span class="icon "><i class="fa fa-times"></i></span>
+          <span class="icon ">
+            <i class="fa fa-times"></i>
+          </span>
           Discard
         </a>
-        <a (click)="updateLocation(loc._id)" *ngIf="loc.editing" class="card-footer-item has-text-success">
-          <span class="icon "><i class="fa fa-check "></i></span>
+        <a *ngIf="loc.editing" (click)="updateLocation(loc._id)" class="card-footer-item has-text-success">
+          <span class="icon ">
+            <i class="fa fa-check "></i>
+          </span>
           Save
         </a>
       </footer>
