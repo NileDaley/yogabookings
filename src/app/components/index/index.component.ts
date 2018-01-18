@@ -8,11 +8,7 @@ import { DataService } from 'app/services/data.service';
 })
 export class IndexComponent {
 
-  users: Array<any>;
-
-  constructor(private _dataService: DataService) {
-    this._dataService.getCustomers()
-      .subscribe(res => this.users = res['data']);
+  constructor() {
   }
 
 }

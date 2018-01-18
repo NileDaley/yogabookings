@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomersComponent } from './customers.component';
+import { DataService } from 'app/services/data.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('CustomersComponent', () => {
   let component: CustomersComponent;
@@ -8,7 +10,9 @@ describe('CustomersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CustomersComponent ]
+      declarations: [CustomersComponent],
+      imports: [HttpClientModule],
+      providers: [DataService]
     })
     .compileComponents();
   }));
@@ -16,6 +20,7 @@ describe('CustomersComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CustomersComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
   });
 
