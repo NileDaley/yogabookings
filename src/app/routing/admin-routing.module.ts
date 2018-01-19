@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { DashboardComponent as AdminDashboard } from 'app/components/admin/dashboard/dashboard.component';
 import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/customers/customers.component';
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
+import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
 import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
 
 const adminRoutes: Routes = [
@@ -13,6 +14,10 @@ const adminRoutes: Routes = [
       {
         path: 'customers',
         component: AdminAllCustomers
+      },
+      {
+        path: 'locations/:id',
+        component: AdminSingleLocation
       },
       {
         path: 'locations',

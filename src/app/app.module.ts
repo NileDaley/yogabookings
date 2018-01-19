@@ -25,6 +25,7 @@ import { LocationsComponent } from './components/guest/locations/locations.compo
 
 /* Services */
 import { DataService } from 'app/services/data.service';
+import { LocationComponent } from './components/admin/locations/location/location.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { DataService } from 'app/services/data.service';
     AdminLocations,
     AdminTutors,
     StatusComponent,
-    LocationsComponent
+    LocationsComponent,
+    LocationComponent
   ],
   imports: [
     BrowserModule,

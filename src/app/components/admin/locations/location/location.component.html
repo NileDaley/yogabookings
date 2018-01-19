@@ -1,0 +1,112 @@
+<!-- Notifications -->
+<div *ngIf="messages.length > 0">
+  <div *ngFor="let m of messages" class="notification" [ngClass]="{
+      'is-danger': m.type === 'error',
+      'is-success': m.type === 'success',
+      'is-warning': m.type === 'warning'}">
+    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    {{m.message}}
+  </div>
+</div>
+
+<!-- Loading spinner -->
+<div *ngIf="loading; else content">
+  <div class="section has-text-centered">
+    <h1 class="title has-text-info">Loading...</h1>
+    <span class="icon">
+      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
+    </span>
+  </div>
+</div>
+
+<ng-template #content>
+
+  <div class="card">
+
+    <div class="card-content" *ngIf="!editing; else editingCard">
+
+      <h2 class="subtitle has-text-centered"> {{location.name}}</h2>
+
+      <div class="columns">
+        <div class="column is-2 is-offset-5">
+          <a (click)="toggleEdit()" class="button is-info is-rounded is-fullwidth">
+            <span>Edit</span>
+            <span class="icon">
+              <i class="fas fa-edit"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div class="columns">
+        <p class="label column is-4">Address</p>
+        <div class="column is-8">
+          <p *ngFor="let line of location.address">
+            {{line}}
+          </p>
+        </div>
+      </div>
+      <div class="columns ">
+        <p class="label column is-4 ">Email Address</p>
+        <div class="column is-8 ">
+          {{location.email}}
+        </div>
+      </div>
+      <div class="columns ">
+        <p class="label column is-4 ">Phone Number</p>
+        <div class="column is-8 ">
+          {{location.phone}}
+        </div>
+      </div>
+    </div>
+
+    <ng-template #editingCard class="card-content">
+      <div class="card-content">
+        <div class="columns">
+          <div class="column is-4 is-offset-2">
+            <a (click)="updateLocation()" class="button is-success is-rounded is-fullwidth">
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>Save Changes</span>
+            </a>
+          </div>
+          <div class="column is-4">
+            <a (click)="discardEdit()" class="button is-danger is-rounded is-fullwidth">
+              <span>Discard Changes</span>
+              <span class="icon">
+                <i class="fas fa-times"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="columns">
+          <p class="label column is-4">Name</p>
+          <div class="column is-8">
+            <input class="input form-control" type="text" [(ngModel)]="location.name" />
+          </div>
+        </div>
+        <div class="columns">
+          <p class="label column is-4">Address</p>
+          <div class="column is-8">
+            <input class="input form-control" type="text" [(ngModel)]="location.address[i]" *ngFor="let line of location.address; let i = index" />
+          </div>
+        </div>
+        <div class="columns">
+          <p class="label column is-4 ">Email Address</p>
+          <div class="column is-8 ">
+            <input class="input form-control" type="email" [(ngModel)]="location.email" />
+          </div>
+        </div>
+        <div class="columns">
+          <p class="label column is-4 ">Phone Number</p>
+          <div class="column is-8 ">
+            <input class="input form-control" type="phone" [(ngModel)]="location.phone">
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+
+</ng-template>

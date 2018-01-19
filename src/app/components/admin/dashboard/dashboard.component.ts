@@ -12,7 +12,7 @@ export class DashboardComponent implements OnInit {
       'name': 'Bookings',
       'links': [
         { 'text': 'View All Bookings', 'url': '/admin/bookings', 'icon': { 'style': 'far', 'code': 'calendar-alt' } },
-        { 'text': 'Create Customer Booking', 'url': '/admin/bookings/new', 'icon': { 'style': 'far', 'code': 'calendar-plus' } }
+        { 'text': 'Create Booking', 'url': '/admin/bookings/new', 'icon': { 'style': 'far', 'code': 'calendar-plus' } }
       ]
     },
     {
