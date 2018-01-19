@@ -24,8 +24,15 @@ export class LocationComponent implements OnInit {
     const id: String = this.route.snapshot.paramMap.get('id');
     this._dataService.getLocation(id).subscribe(res => {
       const data = res['data'];
-      this.pristineLocation = new Location(data._id, data.name, data.address, data.email, data.phone);
+      this.pristineLocation = new Location(data._id, data.name, data.address.map(line => line), data.email, data.phone);
       this.location = new EditableLocation(this.pristineLocation);
+      this.location.address = this.location.address.map(line => line);
+      this.loading = false;
+    }, err => {
+      this.messages.push({
+        message: 'There was an error retrieving this location from the database',
+        type: 'error'
+      });
       this.loading = false;
     });
   }
@@ -35,8 +42,6 @@ export class LocationComponent implements OnInit {
   }
 
   discardEdit(): void {
-    console.log(this.location);
-    console.log(this.pristineLocation);
     this.location = new EditableLocation(this.pristineLocation);
     this.toggleEdit();
   }
@@ -70,6 +75,11 @@ export class LocationComponent implements OnInit {
       this.messages.push({ 'message': message, 'type': type });
 
     });
+  }
+
+  // Used in the template to resolve bug with editing address lines
+  trackByFn(index: any, item: any) {
+    return index;
   }
 
 }
