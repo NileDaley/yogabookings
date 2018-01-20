@@ -32,10 +32,13 @@
         <td>
           <p *ngFor="let line of loc.address">{{line}}</p>
         </td>
-        <td>{{loc.email}}</td>
+        <td>
+          <a href="mailto:{{loc.email}}" class="link">{{loc.email}}</a>
+        </td>
         <td>{{loc.phone}}</td>
         <td class="has-text-centered">
-          <a routerLink="/admin/locations/{{loc._id}}" class="has-text-info">
+          <a routerLink="/admin/locations/{{loc._id}}" class="button is-link is-rounded">
+            <span>Edit</span>
             <span class="icon ">
               <i class="fa fa-edit"></i>
             </span>
