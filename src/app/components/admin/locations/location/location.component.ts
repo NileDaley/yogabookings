@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from 'app/models/location';
 import { EditableLocation } from 'app/models/editable-location';
 import { pick } from 'lodash';
+import { OpenHours } from 'app/models/openHours';
 
 @Component({
   selector: 'app-location',
@@ -21,10 +22,21 @@ export class LocationComponent implements OnInit {
   constructor(private _dataService: DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.getLocation();
+  }
+
+  private getLocation(): void {
     const id: String = this.route.snapshot.paramMap.get('id');
     this._dataService.getLocation(id).subscribe(res => {
       const data = res['data'];
-      this.pristineLocation = new Location(data._id, data.name, data.address.map(line => line), data.email, data.phone);
+      this.pristineLocation = new Location(
+        data._id,
+        data.name,
+        data.address.map(line => line),
+        data.email,
+        data.phone,
+        data.openHours.map(day => new OpenHours(day.day, day.isOpen, day.open, day.close))
+      );
       this.location = new EditableLocation(this.pristineLocation);
       this.location.address = this.location.address.map(line => line);
       this.loading = false;
@@ -48,7 +60,7 @@ export class LocationComponent implements OnInit {
 
   updateLocation(): void {
 
-    const newValues = pick(this.location, ['name', 'address', 'email', 'phone']);
+    const newValues = pick(this.location, ['name', 'address', 'email', 'phone', 'openHours']);
 
     this._dataService.updateLocation(this.location._id, newValues).subscribe(res => {
 
@@ -80,6 +92,14 @@ export class LocationComponent implements OnInit {
   // Used in the template to resolve bug with editing address lines
   trackByFn(index: any, item: any) {
     return index;
+  }
+
+  checkOpenHours(day: OpenHours): void {
+    day.isOpen = !(day.open === '' && day.close === '');
+  }
+
+  toggleOpen(day: OpenHours) {
+    day.isOpen = !day.isOpen;
   }
 
 }
