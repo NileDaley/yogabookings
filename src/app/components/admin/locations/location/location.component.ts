@@ -62,7 +62,7 @@ export class LocationComponent implements OnInit {
 
   updateLocation(): void {
 
-    const newValues = pick(this.location, ['name', 'address', 'email', 'phone', 'openHours']);
+    const newValues = pick(this.location, ['name', 'address', 'email', 'phone', 'openHours', 'venues']);
 
     this._dataService.updateLocation(this.location._id, newValues).subscribe(res => {
 
@@ -100,8 +100,17 @@ export class LocationComponent implements OnInit {
     day.isOpen = !(day.open === '' && day.close === '');
   }
 
-  toggleOpen(day: OpenHours) {
+  toggleOpen(day: OpenHours): void {
     day.isOpen = !day.isOpen;
+  }
+
+  removeVenue(venue: Venue): void {
+    const index = this.location.venues.indexOf(venue);
+    this.location.venues.splice(index, 1);
+  }
+
+  newVenue(): void {
+    this.location.venues.push(new Venue('', 0));
   }
 
 }

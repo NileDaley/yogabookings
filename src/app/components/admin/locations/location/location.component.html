@@ -62,6 +62,17 @@
             </a>
           </div>
 
+          <div class="field">
+            <p class="label">Venues</p>
+            <div class="columns" *ngFor="let venue of location.venues">
+              <div class="column">{{venue.name}}</div>
+              <div class="column">
+                <span class="icon">
+                  <i class="fas fa-users"></i>
+                </span> {{venue.capacity}}</div>
+            </div>
+          </div>
+
         </div>
 
         <div class="column is-4-widescreen">
@@ -127,6 +138,29 @@
               <p class="label">Phone Number</p>
               <input class="input form-control" type="phone" [(ngModel)]="location.phone">
             </div>
+            <p class="label">Venues
+              <span (click)="newVenue()" class="icon has-text-success">
+                <i class="fas fa-plus"></i>
+              </span>
+            </p>
+            <ng-container *ngFor="let venue of location.venues; let count = index; trackBy: trackByFn">
+              <div class="columns">
+                <div class="column">
+                  <input [(ngModel)]="location.venues[count].name" type="text" class="input form-control">
+                </div>
+                <div class="column is-4">
+                  <div class="control has-icons-left">
+                    <input [(ngModel)]="location.venues[count].capacity" type="number" class="input form-control">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-users"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="column is-1">
+                  <a (click)="removeVenue(location.venues[count])" class="delete is-small"></a>
+                </div>
+              </div>
+            </ng-container>
 
           </div>
 
