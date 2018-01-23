@@ -23,13 +23,14 @@
 
   <div class="card">
 
+    <!-- Display details -->
     <div class="card-content" *ngIf="!editing; else editingCard">
 
       <h2 class="subtitle is-4 has-text-centered"> {{location.name}}</h2>
 
       <div class="columns">
 
-        <div class="column is-4 is-offset-2">
+        <div class="column is-4-widescreen is-offset-2-widescreen">
 
           <div class="field">
             <p class="label">
@@ -63,7 +64,7 @@
 
         </div>
 
-        <div class="column is-4">
+        <div class="column is-4-widescreen">
 
           <label class="label has-text-centered">Open Hours</label>
           <div *ngFor="let day of location.openHours">
@@ -99,12 +100,15 @@
 
     </div>
 
-    <ng-template #editingCard class="card-content">
+    <!-- Editing Content -->
+    <ng-template #editingCard>
       <div class="card-content">
 
         <!-- Form fields -->
         <div class="columns">
-          <div class="column is-6 is-offset-3">
+
+          <!-- Name, Address, Email + Phone -->
+          <div class="column is-4 is-offset-1">
             <div class="field">
               <p class="label">Name</p>
               <input class="input form-control" type="text" [(ngModel)]="location.name" />
@@ -124,47 +128,42 @@
               <input class="input form-control" type="phone" [(ngModel)]="location.phone">
             </div>
 
-            <hr class="hr">
-            <div class="field">
-
-              <div class="columns">
-                <div class="column">
-                  <p class="has-text-weight-semibold">Day</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-semibold">Open?</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-semibold">Open Time</p>
-                </div>
-                <div class="column has-text-centered">
-                  <p class="has-text-weight-semibold">Close Time</p>
-                </div>
-              </div>
-
-              <ng-container *ngFor="let day of location.openHours; let count = index">
-                <div class="columns">
-                  <div class="column">
-                    <p class="is-capitalized">{{day.day}}</p>
-                  </div>
-                  <div class="column has-text-centered">
-                    <label class="checkbox">
-                      <input [checked]="location.openHours[count].isOpen" (change)="toggleOpen(location.openHours[count])" type="checkbox">
-                    </label>
-                  </div>
-                  <div class="column">
-                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].open" (keyup)="checkOpenHours(location.openHours[count])" type="text" maxlength="4" class="input has-text-centered">
-                  </div>
-                  <div class="column">
-                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].close" (keyup)="checkOpenHours(location.openHours[count])" type="text" maxlength="4" class="input has-text-centered">
-                  </div>
-                </div>
-              </ng-container>
-
-              <p class="has-text-info has-text-centered">Enter a time in hhmm format, or leave empty if closed</p>
-
-            </div>
           </div>
+
+          <div class="column is-6">
+
+            <table class="table">
+              <tr>
+                <th>Day</th>
+                <th>Open?</th>
+                <th>Open Time</th>
+                <th>Close Time</th>
+              </tr>
+              <tr *ngFor="let day of location.openHours; let count = index">
+                <td>
+                  <p class="is-capitalized">{{day.day}}</p>
+                </td>
+                <td class="has-text-centered">
+                  <label class="checkbox">
+                    <input [checked]="location.openHours[count].isOpen" (change)="toggleOpen(location.openHours[count])" type="checkbox">
+                  </label>
+                </td>
+                <td>
+                  <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].open" (keyup)="checkOpenHours(location.openHours[count])" type="text" maxlength="4" class="input has-text-centered">
+                </td>
+                <td>
+                  <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].close" (keyup)="checkOpenHours(location.openHours[count])" type="text" maxlength="4" class="input has-text-centered">
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <p class="has-text-info has-text-centered">Enter a time in hhmm format, or leave empty if closed</p>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+
         </div>
 
         <!-- Save/Discard buttons -->
