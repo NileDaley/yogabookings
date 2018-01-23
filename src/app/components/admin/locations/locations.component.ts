@@ -26,7 +26,7 @@ export class LocationsComponent implements OnInit {
     this._dataService.getLocations().subscribe(res => {
       const data: Array<any> = res['data'];
       this.locations = data.map(l =>
-        new Location(l._id, l.name, l.address, l.email, l.phone, l.openHours)
+        new Location(l._id, l.name, l.address, l.email, l.phone, l.openHours, l.venues)
       );
       this.filteredLocations = this.locations.map(l => l);
       this.loading = false;

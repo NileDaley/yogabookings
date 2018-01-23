@@ -5,6 +5,7 @@ import { Location } from 'app/models/location';
 import { EditableLocation } from 'app/models/editable-location';
 import { pick } from 'lodash';
 import { OpenHours } from 'app/models/openHours';
+import { Venue } from 'app/models/venue';
 
 @Component({
   selector: 'app-location',
@@ -35,7 +36,8 @@ export class LocationComponent implements OnInit {
         data.address.map(line => line),
         data.email,
         data.phone,
-        data.openHours.map(day => new OpenHours(day.day, day.isOpen, day.open, day.close))
+        data.openHours.map(day => new OpenHours(day.day, day.isOpen, day.open, day.close)),
+        data.venues.map(venue => new Venue(venue.name, venue.capacity))
       );
       this.location = new EditableLocation(this.pristineLocation);
       this.location.address = this.location.address.map(line => line);
