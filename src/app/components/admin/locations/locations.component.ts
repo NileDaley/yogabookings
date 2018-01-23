@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
-import { Location } from './location';
-import { EditableLocation as Editable} from './editable-location';
-import * as _ from 'lodash';
+import { Location } from 'app/models/location';
+import { EditableLocation as Editable } from 'app/models/editable-location';
+import { find, pick } from 'lodash';
 
 @Component({
   selector: 'app-locations',
@@ -11,74 +11,70 @@ import * as _ from 'lodash';
 })
 export class LocationsComponent implements OnInit {
 
-  locations: Array<Editable> = [];
-  pristineLocations: Array<Location> = [];
+  locations: Array<Location> = [];
+  filteredLocations: Array<Location>;
   loading = true;
   messages = [];
 
-  constructor(private _dataService: DataService) {}
+  constructor(private _dataService: DataService) { }
 
   ngOnInit() {
+    this.getLocations();
+  }
+
+  private getLocations(): void {
     this._dataService.getLocations().subscribe(res => {
       const data: Array<any> = res['data'];
-      this.pristineLocations = data.map(l =>
-        new Location(l._id, l.name, l.address, l.email, l.phone)
+      this.locations = data.map(l =>
+        new Location(l._id, l.name, l.address, l.email, l.phone, l.openHours, l.venues)
       );
-      this.locations = this.pristineLocations.map(l =>
-        new Editable(l._id, l.name, l.address, l.email, l.phone)
-      );
+      this.filteredLocations = this.locations.map(l => l);
       this.loading = false;
     });
   }
 
-  toggleEdit(loc_id: string): void {
-    const loc = _.find(this.locations, { _id: loc_id });
-    loc.editing = !loc.editing;
-  }
+  // filter the locations based on the search criteria
+  filterLocations(value: string): void {
+    value = value.trim().toLowerCase();
+    if (value === '') { this.resetFilter(); }
 
-  discardEdit(loc_id: string): void {
+    /*
+      Filters locations based on wether any value of the location matches the search value
+    */
+    this.filteredLocations = this.locations.filter(location => {
+      let match = false;
 
-    const pristine: Location = _.find(this.pristineLocations, { _id: loc_id });
-    const loc: Editable = _.find(this.locations, { _id: loc_id });
+      const fields = ['name', 'address', 'phone', 'email'];
 
-    const { name, address, email, phone } = pristine;
-    loc.update({ name, address, phone, email });
-    loc.editing = false;
+      fields.forEach(key => {
 
-  }
-
-  updateLocation(loc_id: string): void {
-    const loc: Editable = _.find(this.locations, { _id: loc_id });
-    const newLoc = _.pick(loc, ['name', 'address', 'email', 'phone']);
-
-    this._dataService.updateLocation(loc_id, newLoc).subscribe(res => {
-
-      let message, type;
-
-      if (res['matched'] === 0) {
-        message = `${newLoc.name} could not be found in the database, please refresh the page and try again.`;
-        type = 'error';
-      } else {
-        if (res['modified'] === 0) {
-          message = `None of the details for ${newLoc.name} were changed`;
-          type = 'warning';
+        // if the current key in location is an array, iterate it's values
+        if (key === 'address') {
+          for (const line of location[key]) {
+            // if the current value matches the search value, returrn true
+            if (line.toLowerCase().includes(value)) {
+              match = true;
+              return;
+            }
+          }
         } else {
-          const pristine: Location = _.find(this.pristineLocations, { _id: loc_id });
-          pristine.update(newLoc);
-          message = `${newLoc.name} was updated successfully`;
-          type = 'success';
+          // if the current value matches the search value, returrn true
+          if (location[key].toLowerCase().includes(value)) {
+            match = true;
+            return;
+          }
         }
-      }
 
-      loc.editing = false;
-      this.messages.push({ 'message': message, 'type': type });
+      });
+
+      return match;
 
     });
+
   }
 
-  updatePristine(p: Location): void {
-    let pristine = _.find(this.pristineLocations, { _id: p._id });
-    pristine = p;
+  resetFilter(): void {
+    this.filteredLocations = this.locations.map(l => l);
   }
 
 }

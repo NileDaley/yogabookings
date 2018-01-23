@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Location } from 'app/models/location';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class DataService {
@@ -10,11 +12,15 @@ export class DataService {
     return this.http.get('/api/users');
   }
 
-  getLocations() {
+  getLocations(): Observable<any> {
     return this.http.get('/api/locations');
   }
 
-  updateLocation(_id, values) {
-    return this.http.patch(`/api/locations/update/${_id}`, values);
+  getLocation(id: String) {
+    return this.http.get(`/api/locations/${id}`);
+  }
+
+  updateLocation(_id: String, newValues: String[]) {
+    return this.http.patch(`/api/locations/update/${_id}`, newValues);
   }
 }

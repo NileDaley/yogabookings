@@ -1,0 +1,187 @@
+<!-- Notifications -->
+<div *ngIf="messages.length > 0">
+  <div *ngFor="let m of messages" class="notification" [ngClass]="{
+      'is-danger': m.type === 'error',
+      'is-success': m.type === 'success',
+      'is-warning': m.type === 'warning'}">
+    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    {{m.message}}
+  </div>
+</div>
+
+<!-- Loading spinner -->
+<div *ngIf="loading; else content">
+  <div class="section has-text-centered">
+    <h1 class="title has-text-info">Loading...</h1>
+    <span class="icon">
+      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
+    </span>
+  </div>
+</div>
+
+<ng-template #content>
+
+  <div class="card">
+
+    <!-- Display details -->
+    <div class="card-content" *ngIf="!editing; else editingCard">
+
+      <h2 class="subtitle is-4 has-text-centered"> {{location.name}}</h2>
+
+      <div class="columns">
+
+        <div class="column is-4-widescreen is-offset-2-widescreen">
+
+          <div class="field">
+            <p class="label">
+              <span class="icon">
+                <i class="fas fa-building"></i>
+              </span> Address</p>
+            <p *ngFor="let line of location.address">
+              {{line}}
+            </p>
+          </div>
+
+          <div class="field">
+            <p class="label">
+              <span class="icon">
+                <i class="fas fa-envelope"></i>
+              </span> Email Address</p>
+            <a class="link" href="mailto:{{location.email}}">
+              {{location.email}}
+            </a>
+          </div>
+
+          <div class="field">
+            <p class="label">
+              <span class="icon">
+                <i class="fas fa-phone"></i>
+              </span>Phone Number</p>
+            <a class="link" href="tel:{{location.phone}}">
+              {{location.phone}}
+            </a>
+          </div>
+
+        </div>
+
+        <div class="column is-4-widescreen">
+
+          <label class="label has-text-centered">Open Hours</label>
+          <div *ngFor="let day of location.openHours">
+            <div class="columns">
+              <div class="column">
+                <p class="is-capitalized">
+                  {{day.day}}
+                </p>
+              </div>
+              <div class="column">
+                <p *ngIf="day.isOpen; else closed" class="has-text-centered">{{day.open}} - {{day.close}}</p>
+                <ng-template #closed>
+                  <p class="has-text-centered">closed</p>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Edit button -->
+      <div class="columns">
+        <div class="column is-4 is-offset-4">
+          <a (click)="toggleEdit()" class="button is-info is-rounded is-fullwidth">
+            <span>Edit</span>
+            <span class="icon">
+              <i class="fas fa-edit"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Editing Content -->
+    <ng-template #editingCard>
+      <div class="card-content">
+
+        <!-- Form fields -->
+        <div class="columns">
+
+          <!-- Name, Address, Email + Phone -->
+          <div class="column is-4 is-offset-1">
+            <div class="field">
+              <p class="label">Name</p>
+              <input class="input form-control" type="text" [(ngModel)]="location.name" />
+            </div>
+            <div class="field">
+              <p class="label">Address</p>
+              <ng-container *ngFor="let line of location.address; let i = index; trackBy:trackByFn">
+                <input class="input form-control" type="text" [(ngModel)]="location.address[i]" />
+              </ng-container>
+            </div>
+            <div class="field">
+              <p class="label">Email Address</p>
+              <input class="input form-control" type="email" [(ngModel)]="location.email" />
+            </div>
+            <div class="field">
+              <p class="label">Phone Number</p>
+              <input class="input form-control" type="phone" [(ngModel)]="location.phone">
+            </div>
+
+          </div>
+
+          <!-- Open Hours -->
+          <div class="column is-5 is-offset-1">
+
+            <label class="label has-text-centered">Open Hours</label>
+            <p class="help is-info has-text-centered">Please use hhmm format</p>
+
+            <ng-container *ngFor="let day of location.openHours; let count = index">
+              <div class="field">
+                <div>
+                  <label class="is-capitalized label has-text-weight-semibold has-text-centered">{{day.day}}</label>
+                </div>
+                <div class="columns is-mobile">
+                  <div class="column is-1 is-2-mobile">
+                    <span class="checkbox has-text-centered">
+                      <input [checked]="location.openHours[count].isOpen" (change)="toggleOpen(location.openHours[count])" type="checkbox">
+                    </span>
+                  </div>
+                  <div class="column">
+                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].open" (keyup)="checkOpenHours(location.openHours[count])" placeholder="Open" type="text" maxlength="4" class="input has-text-centered">
+                  </div>
+                  <div class="column">
+                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].close" (keyup)="checkOpenHours(location.openHours[count])" placeholder="Close" type="text" maxlength="4" class="input has-text-centered">
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+
+        </div>
+
+        <!-- Save/Discard buttons -->
+        <div class="columns">
+          <div class="column is-3-widescreen is-offset-3-widescreen">
+            <a (click)="updateLocation()" class="button is-success is-rounded is-fullwidth">
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>Save Changes</span>
+            </a>
+          </div>
+          <div class="column is-3-widescreen">
+            <a (click)="discardEdit()" class="button is-danger is-rounded is-fullwidth">
+              <span>Discard Changes</span>
+              <span class="icon">
+                <i class="fas fa-times"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </ng-template>
+  </div>
+</ng-template>

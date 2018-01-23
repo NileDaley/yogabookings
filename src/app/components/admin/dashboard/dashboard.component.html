@@ -1,21 +1,25 @@
 <div class="section">
   <div class="columns">
     <div id="admin-navigation" class="column is-one-quarter container is-hidden-touch">
-      <aside class="menu" *ngFor="let item of dashboardItems">
-        <p class="menu-label">
-          {{item.name}}
-        </p>
-        <ul class="menu-list">
-          <li *ngFor="let link of item.links">
-            <a [routerLink]=link.url routerLinkActive="has-text-info">
-              <span class="icon">
-                <i class="fa fa-{{link.icon}}"></i>
-              </span>
-              {{link.text}}
-            </a>
-          </li>
-        </ul>
+      <aside class="menu">
+        <ng-container *ngFor="let item of dashboardItems">
+          <p class="menu-label">
+            {{item.name}}
+          </p>
+          <ul class="menu-list">
+            <li *ngFor="let link of item.links">
+              <a [routerLink]=link.url routerLinkActive="has-text-info">
+                <span class="icon">
+                  <i class="{{link.icon.style}} fa-{{link.icon.code}}"></i>
+                </span>
+                {{link.text}}
+              </a>
+            </li>
+          </ul>
+        </ng-container>
+
       </aside>
+
     </div>
     <div class="column is-three-quarters">
       <div class="section">
