@@ -130,37 +130,32 @@
 
           </div>
 
-          <div class="column is-6">
+          <!-- Open Hours -->
+          <div class="column is-5 is-offset-1">
 
-            <table class="table">
-              <tr>
-                <th>Day</th>
-                <th>Open?</th>
-                <th>Open Time</th>
-                <th>Close Time</th>
-              </tr>
-              <tr *ngFor="let day of location.openHours; let count = index">
-                <td>
-                  <p class="is-capitalized">{{day.day}}</p>
-                </td>
-                <td class="has-text-centered">
-                  <label class="checkbox">
-                    <input [checked]="location.openHours[count].isOpen" (change)="toggleOpen(location.openHours[count])" type="checkbox">
-                  </label>
-                </td>
-                <td>
-                  <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].open" (keyup)="checkOpenHours(location.openHours[count])" type="text" maxlength="4" class="input has-text-centered">
-                </td>
-                <td>
-                  <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].close" (keyup)="checkOpenHours(location.openHours[count])" type="text" maxlength="4" class="input has-text-centered">
-                </td>
-              </tr>
-              <tr>
-                <td colspan="4">
-                  <p class="has-text-info has-text-centered">Enter a time in hhmm format, or leave empty if closed</p>
-                </td>
-              </tr>
-            </table>
+            <label class="label has-text-centered">Open Hours</label>
+            <p class="help is-info has-text-centered">Please use hhmm format</p>
+
+            <ng-container *ngFor="let day of location.openHours; let count = index">
+              <div class="field">
+                <div>
+                  <label class="is-capitalized label has-text-weight-semibold has-text-centered">{{day.day}}</label>
+                </div>
+                <div class="columns is-mobile">
+                  <div class="column is-1 is-2-mobile">
+                    <span class="checkbox has-text-centered">
+                      <input [checked]="location.openHours[count].isOpen" (change)="toggleOpen(location.openHours[count])" type="checkbox">
+                    </span>
+                  </div>
+                  <div class="column">
+                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].open" (keyup)="checkOpenHours(location.openHours[count])" placeholder="Open" type="text" maxlength="4" class="input has-text-centered">
+                  </div>
+                  <div class="column">
+                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].close" (keyup)="checkOpenHours(location.openHours[count])" placeholder="Close" type="text" maxlength="4" class="input has-text-centered">
+                  </div>
+                </div>
+              </div>
+            </ng-container>
 
           </div>
 
@@ -168,7 +163,7 @@
 
         <!-- Save/Discard buttons -->
         <div class="columns">
-          <div class="column is-3 is-offset-3">
+          <div class="column is-3-widescreen is-offset-3-widescreen">
             <a (click)="updateLocation()" class="button is-success is-rounded is-fullwidth">
               <span class="icon">
                 <i class="fas fa-check"></i>
@@ -176,7 +171,7 @@
               <span>Save Changes</span>
             </a>
           </div>
-          <div class="column is-3">
+          <div class="column is-3-widescreen">
             <a (click)="discardEdit()" class="button is-danger is-rounded is-fullwidth">
               <span>Discard Changes</span>
               <span class="icon">
