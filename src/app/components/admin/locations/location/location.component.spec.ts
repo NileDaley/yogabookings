@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
 import { LocationComponent } from './location.component';
+import { DataService } from 'app/services/data.service';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 describe('LocationComponent', () => {
   let component: LocationComponent;
@@ -8,7 +13,9 @@ describe('LocationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LocationComponent ]
+      imports: [HttpClientModule, FormsModule, RouterTestingModule],
+      declarations: [LocationComponent],
+      providers: [DataService]
     })
     .compileComponents();
   }));
@@ -16,10 +23,10 @@ describe('LocationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LocationComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 });
