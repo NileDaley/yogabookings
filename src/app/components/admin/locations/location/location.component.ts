@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from 'app/models/location';
-import { EditableLocation } from 'app/models/editable-location';
 import { pick } from 'lodash';
 import { OpenHours } from 'app/models/openHours';
 import { Venue } from 'app/models/venue';
@@ -14,8 +13,7 @@ import { Venue } from 'app/models/venue';
 })
 export class LocationComponent implements OnInit {
 
-  pristineLocation: Location;
-  location: EditableLocation;
+  location: Location;
   loading = true;
   editing = false;
   messages = [];
@@ -27,10 +25,14 @@ export class LocationComponent implements OnInit {
   }
 
   private getLocation(): void {
+
     const id: String = this.route.snapshot.paramMap.get('id');
+
     this._dataService.getLocation(id).subscribe(res => {
+
       const data = res['data'];
-      this.pristineLocation = new Location(
+
+      this.location = new Location(
         data._id,
         data.name,
         data.address.map(line => line),
@@ -39,9 +41,9 @@ export class LocationComponent implements OnInit {
         data.openHours.map(day => new OpenHours(day.day, day.isOpen, day.open, day.close)),
         data.venues.map(venue => new Venue(venue.name, venue.capacity))
       );
-      this.location = new EditableLocation(this.pristineLocation);
-      this.location.address = this.location.address.map(line => line);
+
       this.loading = false;
+
     }, err => {
       this.messages.push({
         message: 'There was an error retrieving this location from the database',
@@ -56,7 +58,7 @@ export class LocationComponent implements OnInit {
   }
 
   discardEdit(): void {
-    this.location = new EditableLocation(this.pristineLocation);
+    this.getLocation();
     this.toggleEdit();
   }
 
@@ -80,7 +82,7 @@ export class LocationComponent implements OnInit {
         }
 
       } else {
-        this.pristineLocation.update(newValues);
+        this.getLocation();
         message = `${newValues.name} was updated successfully`;
         type = 'success';
       }

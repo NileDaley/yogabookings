@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from 'app/services/data.service';
-import { Location } from 'app/models/location';
-import { EditableLocation as Editable } from 'app/models/editable-location';
-import { find, pick } from 'lodash';
+import {Component, OnInit} from '@angular/core';
+import {DataService} from 'app/services/data.service';
+import {Location} from 'app/models/location';
+import {find, pick} from 'lodash';
 
 @Component({
   selector: 'app-locations',
@@ -16,7 +15,8 @@ export class LocationsComponent implements OnInit {
   loading = true;
   messages = [];
 
-  constructor(private _dataService: DataService) { }
+  constructor(private _dataService: DataService) {
+  }
 
   ngOnInit() {
     this.getLocations();
@@ -36,7 +36,9 @@ export class LocationsComponent implements OnInit {
   // filter the locations based on the search criteria
   filterLocations(value: string): void {
     value = value.trim().toLowerCase();
-    if (value === '') { this.resetFilter(); }
+    if (value === '') {
+      this.resetFilter();
+    }
 
     /*
       Filters locations based on wether any value of the location matches the search value
