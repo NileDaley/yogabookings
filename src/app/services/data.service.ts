@@ -21,6 +21,6 @@ export class DataService {
   }
 
   updateLocation(_id: String, newValues: String[]) {
-    return this.http.patch(`/api/locations/update/${_id}`, newValues);
+    return this.http.patch(`/api/locations/${_id}`, newValues);
   }
 }

@@ -9,4 +9,4 @@ const UserSchema = new Schema({
   role: Number
 });
 
-module.exports = UserSchema
+module.exports = UserSchema;
