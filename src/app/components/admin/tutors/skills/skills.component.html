@@ -1,0 +1,28 @@
+<h1 class="title has-text-centered">Tutor Skills</h1>
+<div class="columns">
+  <div class="column is-6 is-offset-3">
+    <input (keyup)="filter(criteria.value)" #criteria type="text" class="input has-text-centered"
+           placeholder="Search Skills">
+  </div>
+</div>
+<div class="columns is-centered is-multiline">
+  <ng-container *ngFor="let skill of filteredSkills">
+    <div class="column is-4">
+      <div class="card" style="height:100%">
+        <div class="card-header">
+          <div class="card-header-title">
+            <span>{{skill.name}}</span>
+            <span class="icon">
+              <a class="link">
+                <i class="far fa-edit"></i>
+              </a>
+            </span>
+          </div>
+        </div>
+        <div class="card-content">
+          <p class="has-text-centered">{{skill.description}}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

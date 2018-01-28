@@ -52,9 +52,9 @@ export class DashboardComponent implements OnInit {
           'icon': {'style': 'fas', 'code': 'user-plus'}
         },
         {
-          'text': 'Skill Management',
-          'url': '/admin/skills',
-          'icon': {'style': 'fas', 'code': 'graduation-cap'}
+          'text': 'Tutor Skills',
+          'url': '/admin/tutors/skills',
+          'icon': {'style': 'fas', 'code': 'lightbulb'}
         }
       ]
     },

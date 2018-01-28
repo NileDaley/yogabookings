@@ -10,11 +10,14 @@
 
 <!-- Main content which is shown when data isn't loading -->
 <ng-template #content>
+
+  <h1 class="title is-size-3 has-text-centered">Locations</h1>
+
   <!-- Search Bar -->
   <div class="columns">
-    <div class="column is-4 is-offset-4">
+    <div class="column is-6 is-offset-3">
       <input #filter type="text" (keyup)="filterLocations(filter.value)" class="input has-text-centered"
-             placeholder="Search">
+             placeholder="Search Locations">
     </div>
   </div>
 

@@ -8,7 +8,7 @@
           </p>
           <ul class="menu-list">
             <li *ngFor="let link of item.links">
-              <a [routerLink]=link.url routerLinkActive="has-text-info">
+              <a [routerLink]=link.url routerLinkActive="has-text-info" [routerLinkActiveOptions]="{'exact': true}">
                 <span class="icon">
                   <i class="{{link.icon.style}} fa-{{link.icon.code}}"></i>
                 </span>

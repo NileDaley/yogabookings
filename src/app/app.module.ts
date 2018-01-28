@@ -18,14 +18,15 @@ import { StatusComponent } from './components/status/status.component';
 import { DashboardComponent as AdminDashboard } from 'app/components/admin/dashboard/dashboard.component';
 import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/customers/customers.component';
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
+import { LocationComponent as AdminSingleLocation } from './components/admin/locations/location/location.component';
 import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
 
 /* Guest components */
-import { LocationsComponent } from './components/guest/locations/locations.component';
+import { LocationsComponent as GuestLocations } from './components/guest/locations/locations.component';
 
 /* Services */
 import { DataService } from 'app/services/data.service';
-import { LocationComponent } from './components/admin/locations/location/location.component';
+import { SkillsComponent as AdminTutorSkills } from './components/admin/tutors/skills/skills.component';
 
 @NgModule({
   declarations: [
@@ -37,10 +38,11 @@ import { LocationComponent } from './components/admin/locations/location/locatio
     AdminDashboard,
     AdminAllCustomers,
     AdminLocations,
+    AdminSingleLocation,
     AdminTutors,
+    AdminTutorSkills,
     StatusComponent,
-    LocationsComponent,
-    LocationComponent
+    GuestLocations
   ],
   imports: [
     BrowserModule,

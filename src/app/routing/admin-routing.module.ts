@@ -6,6 +6,7 @@ import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/cu
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
 import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
 import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
+import { SkillsComponent as AdminSkills } from '../components/admin/tutors/skills/skills.component';
 
 const adminRoutes: Routes = [
   {
@@ -26,6 +27,10 @@ const adminRoutes: Routes = [
       {
         path: 'tutors',
         component: AdminTutors
+      },
+      {
+        path: 'tutors/skills',
+        component: AdminSkills
       }
     ]
   }
