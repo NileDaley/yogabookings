@@ -3,10 +3,14 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const UserSchema = require('../schemas/UserSchema');
+const adminRoutes = require('./users/adminRoutes');
+const tutorRoutes = require('./users/tutorRoutes');
+const customerRoutes = require('./users/customerRoutes');
 
 // Error handling
 const sendError = (err, res) => {
   response.status = 501;
+  response.data = [];
   response.message = typeof err === 'object' ? err.message : err;
   res.status(501).json(response);
 };
@@ -18,10 +22,15 @@ let response = {
   message: null
 };
 
+router.use('/customers', customerRoutes);
+router.use('/tutors', tutorRoutes);
+router.use('/admins', adminRoutes);
+
 // Get all users
 router.get('/', (req, res) => {
   let User = mongoose.model('User', UserSchema);
-  User.find({role: 0})
+  User.find()
+    .select('email role')
     .then(data => {
       response.data = data;
       res.json(response);
@@ -33,6 +42,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   let User = mongoose.model('User', UserSchema);
   User.findById(req.params.id)
+    .select('email role')
     .then(data => {
       response.data = data;
       res.json(response);
@@ -41,8 +51,8 @@ router.get('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req,res) => {
-  let Location = mongoose.model('User', UserSchema);
-  Location.findByIdAndRemove(req.params.id)
+  let User = mongoose.model('User', UserSchema);
+  User.findByIdAndRemove(req.params.id)
     .then((data, err) => {
       if (err) sendError(err,res);
       response.data = data;
@@ -50,5 +60,4 @@ router.delete('/:id', (req,res) => {
     })
     .catch(err => sendError(err,res));
 });
-
 module.exports = router;

@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Location } from 'app/models/location';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class DataService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getCustomers() {
     return this.http.get('/api/users');
@@ -16,11 +16,20 @@ export class DataService {
     return this.http.get('/api/locations');
   }
 
-  getLocation(id: String) {
+  getLocation(id: string) {
     return this.http.get(`/api/locations/${id}`);
   }
 
-  updateLocation(_id: String, newValues: String[]) {
+  updateLocation(_id: string, newValues: string[]) {
     return this.http.patch(`/api/locations/${_id}`, newValues);
   }
+
+  getTutors() {
+    return this.http.get(`/api/tutors/`);
+  }
+
+  getTutor(id: string) {
+    return this.http.get(`/api/tutors/${id}`);
+  }
+
 }

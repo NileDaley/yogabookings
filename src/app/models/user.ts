@@ -1,22 +1,19 @@
 export class User {
 
-  forename: string;
-  surname: string;
   email: string;
-  phone: string;
   password: string;
   role: number;
 
-  // Payment methods
-  // Classes
-
-  constructor(forename: string, surname: string, email: string, phone: string, password: string, role: number) {
-    this.forename = forename;
-    this.surname = surname;
+  constructor(email: string, password: string, role: number) {
     this.email = email;
-    this.phone = phone;
     this.password = password;
     this.role = role;
   }
 
+}
+
+export enum Role {
+  Customer = 0,
+  Tutor = 10,
+  Admin = 20,
 }

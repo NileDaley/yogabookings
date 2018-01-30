@@ -26,7 +26,7 @@ export class LocationComponent implements OnInit {
 
   private getLocation(): void {
 
-    const id: String = this.route.snapshot.paramMap.get('id');
+    const id: string = this.route.snapshot.paramMap.get('id');
 
     this._dataService.getLocation(id).subscribe(res => {
 

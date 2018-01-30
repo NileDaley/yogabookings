@@ -27,6 +27,7 @@ import { LocationsComponent as GuestLocations } from './components/guest/locatio
 /* Services */
 import { DataService } from 'app/services/data.service';
 import { SkillsComponent as AdminTutorSkills } from './components/admin/tutors/skills/skills.component';
+import { TutorComponent } from './components/admin/tutors/tutor/tutor.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SkillsComponent as AdminTutorSkills } from './components/admin/tutors/s
     AdminTutors,
     AdminTutorSkills,
     StatusComponent,
-    GuestLocations
+    GuestLocations,
+    TutorComponent
   ],
   imports: [
     BrowserModule,

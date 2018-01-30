@@ -1,21 +1,25 @@
 <h1 class="title has-text-centered">Tutors</h1>
-<div class="columns">
-  <div class="column is-8 is-offset-2">
-    <table class="table is-striped is-hoverable">
-      <tr>
-        <th>Forename</th>
-        <th>Surname</th>
-        <th>Phone</th>
-        <th>Email</th>
-      </tr>
-      <ng-container *ngFor="let tutor of tutors">
-        <tr>
-          <td>{{tutor.forename}}</td>
-          <td>{{tutor.surname}}</td>
-          <td>{{tutor.phone}}</td>
-          <td>{{tutor.email}}</td>
-        </tr>
-      </ng-container>
-    </table>
-  </div>
-</div>
+
+<table class="table is-striped is-hoverable is-fullwidth">
+  <tr>
+    <th>Forename</th>
+    <th>Surname</th>
+    <th>Phone</th>
+    <th>Email</th>
+    <th></th>
+  </tr>
+  <ng-container *ngFor="let tutor of tutors">
+    <tr>
+      <td>{{tutor.forename}}</td>
+      <td>{{tutor.surname}}</td>
+      <td>{{tutor.phone}}</td>
+      <td>{{tutor.user.email}}</td>
+      <td class="has-text-centered">
+        <a routerLink="/admin/tutors/{{tutor._id}}" class="button is-link is-rounded">
+          <span>More Details</span>
+        </a>
+      </td>
+    </tr>
+  </ng-container>
+</table>
+
