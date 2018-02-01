@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {DataService} from '../../../../services/data.service';
+import {Skill} from '../../../../models/skill';
 
 @Component({
   selector: 'app-skills',
@@ -10,17 +12,21 @@ export class SkillsComponent implements OnInit {
   skills: any[];
   filteredSkills: any[];
 
-  constructor() {
+  constructor(private _dataService: DataService) {
   }
 
   ngOnInit() {
-    this.filteredSkills = this.skills = [
-      {name: 'Yoga', description: 'Breath control, meditation, and specific bodily postures for health and relaxation'},
-      {name: 'Spiritualism', description: 'Foo bar baz'},
-      {name: 'Mindfulness', description: 'Baz bar foo'},
-      {name: 'Private Tuition', description: 'One-on-one classes'},
-    ];
+    this.getSkills();
+  }
 
+  private getSkills(){
+    this._dataService.getSkills().subscribe(res => {
+      const data = res['data'];
+      this.skills = data.map(skill => new Skill(skill.name, skill.description));
+      this.filteredSkills = this.skills;
+    }, err => {
+
+    });
   }
 
   filter(criteria: String) {

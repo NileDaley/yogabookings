@@ -7,7 +7,7 @@ import { LocationsComponent as AdminLocations } from 'app/components/admin/locat
 import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
 import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
 import { TutorComponent as AdminSingleTutor} from 'app/components/admin/tutors/tutor/tutor.component';
-import { SkillsComponent as AdminSkills } from '../components/admin/tutors/skills/skills.component';
+import { SkillsComponent as AdminSkills } from 'app/components/admin/tutors/skills/skills.component';
 
 const adminRoutes: Routes = [
   {
@@ -30,12 +30,12 @@ const adminRoutes: Routes = [
         component: AdminTutors
       },
       {
-        path: 'tutors/:id',
-        component: AdminSingleTutor
-      },
-      {
         path: 'tutors/skills',
         component: AdminSkills
+      },
+      {
+        path: 'tutors/:id',
+        component: AdminSingleTutor
       }
     ]
   }

@@ -32,4 +32,8 @@ export class DataService {
     return this.http.get(`/api/users/tutors/${id}`);
   }
 
+  getSkills() {
+    return this.http.get(`/api/users/tutors/skills`);
+  }
+
 }
