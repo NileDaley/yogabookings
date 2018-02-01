@@ -69,7 +69,6 @@ export class LocationComponent implements OnInit {
     this._dataService.updateLocation(this.location._id, newValues).subscribe(res => {
 
       let message, type;
-      console.log(res);
 
       if (res['data']['status'] === false) {
 

@@ -5,35 +5,41 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class DataService {
 
+  baseURL = '/api';
+
   constructor(private http: HttpClient) {
   }
 
   getCustomers() {
-    return this.http.get('/api/users');
+    return this.http.get(`${this.baseURL}/users`);
   }
 
   getLocations(): Observable<any> {
-    return this.http.get('/api/locations');
+    return this.http.get(`${this.baseURL}/locations`);
   }
 
   getLocation(id: string) {
-    return this.http.get(`/api/locations/${id}`);
+    return this.http.get(`${this.baseURL}/locations/${id}`);
   }
 
   updateLocation(_id: string, newValues: string[]) {
-    return this.http.patch(`/api/locations/${_id}`, newValues);
+    return this.http.patch(`${this.baseURL}/locations/${_id}`, newValues);
   }
 
   getTutors() {
-    return this.http.get(`/api/users/tutors/`);
+    return this.http.get(`${this.baseURL}/users/tutors/`);
   }
 
   getTutor(id: string) {
-    return this.http.get(`/api/users/tutors/${id}`);
+    return this.http.get(`${this.baseURL}/users/tutors/${id}`);
+  }
+
+  updateTutor(id: string, newValues) {
+    return this.http.patch(`${this.baseURL}/users/tutors/${id}`, newValues);
   }
 
   getSkills() {
-    return this.http.get(`/api/users/tutors/skills`);
+    return this.http.get(`${this.baseURL}/users/tutors/skills`);
   }
 
 }

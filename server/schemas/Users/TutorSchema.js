@@ -5,6 +5,7 @@ const TutorSchema = new Schema({
   forename: String,
   surname: String,
   gender: String,
+  phone: String,
   skills: [{type: Schema.Types.ObjectId, ref: 'Skill'}],
   user: {type: Schema.Types.ObjectId, ref: 'User'}
 });

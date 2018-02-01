@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+const SkillsRoutes = require('./skillsRoutes');
+
 const TutorSchema = require('../../schemas/Users/TutorSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
 const SkillSchema = require('../../schemas/Users/SkillSchema');
@@ -21,6 +23,8 @@ let response = {
   message: null
 };
 
+router.use('/skills', SkillsRoutes);
+
 router.get('/', (req, res) => {
   let Tutor = mongoose.model('Tutor', TutorSchema);
   let User = mongoose.model('User', UserSchema);
@@ -35,15 +39,6 @@ router.get('/', (req, res) => {
     .catch(err => sendError(err, res));
 });
 
-router.get('/skills', (req,res) => {
-  let Skill = mongoose.model('Skill', SkillSchema);
-  Skill.find()
-    .then(data => {
-      response.data = data;
-      res.send(response);
-    })
-});
-
 router.get('/:id', (req, res) => {
   let Tutor = mongoose.model('Tutor', TutorSchema);
   let User = mongoose.model('User', UserSchema);
@@ -54,7 +49,40 @@ router.get('/:id', (req, res) => {
       response.data = data;
       res.send(response);
     })
-    .catch(err => sendError(err,res));
+    .catch(err => sendError(err, res));
+});
+
+router.patch('/:id', (req, res) => {
+  let Tutor = mongoose.model('Tutor', TutorSchema);
+  let User = mongoose.model('User', UserSchema);
+  let Skill = mongoose.model('Skill', SkillSchema);
+
+  let newValues = req.body;
+  let skills = newValues.skills.map(s => mongoose.Types.ObjectId(s._id));
+  let user = mongoose.Types.ObjectId(newValues.user._id);
+
+  let {forename, surname, phone, gender} = newValues;
+
+  Tutor.update({_id: req.params.id},
+    {
+      $set: {
+        skills,
+        user,
+        forename,
+        surname,
+        phone,
+        gender
+      }
+    })
+    .then(data => {
+      response.data = {
+        status: data['n'] > 0 && data['nModified'] > 0,
+        matched: data['n'],
+        modified: data['nModified']
+      };
+      res.json(response);
+    }).catch(err => sendError(err, res));
+
 });
 
 module.exports = router;

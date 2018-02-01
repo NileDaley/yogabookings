@@ -19,12 +19,12 @@ export class SkillsComponent implements OnInit {
     this.getSkills();
   }
 
-  private getSkills(){
+  private getSkills() {
     this._dataService.getSkills().subscribe(res => {
       const data = res['data'];
-      this.skills = data.map(skill => new Skill(skill.name, skill.description));
+      this.skills = data.map(skill => new Skill(skill._id, skill.name, skill.description));
       this.filteredSkills = this.skills;
-    }, err => {
+    }, () => {
 
     });
   }

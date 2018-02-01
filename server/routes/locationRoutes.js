@@ -10,6 +10,7 @@ const OpenHoursSchema = require('../schemas/Locations/OpenHoursSchema');
 const sendError = (err, res) => {
   response.status = 501;
   response.message = typeof err === 'object' ? err.message : err;
+  response.data = [];
   res.status(501).json(response);
 };
 
