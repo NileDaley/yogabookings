@@ -25,8 +25,16 @@ export class TutorComponent implements OnInit {
   private getTutor(id: string) {
     this._dataService.getTutor(id)
       .subscribe(
-        data => {
-          console.log(data);
+        res => {
+          const data = res['data'];
+          this.tutor = new Tutor(
+            data._id,
+            data.forename,
+            data.surname,
+            data.gender,
+            data.phone,
+            data.user,
+            data.skills);
         },
         error => {
           console.log(error);

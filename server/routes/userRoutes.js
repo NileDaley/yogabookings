@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const UserSchema = require('../schemas/UserSchema');
+const UserSchema = require('../schemas/Users/UserSchema');
 const adminRoutes = require('./users/adminRoutes');
 const tutorRoutes = require('./users/tutorRoutes');
 const customerRoutes = require('./users/customerRoutes');

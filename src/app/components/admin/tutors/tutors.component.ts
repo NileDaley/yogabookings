@@ -24,8 +24,11 @@ export class TutorsComponent implements OnInit {
   private getTutors() {
     this._dataService.getTutors()
       .subscribe(
-        data => {
-          console.log(data);
+        res => {
+          const data: Array<any> = res['data'];
+          this.tutors = data.map(t => {
+            return new Tutor(t._id, t.forename, t.surname, t.gender, t.phone, t.user, t.skills);
+          });
         },
         error => console.log(error)
       );

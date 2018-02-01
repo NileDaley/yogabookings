@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const UserSchema = require('../../schemas/UserSchema');
-const AdminSchema = require('../../schemas/AdminSchema');
+const UserSchema = require('../../schemas/Users/UserSchema');
+const AdminSchema = require('../../schemas/Users/AdminSchema');
 
 // Error handling
 const sendError = (err, res) => {

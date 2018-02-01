@@ -25,11 +25,11 @@ export class DataService {
   }
 
   getTutors() {
-    return this.http.get(`/api/tutors/`);
+    return this.http.get(`/api/users/tutors/`);
   }
 
   getTutor(id: string) {
-    return this.http.get(`/api/tutors/${id}`);
+    return this.http.get(`/api/users/tutors/${id}`);
   }
 
 }

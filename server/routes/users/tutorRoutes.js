@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const TutorSchema = require('../../schemas/TutorSchema');
-const UserSchema = require('../../schemas/UserSchema');
+const TutorSchema = require('../../schemas/Users/TutorSchema');
+const UserSchema = require('../../schemas/Users/UserSchema');
 
 // Error handling
 const sendError = (err, res) => {
@@ -30,6 +30,18 @@ router.get('/', (req, res) => {
       res.send(response);
     })
     .catch(err => sendError(err, res));
+});
+
+router.get('/:id', (req, res) => {
+  let Tutor = mongoose.model('Tutor', TutorSchema);
+  let User = mongoose.model('User', UserSchema);
+  Tutor.findById(req.params.id)
+    .populate('user')
+    .then(data => {
+      response.data = data;
+      res.send(response);
+    })
+    .catch(err => sendError(err,res));
 });
 
 module.exports = router;
