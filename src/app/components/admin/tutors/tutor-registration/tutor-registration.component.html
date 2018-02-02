@@ -1,0 +1,118 @@
+<!-- Notifications -->
+<div *ngIf="messages.length > 0">
+  <div *ngFor="let m of messages" class="notification" [ngClass]="{
+      'is-danger': m.type === 'error',
+      'is-success': m.type === 'success',
+      'is-warning': m.type === 'warning'}">
+    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    {{m.message}}
+  </div>
+</div>
+
+<!-- Loading spinner -->
+<div *ngIf="loading; else content">
+  <div class="section has-text-centered">
+    <h1 class="title has-text-info">Loading...</h1>
+    <span class="icon">
+      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
+    </span>
+  </div>
+</div>
+
+<ng-template #content>
+  <div class="card">
+
+    <div class="card-content">
+
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <h2 class="subtitle is-4 has-text-centered">Tutor Registration</h2>
+
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <p class="label">Forename</p>
+                <input [(ngModel)]="tutor.forename" class="input" type="text">
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <p class="label">Surname</p>
+                <input [(ngModel)]="tutor.surname" class="input" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <p class="label">Phone</p>
+                <input [(ngModel)]="tutor.phone" type="tel" class="input">
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <p class="label">Gender</p>
+                <input [(ngModel)]="tutor.gender" type="text" class="input">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <p class="label">Email</p>
+            <input [(ngModel)]="tutor.user.email" type="email" class="input">
+          </div>
+
+          <div class="field">
+            <p class="label">Password</p>
+            <input [(ngModel)]="tutor.user.password" type="password" class="input">
+          </div>
+
+          <p class="label">Skills</p>
+          <div class="field is-grouped is-grouped-multiline">
+
+            <div class="control" *ngFor="let skill of tutor.skills">
+
+              <div class="tags has-addons">
+                <span class="tag is-link">{{skill.name}}</span>
+                <a (click)="removeSkill(skill)" class="tag"><span><i class="fas fa-minus"></i></span></a>
+              </div>
+
+            </div>
+
+          </div>
+
+          <p class="label">Available Skills</p>
+          <p *ngIf="availableSkills.length === 0">No skills available</p>
+          <div class="field is-grouped is-grouped-multiline">
+
+            <div class="control" *ngFor="let skill of availableSkills">
+
+              <div class="tags has-addons">
+                <span class="tag is-warning">{{skill.name}}</span>
+                <a (click)="addSkill(skill)" class="tag"><span><i class="fas fa-plus"></i></span></a>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Save/Discard buttons -->
+      <div class="columns">
+        <div class="column is-6-widescreen is-offset-3-widescreen">
+          <a (click)="insertTutor()" class="button is-success is-rounded is-fullwidth">
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+            <span>Register Tutor</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</ng-template>

@@ -25,6 +25,7 @@ let response = {
 
 router.use('/skills', SkillsRoutes);
 
+// Get all tutors
 router.get('/', (req, res) => {
   let Tutor = mongoose.model('Tutor', TutorSchema);
   let User = mongoose.model('User', UserSchema);
@@ -39,6 +40,51 @@ router.get('/', (req, res) => {
     .catch(err => sendError(err, res));
 });
 
+router.post('/', (req, res) => {
+
+  let Tutor = mongoose.model('Tutor', TutorSchema);
+  let User = mongoose.model('User', UserSchema);
+  let Skill = mongoose.model('Skill', SkillSchema);
+
+  let values = req.body;
+  let {forename, surname, gender, phone} = values;
+
+  let user = new User(values.user);
+  user.save()
+    .then(newUser => {
+
+      const userID = mongoose.Types.ObjectId(newUser._id);
+      const skills = values.skills.map(skill => mongoose.Types.ObjectId(skill._id));
+
+      let tutor = new Tutor({
+        forename,
+        surname,
+        gender,
+        phone,
+        skills,
+        user: userID
+      });
+
+      tutor.save()
+        .then(newTutor => {
+
+          response.data = newTutor;
+          response.status = 201;
+          res.send(response);
+
+          // Reset the response code, otherwise future responses would be 201
+          response.status = 200;
+        })
+        .catch(err => {
+          sendError(err, res);
+        })
+
+    })
+    .catch(err => sendError(err, res));
+
+});
+
+// Get single tutor
 router.get('/:id', (req, res) => {
   let Tutor = mongoose.model('Tutor', TutorSchema);
   let User = mongoose.model('User', UserSchema);
@@ -52,6 +98,7 @@ router.get('/:id', (req, res) => {
     .catch(err => sendError(err, res));
 });
 
+// Update tutor
 router.patch('/:id', (req, res) => {
   let Tutor = mongoose.model('Tutor', TutorSchema);
   let User = mongoose.model('User', UserSchema);

@@ -17,17 +17,21 @@ import { StatusComponent } from './components/status/status.component';
 /* Admin Components */
 import { DashboardComponent as AdminDashboard } from 'app/components/admin/dashboard/dashboard.component';
 import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/customers/customers.component';
+
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
-import { LocationComponent as AdminSingleLocation } from './components/admin/locations/location/location.component';
+import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
+
 import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
+import { TutorComponent as AdminSingleTutor } from 'app/components/admin/tutors/tutor/tutor.component';
+import { TutorRegistrationComponent as AdminTutorRegistration } from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
+import { SkillsComponent as AdminTutorSkills } from 'app/components/admin/tutors/skills/skills.component';
 
 /* Guest components */
-import { LocationsComponent as GuestLocations } from './components/guest/locations/locations.component';
+import { LocationsComponent as GuestLocations } from 'app/components/guest/locations/locations.component';
 
 /* Services */
 import { DataService } from 'app/services/data.service';
-import { SkillsComponent as AdminTutorSkills } from './components/admin/tutors/skills/skills.component';
-import { TutorComponent } from './components/admin/tutors/tutor/tutor.component';
+
 
 @NgModule({
   declarations: [
@@ -44,7 +48,8 @@ import { TutorComponent } from './components/admin/tutors/tutor/tutor.component'
     AdminTutorSkills,
     StatusComponent,
     GuestLocations,
-    TutorComponent
+    AdminSingleTutor,
+    AdminTutorRegistration
   ],
   imports: [
     BrowserModule,

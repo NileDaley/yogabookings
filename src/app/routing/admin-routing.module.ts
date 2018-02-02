@@ -1,41 +1,46 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-import { DashboardComponent as AdminDashboard } from 'app/components/admin/dashboard/dashboard.component';
-import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/customers/customers.component';
-import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
-import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
-import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
-import { TutorComponent as AdminSingleTutor} from 'app/components/admin/tutors/tutor/tutor.component';
-import { SkillsComponent as AdminSkills } from 'app/components/admin/tutors/skills/skills.component';
+import { DashboardComponent as Dashboard } from 'app/components/admin/dashboard/dashboard.component';
+import { CustomersComponent as AllCustomers } from 'app/components/admin/customers/customers.component';
+import { LocationsComponent as Locations } from 'app/components/admin/locations/locations.component';
+import { LocationComponent as SingleLocation } from 'app/components/admin/locations/location/location.component';
+import { TutorsComponent as Tutors } from 'app/components/admin/tutors/tutors.component';
+import { TutorComponent as SingleTutor} from 'app/components/admin/tutors/tutor/tutor.component';
+import { SkillsComponent as Skills } from 'app/components/admin/tutors/skills/skills.component';
+import { TutorRegistrationComponent as TutorRegistration} from '../components/admin/tutors/tutor-registration/tutor-registration.component';
 
 const adminRoutes: Routes = [
   {
-    path: 'admin', component: AdminDashboard,
+    path: 'admin', component: Dashboard,
     children: [
       {
         path: 'customers',
-        component: AdminAllCustomers
+        component: AllCustomers
       },
       {
         path: 'locations/:id',
-        component: AdminSingleLocation
+        component: SingleLocation
       },
       {
         path: 'locations',
-        component: AdminLocations
+        component: Locations
       },
       {
         path: 'tutors',
-        component: AdminTutors
+        component: Tutors
       },
       {
         path: 'tutors/skills',
-        component: AdminSkills
+        component: Skills
+      },
+      {
+        path: 'tutors/register',
+        component: TutorRegistration
       },
       {
         path: 'tutors/:id',
-        component: AdminSingleTutor
+        component: SingleTutor
       }
     ]
   }

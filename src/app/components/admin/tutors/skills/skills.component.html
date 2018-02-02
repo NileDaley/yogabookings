@@ -1,4 +1,4 @@
-<h1 class="title has-text-centered">Tutor Skills</h1>
+<h1 class="subtitle is-3 has-text-centered">Tutor Skills</h1>
 <div class="columns">
   <div class="column is-6 is-offset-3">
     <input (keyup)="filter(criteria.value)" #criteria type="text" class="input has-text-centered"
@@ -11,7 +11,7 @@
       <div class="card" style="height:100%">
         <div class="card-header">
           <div class="card-header-title">
-            <span>{{skill.name}}</span>
+            <span class="is-capitalized">{{skill.name}}</span>
             <span class="icon">
               <a class="link">
                 <i class="far fa-edit"></i>

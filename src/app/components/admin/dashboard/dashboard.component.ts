@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
         },
         {
           'text': 'Tutor Registration',
-          'url': '/admin/tutors/new',
+          'url': '/admin/tutors/register',
           'icon': {'style': 'fas', 'code': 'user-plus'}
         },
         {

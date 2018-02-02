@@ -38,6 +38,10 @@ export class DataService {
     return this.http.patch(`${this.baseURL}/users/tutors/${id}`, newValues);
   }
 
+  insertTutor(values) {
+    return this.http.post(`${this.baseURL}/users/tutors/`, values);
+  }
+
   getSkills() {
     return this.http.get(`${this.baseURL}/users/tutors/skills`);
   }
