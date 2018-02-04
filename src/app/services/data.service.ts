@@ -54,4 +54,8 @@ export class DataService {
     return this.http.patch(`${this.baseURL}/users/tutors/skills/${id}`, values);
   }
 
+  insertSkill(skill) {
+    return this.http.post(`${this.baseURL}/users/tutors/skills/`, skill);
+  }
+
 }

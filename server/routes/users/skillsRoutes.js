@@ -28,6 +28,23 @@ router.get('/', (req, res) => {
     })
 });
 
+router.post('/', (req, res) => {
+  let Skill = mongoose.model('Skill', SkillSchema);
+  let {name, description} = req.body;
+  let skill = new Skill({
+    name, description
+  });
+  skill.save()
+    .then(newSkill => {
+
+      response.data = newSkill;
+      response.status = 201;
+      res.send(response);
+
+      response.status = 200;
+    }).catch(err => sendError(err, res));
+});
+
 router.get('/:id', (req, res) => {
   let Skill = mongoose.model('Skill', SkillSchema);
   Skill.findById(req.params.id)

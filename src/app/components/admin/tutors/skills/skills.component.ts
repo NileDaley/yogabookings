@@ -11,6 +11,8 @@ export class SkillsComponent implements OnInit {
 
   skills: any[];
   filteredSkills: any[];
+  isAddingSkill = false;
+  newSkill: Skill;
 
   constructor(private _dataService: DataService) {
   }
@@ -24,6 +26,7 @@ export class SkillsComponent implements OnInit {
       const data = res['data'];
       this.skills = data.map(skill => new Skill(skill._id, skill.name, skill.description));
       this.filteredSkills = this.skills;
+      this.newSkill = new Skill('', '', '');
     }, () => {
 
     });
@@ -38,6 +41,22 @@ export class SkillsComponent implements OnInit {
         return skill.name.toLowerCase().includes(criteria) || skill.description.toLowerCase().includes(criteria);
       });
     }
+  }
+
+  discardNewSkill() {
+    this.isAddingSkill = false;
+    this.newSkill = new Skill('', '', '');
+  }
+
+  saveNewSkill() {
+    this._dataService.insertSkill(this.newSkill)
+      .subscribe(res => {
+        // reset the new skill, get all skills and toggle isAddingSkill
+        this.getSkills();
+        this.isAddingSkill = false;
+      }, err => {
+
+      });
   }
 
 }
