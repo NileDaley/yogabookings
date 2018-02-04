@@ -25,6 +25,7 @@ import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tuto
 import { TutorComponent as AdminSingleTutor } from 'app/components/admin/tutors/tutor/tutor.component';
 import { TutorRegistrationComponent as AdminTutorRegistration } from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
 import { SkillsComponent as AdminTutorSkills } from 'app/components/admin/tutors/skills/skills.component';
+import { SkillComponent as AdminTutorSkill } from './components/admin/tutors/skills/skill/skill.component';
 
 /* Guest components */
 import { LocationsComponent as GuestLocations } from 'app/components/guest/locations/locations.component';
@@ -46,10 +47,11 @@ import { DataService } from 'app/services/data.service';
     AdminSingleLocation,
     AdminTutors,
     AdminTutorSkills,
+    AdminTutorSkill,
     StatusComponent,
     GuestLocations,
     AdminSingleTutor,
-    AdminTutorRegistration
+    AdminTutorRegistration,
   ],
   imports: [
     BrowserModule,

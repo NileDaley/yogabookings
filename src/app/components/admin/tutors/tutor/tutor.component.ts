@@ -92,8 +92,6 @@ export class TutorComponent implements OnInit {
   }
 
   saveTutor() {
-    console.log('saving...');
-    console.log(this.tutor);
     this._dataService
       .updateTutor(this.tutor._id, this.tutor)
       .subscribe(res => {

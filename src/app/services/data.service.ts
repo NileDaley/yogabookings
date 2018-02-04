@@ -46,4 +46,12 @@ export class DataService {
     return this.http.get(`${this.baseURL}/users/tutors/skills`);
   }
 
+  getSkill(id) {
+    return this.http.get(`${this.baseURL}/users/tutors/skills/${id}`);
+  }
+
+  updateSkill(id, values) {
+    return this.http.patch(`${this.baseURL}/users/tutors/skills/${id}`, values);
+  }
+
 }

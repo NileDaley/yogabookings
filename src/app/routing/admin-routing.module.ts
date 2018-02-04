@@ -8,7 +8,8 @@ import { LocationComponent as SingleLocation } from 'app/components/admin/locati
 import { TutorsComponent as Tutors } from 'app/components/admin/tutors/tutors.component';
 import { TutorComponent as SingleTutor} from 'app/components/admin/tutors/tutor/tutor.component';
 import { SkillsComponent as Skills } from 'app/components/admin/tutors/skills/skills.component';
-import { TutorRegistrationComponent as TutorRegistration} from '../components/admin/tutors/tutor-registration/tutor-registration.component';
+import { SkillComponent as SingleSkill } from 'app/components/admin/tutors/skills/skill/skill.component';
+import { TutorRegistrationComponent as TutorRegistration} from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
 
 const adminRoutes: Routes = [
   {
@@ -33,6 +34,10 @@ const adminRoutes: Routes = [
       {
         path: 'tutors/skills',
         component: Skills
+      },
+      {
+        path: 'tutors/skills/:id',
+        component: SingleSkill
       },
       {
         path: 'tutors/register',
