@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
         },
         {
           'text': 'Customer Registration',
-          'url': '/admin/customers/new',
+          'url': '/admin/customers/register',
           'icon': {'style': 'fas', 'code': 'user-plus'}
         },
       ]

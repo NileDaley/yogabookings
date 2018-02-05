@@ -128,23 +128,21 @@ router.delete('/:id', (req, res) => {
   let Customer = mongoose.model('Customer', CustomerSchema);
   let User = mongoose.model('User', UserSchema);
 
+  Customer.findById(req.params.id)
+    .then(cust => {
 
-  Customer.findByIdAndRemove(req.params.id)
-    .then(deletedCustomer => {
+      let userID = cust.user;
 
-      let userID = deletedCustomer.user._id;
-
-      User.findByIdAndRemove(userID)
-        .then(deletedUser => {
-
-          response.data = [];
-          res.json(response);
-
+      User.remove({_id: userID})
+        .then(() => {
+          Customer.remove({_id: req.params.id})
+            .then(() => {
+              res.send(response);
+            })
+            .catch(err => sendError(err, res));
         })
         .catch(err => sendError(err, res));
-
-    })
-    .catch(err => sendError(err, res));
+    });
 
 });
 

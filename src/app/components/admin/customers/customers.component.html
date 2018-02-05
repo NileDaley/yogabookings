@@ -1,3 +1,41 @@
-<ul *ngFor="let cust of customers">
-  <li>{{cust.forename}} {{cust.surname}}</li>
-</ul>
+<h1 class="subtitle is-4 has-text-centered">All Customers</h1>
+<div class="columns">
+  <div class="column is-4 is-offset-4">
+    <a routerLink="/admin/customers/register" class="button is-rounded is-link is-fullwidth">
+      <span class="icon">
+        <i class="fas fa-user-plus"></i>
+      </span>
+      <span>Register Customer</span>
+    </a>
+  </div>
+</div>
+<div class="columns">
+  <div class="column is-6 is-offset-3">
+    <input #filter type="text" (keyup)="filterCustomers(filter.value)" class="input has-text-centered"
+           placeholder="Search Customers">
+  </div>
+</div>
+<table class="table is-striped is-hoverable is-fullwidth">
+  <tr>
+    <th>Forename</th>
+    <th>Surname</th>
+    <th>Gender</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th></th>
+  </tr>
+  <ng-container *ngFor="let customer of customers">
+    <tr>
+      <td>{{customer.forename}}</td>
+      <td>{{customer.surname}}</td>
+      <td>{{customer.gender}}</td>
+      <td>{{customer.user.email}}</td>
+      <td>{{customer.phone}}</td>
+      <td class="has-text-centered">
+        <a routerLink="/admin/customers/{{customer._id}}" class="button is-link is-rounded">
+          <span>More details</span>
+        </a>
+      </td>
+    </tr>
+  </ng-container>
+</table>
