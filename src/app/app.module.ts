@@ -17,6 +17,7 @@ import { StatusComponent } from './components/status/status.component';
 /* Admin Components */
 import { DashboardComponent as AdminDashboard } from 'app/components/admin/dashboard/dashboard.component';
 import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/customers/customers.component';
+import { CustomerRegistrationComponent as AdminCustomerRegistration } from 'app/components/admin/customers/customer-registration/customer-registration.component';
 
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
 import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
@@ -33,7 +34,6 @@ import { LocationsComponent as GuestLocations } from 'app/components/guest/locat
 /* Services */
 import { DataService } from 'app/services/data.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,6 +43,7 @@ import { DataService } from 'app/services/data.service';
     IndexComponent,
     AdminDashboard,
     AdminAllCustomers,
+    AdminCustomerRegistration,
     AdminLocations,
     AdminSingleLocation,
     AdminTutors,
@@ -51,7 +52,7 @@ import { DataService } from 'app/services/data.service';
     StatusComponent,
     GuestLocations,
     AdminSingleTutor,
-    AdminTutorRegistration,
+    AdminTutorRegistration
   ],
   imports: [
     BrowserModule,

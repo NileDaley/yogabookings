@@ -10,6 +10,7 @@ import { TutorComponent as SingleTutor} from 'app/components/admin/tutors/tutor/
 import { SkillsComponent as Skills } from 'app/components/admin/tutors/skills/skills.component';
 import { SkillComponent as SingleSkill } from 'app/components/admin/tutors/skills/skill/skill.component';
 import { TutorRegistrationComponent as TutorRegistration} from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
+import {CustomerRegistrationComponent as CustomerRegistration} from '../components/admin/customers/customer-registration/customer-registration.component';
 
 const adminRoutes: Routes = [
   {
@@ -18,6 +19,10 @@ const adminRoutes: Routes = [
       {
         path: 'customers',
         component: AllCustomers
+      },
+      {
+        path: 'customers/register',
+        component: CustomerRegistration
       },
       {
         path: 'locations/:id',
