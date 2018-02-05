@@ -11,7 +11,23 @@ export class DataService {
   }
 
   getCustomers() {
-    return this.http.get(`${this.baseURL}/users`);
+    return this.http.get(`${this.baseURL}/users/customers`);
+  }
+
+  getCustomer(id) {
+    return this.http.get(`${this.baseURL}/users/customers/${id}`);
+  }
+
+  insertCustomer(values) {
+    return this.http.post(`${this.baseURL}/users/customers/`, values);
+  }
+
+  updateCustomer(id, values) {
+    return this.http.patch(`${this.baseURL}/users/customers/`, values);
+  }
+
+  deleteCustomer(id) {
+    return this.http.delete(`${this.baseURL}/users/customers/${id}`);
   }
 
   getLocations(): Observable<any> {
@@ -50,8 +66,8 @@ export class DataService {
     return this.http.get(`${this.baseURL}/users/tutors/skills/${id}`);
   }
 
-  updateSkill(id, values) {
-    return this.http.patch(`${this.baseURL}/users/tutors/skills/${id}`, values);
+  updateSkill(id, skill) {
+    return this.http.patch(`${this.baseURL}/users/tutors/skills/${id}`, skill);
   }
 
   insertSkill(skill) {
