@@ -78,7 +78,7 @@ router.get('/:id', (req, res) => {
     .populate('user')
     .then(user => {
       response.data = user;
-      res.send(user);
+      res.send(response);
     })
     .catch(err => sendError(err, res));
 });

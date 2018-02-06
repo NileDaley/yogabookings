@@ -33,6 +33,9 @@ import { LocationsComponent as GuestLocations } from 'app/components/guest/locat
 
 /* Services */
 import { DataService } from 'app/services/data.service';
+import { LoadingComponent } from './components/shared/loading/loading.component';
+import { MessagesComponent } from './components/shared/messages/messages.component';
+import { CustomerComponent } from './components/admin/customers/customer/customer.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { DataService } from 'app/services/data.service';
     StatusComponent,
     GuestLocations,
     AdminSingleTutor,
-    AdminTutorRegistration
+    AdminTutorRegistration,
+    LoadingComponent,
+    MessagesComponent,
+    CustomerComponent
   ],
   imports: [
     BrowserModule,

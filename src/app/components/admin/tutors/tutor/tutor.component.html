@@ -1,23 +1,5 @@
-<!-- Notifications -->
-<div *ngIf="messages.length > 0">
-  <div *ngFor="let m of messages" class="notification" [ngClass]="{
-      'is-danger': m.type === 'error',
-      'is-success': m.type === 'success',
-      'is-warning': m.type === 'warning'}">
-    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
-    {{m.message}}
-  </div>
-</div>
-
-<!-- Loading spinner -->
-<div *ngIf="loading; else content">
-  <div class="section has-text-centered">
-    <h1 class="title has-text-info">Loading...</h1>
-    <span class="icon">
-      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
-    </span>
-  </div>
-</div>
+<app-messages [messages]="messages"></app-messages>
+<app-loading *ngIf="loading; else content"></app-loading>
 
 <ng-template #content>
   <div class="card">

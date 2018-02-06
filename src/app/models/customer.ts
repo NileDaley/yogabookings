@@ -10,25 +10,21 @@ export class Customer {
   phone: string;
   gender: string;
   user: User;
-  paymentMethods: PaymentMethods;
-  payments: Array<Payment>;
+  // paymentMethods: PaymentMethods;
+  // payments: Array<Payment>;
 
   constructor(id: string,
               forename: string,
               surname: string,
               phone: string,
               gender: string,
-              user: User,
-              payments: Array<Payment>,
-              paymentMethods: PaymentMethods) {
+              user: User) {
     this._id = id;
     this.forename = forename;
     this.surname = surname;
     this.phone = phone;
     this.gender = gender;
     this.user = user;
-    this.payments = payments;
-    this.paymentMethods = paymentMethods;
   }
 
 }

@@ -1,0 +1,3 @@
+<app-messages [messages]="messages"></app-messages>
+<app-loading *ngIf="loading; else content"></app-loading>
+<ng-template #content></ng-template>

@@ -17,4 +17,8 @@ export class CustomersComponent implements OnInit {
     this._dataService.getCustomers().subscribe(res => this.customers = res['data']);
   }
 
+  filterCustomers(criteria) {
+
+  }
+
 }

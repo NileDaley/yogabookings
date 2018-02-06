@@ -1,16 +1,17 @@
-import { Routes, RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {NgModule} from '@angular/core';
 
-import { DashboardComponent as Dashboard } from 'app/components/admin/dashboard/dashboard.component';
-import { CustomersComponent as AllCustomers } from 'app/components/admin/customers/customers.component';
-import { LocationsComponent as Locations } from 'app/components/admin/locations/locations.component';
-import { LocationComponent as SingleLocation } from 'app/components/admin/locations/location/location.component';
-import { TutorsComponent as Tutors } from 'app/components/admin/tutors/tutors.component';
-import { TutorComponent as SingleTutor} from 'app/components/admin/tutors/tutor/tutor.component';
-import { SkillsComponent as Skills } from 'app/components/admin/tutors/skills/skills.component';
-import { SkillComponent as SingleSkill } from 'app/components/admin/tutors/skills/skill/skill.component';
-import { TutorRegistrationComponent as TutorRegistration} from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
-import {CustomerRegistrationComponent as CustomerRegistration} from '../components/admin/customers/customer-registration/customer-registration.component';
+import {DashboardComponent as Dashboard} from 'app/components/admin/dashboard/dashboard.component';
+import {CustomersComponent as AllCustomers} from 'app/components/admin/customers/customers.component';
+import {LocationsComponent as Locations} from 'app/components/admin/locations/locations.component';
+import {LocationComponent as SingleLocation} from 'app/components/admin/locations/location/location.component';
+import {TutorsComponent as Tutors} from 'app/components/admin/tutors/tutors.component';
+import {TutorComponent as SingleTutor} from 'app/components/admin/tutors/tutor/tutor.component';
+import {SkillsComponent as Skills} from 'app/components/admin/tutors/skills/skills.component';
+import {SkillComponent as SingleSkill} from 'app/components/admin/tutors/skills/skill/skill.component';
+import {TutorRegistrationComponent as TutorRegistration} from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
+import {CustomerRegistrationComponent as CustomerRegistration} from 'app/components/admin/customers/customer-registration/customer-registration.component';
+import {CustomerComponent as SingleCustomer} from 'app/components/admin/customers/customer/customer.component';
 
 const adminRoutes: Routes = [
   {
@@ -23,6 +24,10 @@ const adminRoutes: Routes = [
       {
         path: 'customers/register',
         component: CustomerRegistration
+      },
+      {
+        path: 'customers/:id',
+        component: SingleCustomer
       },
       {
         path: 'locations/:id',
@@ -61,4 +66,5 @@ const adminRoutes: Routes = [
   exports: [RouterModule]
 })
 
-export class AdminRoutingModule { }
+export class AdminRoutingModule {
+}

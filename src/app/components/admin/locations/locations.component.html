@@ -1,12 +1,4 @@
-<!-- Loading spinner -->
-<div *ngIf="loading; else content">
-  <div class="section has-text-centered">
-    <h1 class="title has-text-info">Loading...</h1>
-    <span class="icon">
-      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
-    </span>
-  </div>
-</div>
+<app-loading *ngIf="loading; else content"></app-loading>
 
 <!-- Main content which is shown when data isn't loading -->
 <ng-template #content>

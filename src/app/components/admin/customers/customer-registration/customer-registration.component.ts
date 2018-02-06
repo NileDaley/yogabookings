@@ -23,9 +23,7 @@ export class CustomerRegistrationComponent implements OnInit {
       '',
       '',
       '',
-      new User('', '', 0),
-      [],
-      new PaymentMethods()
+      new User('', '', 0)
     );
   }
 
