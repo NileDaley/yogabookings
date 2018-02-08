@@ -1,19 +1,15 @@
-<!-- Loading spinner -->
-<div *ngIf="loading; else content">
-  <div class="section has-text-centered">
-    <h1 class="title has-text-info">Loading...</h1>
-    <span class="icon">
-      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
-    </span>
-  </div>
-</div>
+<app-loading *ngIf="loading; else content"></app-loading>
 
 <!-- Main content which is shown when data isn't loading -->
 <ng-template #content>
+
+  <h1 class="title is-size-3 has-text-centered">Locations</h1>
+
   <!-- Search Bar -->
   <div class="columns">
-    <div class="column is-4 is-offset-4">
-      <input #filter type="text" (keyup)="filterLocations(filter.value)" class="input has-text-centered" placeholder="Search">
+    <div class="column is-6 is-offset-3">
+      <input #filter type="text" (keyup)="filterLocations(filter.value)" class="input has-text-centered"
+             placeholder="Search Locations">
     </div>
   </div>
 
@@ -38,10 +34,7 @@
         <td>{{loc.phone}}</td>
         <td class="has-text-centered">
           <a routerLink="/admin/locations/{{loc._id}}" class="button is-link is-rounded">
-            <span>Edit</span>
-            <span class="icon ">
-              <i class="fa fa-edit"></i>
-            </span>
+            <span>More Details</span>
           </a>
         </td>
       </tr>

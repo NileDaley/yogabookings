@@ -17,15 +17,25 @@ import { StatusComponent } from './components/status/status.component';
 /* Admin Components */
 import { DashboardComponent as AdminDashboard } from 'app/components/admin/dashboard/dashboard.component';
 import { CustomersComponent as AdminAllCustomers } from 'app/components/admin/customers/customers.component';
+import { CustomerRegistrationComponent as AdminCustomerRegistration } from 'app/components/admin/customers/customer-registration/customer-registration.component';
+
 import { LocationsComponent as AdminLocations } from 'app/components/admin/locations/locations.component';
+import { LocationComponent as AdminSingleLocation } from 'app/components/admin/locations/location/location.component';
+
 import { TutorsComponent as AdminTutors } from 'app/components/admin/tutors/tutors.component';
+import { TutorComponent as AdminSingleTutor } from 'app/components/admin/tutors/tutor/tutor.component';
+import { TutorRegistrationComponent as AdminTutorRegistration } from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
+import { SkillsComponent as AdminTutorSkills } from 'app/components/admin/tutors/skills/skills.component';
+import { SkillComponent as AdminTutorSkill } from './components/admin/tutors/skills/skill/skill.component';
 
 /* Guest components */
-import { LocationsComponent } from './components/guest/locations/locations.component';
+import { LocationsComponent as GuestLocations } from 'app/components/guest/locations/locations.component';
 
 /* Services */
 import { DataService } from 'app/services/data.service';
-import { LocationComponent } from './components/admin/locations/location/location.component';
+import { LoadingComponent } from './components/shared/loading/loading.component';
+import { MessagesComponent } from './components/shared/messages/messages.component';
+import { CustomerComponent } from './components/admin/customers/customer/customer.component';
 
 @NgModule({
   declarations: [
@@ -36,11 +46,19 @@ import { LocationComponent } from './components/admin/locations/location/locatio
     IndexComponent,
     AdminDashboard,
     AdminAllCustomers,
+    AdminCustomerRegistration,
     AdminLocations,
+    AdminSingleLocation,
     AdminTutors,
+    AdminTutorSkills,
+    AdminTutorSkill,
     StatusComponent,
-    LocationsComponent,
-    LocationComponent
+    GuestLocations,
+    AdminSingleTutor,
+    AdminTutorRegistration,
+    LoadingComponent,
+    MessagesComponent,
+    CustomerComponent
   ],
   imports: [
     BrowserModule,

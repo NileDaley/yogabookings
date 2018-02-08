@@ -9,7 +9,7 @@ let LocationSchema = new Schema({
   email: String,
   phone: String,
   openHours: [OpenHoursSchema],
-  rooms: [VenueSchema]
+  venues: [VenueSchema]
 });
 
-module.exports = LocationSchema
+module.exports = LocationSchema;

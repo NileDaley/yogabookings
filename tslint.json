@@ -25,13 +25,14 @@
     "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": [
-      false
+      true,
+      120
     ],
     "member-access": false,
     "member-ordering": [
       true,
       {
-        "order" : [
+        "order": [
           "static-before-instance",
           "variables-before-functions"
         ]

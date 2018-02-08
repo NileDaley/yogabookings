@@ -1,23 +1,5 @@
-<!-- Notifications -->
-<div *ngIf="messages.length > 0">
-  <div *ngFor="let m of messages" class="notification" [ngClass]="{
-      'is-danger': m.type === 'error',
-      'is-success': m.type === 'success',
-      'is-warning': m.type === 'warning'}">
-    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
-    {{m.message}}
-  </div>
-</div>
-
-<!-- Loading spinner -->
-<div *ngIf="loading; else content">
-  <div class="section has-text-centered">
-    <h1 class="title has-text-info">Loading...</h1>
-    <span class="icon">
-      <i class="fa fa-spinner fa-spin fa-3x has-text-info"></i>
-    </span>
-  </div>
-</div>
+<app-messages [messages]="messages"></app-messages>
+<app-loading *ngIf="loading; else content"></app-loading>
 
 <ng-template #content>
 
@@ -62,6 +44,17 @@
             </a>
           </div>
 
+          <div class="field">
+            <p class="label">Venues</p>
+            <div class="columns" *ngFor="let venue of location.venues">
+              <div class="column">{{venue.name}}</div>
+              <div class="column">
+                <span class="icon">
+                  <i class="fas fa-users"></i>
+                </span> {{venue.capacity}}</div>
+            </div>
+          </div>
+
         </div>
 
         <div class="column is-4-widescreen">
@@ -89,7 +82,7 @@
       <!-- Edit button -->
       <div class="columns">
         <div class="column is-4 is-offset-4">
-          <a (click)="toggleEdit()" class="button is-info is-rounded is-fullwidth">
+          <a (click)="toggleEdit()" class="button is-link is-rounded is-fullwidth">
             <span>Edit</span>
             <span class="icon">
               <i class="fas fa-edit"></i>
@@ -127,6 +120,29 @@
               <p class="label">Phone Number</p>
               <input class="input form-control" type="phone" [(ngModel)]="location.phone">
             </div>
+            <p class="label">Venues
+              <span (click)="newVenue()" class="icon has-text-success">
+                <i class="fas fa-plus"></i>
+              </span>
+            </p>
+            <ng-container *ngFor="let venue of location.venues; let count = index; trackBy: trackByFn">
+              <div class="columns">
+                <div class="column">
+                  <input [(ngModel)]="location.venues[count].name" type="text" class="input form-control">
+                </div>
+                <div class="column is-4">
+                  <div class="control has-icons-left">
+                    <input [(ngModel)]="location.venues[count].capacity" type="number" class="input form-control">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-users"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="column is-1">
+                  <a (click)="removeVenue(location.venues[count])" class="delete is-small"></a>
+                </div>
+              </div>
+            </ng-container>
 
           </div>
 
@@ -183,5 +199,7 @@
 
       </div>
     </ng-template>
+
   </div>
+
 </ng-template>

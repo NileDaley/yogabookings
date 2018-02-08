@@ -1,0 +1,9 @@
+<div *ngIf="messages.length > 0">
+  <div *ngFor="let m of messages" class="notification" [ngClass]="{
+      'is-danger': m.type === 'error',
+      'is-success': m.type === 'success',
+      'is-warning': m.type === 'warning'}">
+    <button class="delete" aria-label="delete" (click)="messages.splice(messages.indexOf(m),1)"></button>
+    {{m.message}}
+  </div>
+</div>
