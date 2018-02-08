@@ -12,4 +12,4 @@ let LocationSchema = new Schema({
   venues: [VenueSchema]
 });
 
-module.exports = LocationSchema
+module.exports = LocationSchema;

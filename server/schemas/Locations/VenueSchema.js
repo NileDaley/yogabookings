@@ -6,4 +6,4 @@ let VenueSchema = new Schema({
   capacity: Number
 });
 
-module.exports = VenueSchema
+module.exports = VenueSchema;

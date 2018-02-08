@@ -1,0 +1,49 @@
+<app-messages [messages]="messages"></app-messages>
+
+<app-loading *ngIf="loading; else content"></app-loading>
+
+<ng-template #content>
+  <div class="card">
+    <div class="card-body">
+      <div class="columns">
+        <div class="column is-6 is-offset-3">
+
+          <h1 class="subtitle is-3 has-text-centered">Edit Skill</h1>
+
+          <div class="field">
+            <p class="label">Name</p>
+            <input [(ngModel)]="skill.name" class="input">
+          </div>
+
+          <div class="field">
+            <p class="label">Description</p>
+            <textarea [(ngModel)]="skill.description" class="textarea"></textarea>
+          </div>
+
+
+          <!-- Save/Discard buttons -->
+          <div class="columns">
+            <div class="column is-6-widescreen">
+              <a (click)="saveSkill()" class="button is-success is-rounded is-fullwidth">
+              <span class="icon">
+                <i class="fas fa-check"></i>
+              </span>
+                <span>Save Changes</span>
+              </a>
+            </div>
+            <div class="column is-6-widescreen">
+              <a (click)="discardEdit()" class="button is-danger is-rounded is-fullwidth">
+                <span>Discard Changes</span>
+                <span class="icon">
+                <i class="fas fa-times"></i>
+              </span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
