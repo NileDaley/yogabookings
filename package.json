@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "watch": "ng build --watch --no-progress",
     "dev": "run-p watch start",
-    "postinstall": "ng build --aot --env=prod --no-progress"
+    "postinstall": "ng build --aot --prod"
   },
   "engines": {
     "node": "8.8.1"
