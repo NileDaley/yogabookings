@@ -1,28 +1,84 @@
-<h1 class="title has-text-centered">Tutor Skills</h1>
+<h1 class="subtitle is-3 has-text-centered">Tutor Skills</h1>
 <div class="columns">
-  <div class="column is-6 is-offset-3">
-    <input (keyup)="filter(criteria.value)" #criteria type="text" class="input has-text-centered"
-           placeholder="Search Skills">
+  <div class="column is-4 is-offset-4">
+    <a *ngIf="!isAddingSkill; else browseButton" (click)="isAddingSkill = true" class="button is-link is-rounded is-fullwidth">
+      <span class="icon">
+        <i class="fas fa-lightbulb"></i>
+      </span>
+      Add a new skill
+    </a>
+    <ng-template #browseButton>
+      <a (click)="isAddingSkill = false" class="button is-link is-rounded is-fullwidth">
+        <span class="icon">
+          <i class="fas fa-lightbulb"></i>
+        </span>
+        All Skills
+      </a>
+    </ng-template>
   </div>
 </div>
-<div class="columns is-centered is-multiline">
-  <ng-container *ngFor="let skill of filteredSkills">
-    <div class="column is-4">
-      <div class="card" style="height:100%">
-        <div class="card-header">
-          <div class="card-header-title">
-            <span>{{skill.name}}</span>
-            <span class="icon">
-              <a class="link">
-                <i class="far fa-edit"></i>
-              </a>
+<div *ngIf="!isAddingSkill; else newSkillContent">
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+      <input (keyup)="filter(criteria.value)" #criteria type="text" class="input has-text-centered"
+             placeholder="Search Skills">
+    </div>
+  </div>
+  <div class="columns is-centered is-multiline">
+    <ng-container *ngFor="let skill of filteredSkills">
+      <div class="column is-4">
+        <div class="card" style="height:100%">
+          <div class="card-header">
+            <div class="card-header-title">
+            <span class="is-capitalized">{{skill.name}}
+              <span class="icon">
+                <a routerLink="/admin/tutors/skills/{{skill._id}}" class="link">
+                  <i class="far fa-edit"></i>
+                </a>
+              </span>
             </span>
+            </div>
+          </div>
+          <div class="card-content">
+            <p class="has-text-centered">{{skill.description}}</p>
           </div>
         </div>
-        <div class="card-content">
-          <p class="has-text-centered">{{skill.description}}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<ng-template #newSkillContent>
+  <div class="columns">
+    <div class="column is-6 is-offset-3">
+
+      <div class="field">
+        <p class="label">Name</p>
+        <input [(ngModel)]="newSkill.name" class="input" type="name">
+      </div>
+
+      <div class="field">
+        <p class="label">Description</p>
+        <textarea [(ngModel)]="newSkill.description" class="textarea"></textarea>
+      </div>
+
+      <div class="columns">
+        <div class="column is-6">
+          <a (click)="saveNewSkill()" class="button is-success is-rounded is-fullwidth">
+            <span class="icon">
+              <i class="fas fa-check"></i>
+            </span>
+            <span>Save</span>
+          </a>
+        </div>
+        <div class="column is-6">
+          <a (click)="discardNewSkill()" class="button is-danger is-rounded is-fullwidth">
+            <span>Discard</span>
+            <span class="icon">
+              <i class="fas fa-times"></i>
+            </span>
+          </a>
         </div>
       </div>
     </div>
-  </ng-container>
-</div>
+  </div>
+</ng-template>

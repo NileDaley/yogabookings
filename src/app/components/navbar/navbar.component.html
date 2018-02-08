@@ -1,10 +1,10 @@
-<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation" (click)="toggleNav()">
   <div class="navbar-brand">
     <a class="navbar-item" routerLink="/">
       YogaBookings
     </a>
 
-    <button class="button navbar-burger is-dark" [ngClass]="{'is-active': navActive}" (click)="toggleNav()">
+    <button class="button navbar-burger is-dark" [ngClass]="{'is-active': navActive}" >
       <span></span>
       <span></span>
       <span></span>

@@ -8,4 +8,4 @@ let OpenHoursSchema = new Schema({
  close: String
 });
 
-module.exports = OpenHoursSchema
+module.exports = OpenHoursSchema;

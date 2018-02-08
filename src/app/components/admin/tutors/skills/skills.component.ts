@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {DataService} from '../../../../services/data.service';
+import {Skill} from '../../../../models/skill';
 
 @Component({
   selector: 'app-skills',
@@ -9,18 +11,25 @@ export class SkillsComponent implements OnInit {
 
   skills: any[];
   filteredSkills: any[];
+  isAddingSkill = false;
+  newSkill: Skill;
 
-  constructor() {
+  constructor(private _dataService: DataService) {
   }
 
   ngOnInit() {
-    this.filteredSkills = this.skills = [
-      {name: 'Yoga', description: 'Breath control, meditation, and specific bodily postures for health and relaxation'},
-      {name: 'Spiritualism', description: 'Foo bar baz'},
-      {name: 'Mindfulness', description: 'Baz bar foo'},
-      {name: 'Private Tuition', description: 'One-on-one classes'},
-    ];
+    this.getSkills();
+  }
 
+  private getSkills() {
+    this._dataService.getSkills().subscribe(res => {
+      const data = res['data'];
+      this.skills = data.map(skill => new Skill(skill._id, skill.name, skill.description));
+      this.filteredSkills = this.skills;
+      this.newSkill = new Skill('', '', '');
+    }, () => {
+
+    });
   }
 
   filter(criteria: String) {
@@ -32,6 +41,22 @@ export class SkillsComponent implements OnInit {
         return skill.name.toLowerCase().includes(criteria) || skill.description.toLowerCase().includes(criteria);
       });
     }
+  }
+
+  discardNewSkill() {
+    this.isAddingSkill = false;
+    this.newSkill = new Skill('', '', '');
+  }
+
+  saveNewSkill() {
+    this._dataService.insertSkill(this.newSkill)
+      .subscribe(res => {
+        // reset the new skill, get all skills and toggle isAddingSkill
+        this.getSkills();
+        this.isAddingSkill = false;
+      }, err => {
+
+      });
   }
 
 }
