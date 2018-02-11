@@ -10,7 +10,7 @@ const ClassSchema = new Schema({
   startDate: Date,
   endDate: Date,
   location: {type: Schema.Types.ObjectId, ref: 'Location'},
-  venue: {type: Schema.Types.ObjectId}
+  venue: String
 });
 
 module.exports = ClassSchema;

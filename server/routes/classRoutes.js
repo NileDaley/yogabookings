@@ -6,6 +6,8 @@ const ClassSchema = require('../schemas/ClassSchema');
 const ClassTypeSchema = require('../schemas/ClassTypeSchema');
 const LocationSchema = require('../schemas/Locations/LocationSchema');
 const TutorSchema = require('../schemas/Users/TutorSchema');
+const SkillSchema = require('../schemas/Users/SkillSchema');
+const UserSchema = require('../schemas/Users/UserSchema');
 const CustomerSchema = require('../schemas/Users/CustomerSchema');
 
 const classTypeRoutes = require('../routes/classes/classTypeRoutes');
@@ -30,11 +32,32 @@ router.use('/types', classTypeRoutes);
 router.get('/', (req, res) => {
   let Location = mongoose.model('Location', LocationSchema);
   let Tutor = mongoose.model('Tutor', TutorSchema);
+  let Skill = mongoose.model('Skill', SkillSchema);
+  let User = mongoose.model('User', UserSchema);
   let Customer = mongoose.model('Customer', CustomerSchema);
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   let Class = mongoose.model('Class', ClassSchema);
   Class.find()
-    .populate('location tutor attendees classType')
+    .populate('location classType')
+    .populate({
+      path: 'tutor',
+      populate: [
+        {
+          path: 'user',
+          select: 'email'
+        }, {
+          path: 'skills',
+          model: 'Skill'
+        }
+      ]
+    })
+    .populate({
+      path: 'attendees',
+      populate: {
+        path: 'user',
+        select: 'email'
+      }
+    })
     .then(classes => {
       response.data = classes;
       res.json(response);
@@ -45,13 +68,34 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   let Location = mongoose.model('Location', LocationSchema);
   let Tutor = mongoose.model('Tutor', TutorSchema);
+  let Skill = mongoose.model('Skill', SkillSchema);
+  let User = mongoose.model('User', UserSchema);
   let Customer = mongoose.model('Customer', CustomerSchema);
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   let Class = mongoose.model('Class', ClassSchema);
   Class.findById(req.params.id)
-    .populate('location tutor attendees classType')
-    .then(_class => {
-      response.data = _class;
+    .populate('location classType')
+    .populate({
+      path: 'tutor',
+      populate: [
+        {
+          path: 'user',
+          select: 'email'
+        }, {
+          path: 'skills',
+          model: 'Skill'
+        }
+      ]
+    })
+    .populate({
+      path: 'attendees',
+      populate: {
+        path: 'user',
+        select: 'email'
+      }
+    })
+    .then(classes => {
+      response.data = classes;
       res.json(response);
     })
     .catch(err => sendError(err, res));
@@ -94,7 +138,7 @@ router.patch('/:id', (req, res) => {
 
   Class.findByIdAndUpdate(req.params.id,
     {
-      $set:{
+      $set: {
         tutor: mongoose.Types.ObjectId(tutor._id),
         attendees: attendees.map(a => mongoose.Types.ObjectId(a._id)),
         classSize,
@@ -110,7 +154,7 @@ router.patch('/:id', (req, res) => {
       response.data = updatedClass;
       res.json(response);
     })
-    .catch(err => sendError(err,res));
+    .catch(err => sendError(err, res));
 });
 
 router.delete('/:id', (req, res) => {
@@ -120,7 +164,6 @@ router.delete('/:id', (req, res) => {
       if (err) sendError(err, res);
       response.data = data;
       res.json(response);
-      ;
     })
     .catch(err => sendError(err, res));
 });
