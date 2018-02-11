@@ -4,12 +4,12 @@ import { Venue } from 'app/models/venue';
 import { ClassType } from 'app/models/class-type';
 
 export class Class {
-  start: Date;
-  end: Date;
-  sizeLimit: number;
+  startDate: Date;
+  endDate: Date;
+  classSize: number;
   price: number;
   tutor: Tutor;
   type: ClassType;
-  venue: Venue;
+  venue: String;
   attendees: Array<Customer>;
 }

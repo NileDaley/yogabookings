@@ -9,16 +9,16 @@ export class DashboardComponent implements OnInit {
 
   dashboardItems = [
     {
-      'name': 'Bookings',
+      'name': 'Classes',
       'links': [
         {
-          'text': 'View All Bookings',
-          'url': '/admin/bookings',
+          'text': 'View All Classes',
+          'url': '/admin/classes',
           'icon': {'style': 'far', 'code': 'calendar-alt'}
         },
         {
-          'text': 'Create Booking',
-          'url': '/admin/bookings/new',
+          'text': 'Create Class',
+          'url': '/admin/classes/new',
           'icon': {'style': 'far', 'code': 'calendar-plus'}
         }
       ]
