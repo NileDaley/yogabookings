@@ -7,8 +7,8 @@ import { User } from 'app/models/user';
 import { Customer } from 'app/models/customer';
 import { Skill } from 'app/models/skill';
 import { Location } from 'app/models/location';
-import { OpenHours } from '../../../models/openHours';
-import { Venue } from '../../../models/venue';
+import { OpenHours } from 'app/models/openHours';
+import { Venue } from 'app/models/venue';
 
 @Component({
   selector: 'app-classes',
@@ -25,12 +25,16 @@ export class ClassesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getClasses();
+  }
+
+  private getClasses() {
     this._dataService.getClasses()
       .subscribe(res => {
         const data = res[ 'data' ];
-        console.log(data);
         this.classes = data.map(c => {
           return new Class(
+            c._id,
             new ClassType(c.classType._id, c.classType.name, c.classType.description),
             new Tutor(
               c.tutor._id,
@@ -65,9 +69,9 @@ export class ClassesComponent implements OnInit {
             c.venue
           );
         });
+        this.loading = false;
       }, err => {
         console.log(err);
       });
   }
-
 }

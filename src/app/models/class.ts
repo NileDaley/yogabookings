@@ -4,6 +4,7 @@ import { ClassType } from 'app/models/class-type';
 import { Location } from 'app/models/location';
 
 export class Class {
+  _id: String;
   type: ClassType;
   tutor: Tutor;
   attendees: Array<Customer>;
@@ -14,7 +15,8 @@ export class Class {
   location: Location;
   venue: String;
 
-  constructor( type: ClassType,
+  constructor( id: String,
+               type: ClassType,
                tutor: Tutor,
                attendees: Array<Customer>,
                startDate: Date,
@@ -23,6 +25,7 @@ export class Class {
                price: number,
                location: Location,
                venue: String ) {
+    this._id = id;
     this.type = type;
     this.tutor = tutor;
     this.attendees = attendees;
