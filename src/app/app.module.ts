@@ -30,8 +30,10 @@ import { TutorComponent as AdminSingleTutor } from 'app/components/admin/tutors/
 import { TutorRegistrationComponent as AdminTutorRegistration } from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
 import { SkillsComponent as AdminTutorSkills } from 'app/components/admin/tutors/skills/skills.component';
 import { SkillComponent as AdminTutorSkill } from './components/admin/tutors/skills/skill/skill.component';
+
 import { ClassesComponent as AdminClasses } from './components/admin/classes/classes.component';
 import { ClassComponent as AdminSingleClass } from './components/admin/classes/class/class.component';
+import { NewClassComponent as AdminNewClass } from './components/admin/classes/new-class/new-class.component';
 
 /* Guest components */
 import { LocationsComponent as GuestLocations } from 'app/components/guest/locations/locations.component';
@@ -63,7 +65,8 @@ import { DataService } from 'app/services/data.service';
     MessagesComponent,
     AdminSingleCustomer,
     AdminClasses,
-    AdminSingleClass
+    AdminSingleClass,
+    AdminNewClass
   ],
   imports: [
     BrowserModule,

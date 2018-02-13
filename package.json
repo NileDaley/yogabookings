@@ -9,7 +9,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "watch": "ng build --watch --no-progress",
+    "watch": "ng build --watch",
     "dev": "run-p watch start",
     "postinstall": "ng build --aot --prod"
   },
