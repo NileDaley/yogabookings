@@ -1,3 +1,54 @@
-<p>
-  new-class works!
-</p>
+<h1 class="subtitle is-3 has-text-centered">New Class</h1>
+<app-loading *ngIf="loading; else content"></app-loading>
+<ng-template #content>
+
+  <div class="field">
+    <label for="startDate" class="label">Date</label>
+    <input class="input" type="date" id="startDate">
+  </div>
+
+  <div class="field">
+    <label for="classType" class="label">Class Type</label>
+    <div class="select is-rounded">
+      <select (change)="selectValue('type', ct.value)" #ct id="classType">
+        <option value="" selected>Select a type</option>
+        <option *ngFor="let type of classTypes" [value]="type.id">{{type.name}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="tutor" class="label">Class Tutor</label>
+    <div class="select is-rounded">
+      <select (change)="selectValue('tutor', tutor.value)" #tutor id="tutor">
+        <option value="" selected>Select a tutor</option>
+        <option *ngFor="let t of tutors" [value]="t._id">{{t.forename}} {{t.surname}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="location" class="label">Location</label>
+    <div class="select is-rounded">
+      <select (change)="selectValue('location', location.value)" #location id="location"></select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="venue" class="label">Venue</label>
+    <div class="select is-rounded">
+      <select (change)="selectValue('venue', venue.value)" #venue id="venue"></select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="price" class="label">Price</label>
+    <input id="price" type="number" min=0 class="input">
+  </div>
+
+  <div class="field">
+    <label class="label" for="classSize">Class Size</label>
+    <input id="classSize" type="number" min="1" class="input">
+  </div>
+
+</ng-template>
