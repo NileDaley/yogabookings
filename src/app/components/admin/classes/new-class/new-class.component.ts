@@ -144,4 +144,8 @@ export class NewClassComponent implements OnInit {
     const day = date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
     return `${year}-${month}-${day}`;
   }
+
+  saveClass() {
+
+  }
 }

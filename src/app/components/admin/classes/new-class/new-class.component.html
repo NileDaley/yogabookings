@@ -1,66 +1,138 @@
-<h1 class="subtitle is-3 has-text-centered">New Class</h1>
-<app-loading *ngIf="loading; else content"></app-loading>
-<ng-template #content>
+<div class="card">
 
-  <div class="field">
-    <label for="startDate" class="label">Date</label>
-    <input class="input" type="date" id="startDate" [min]="earliestClassDate()" pattern="\d{4}-\d{2}-\d{2}"
-      placeholder="yyyy-mm-dd">
+  <div class="card-content">
+
+    <h1 class="subtitle is-3 has-text-centered">New Class</h1>
+
+    <app-loading *ngIf="loading; else content"></app-loading>
+
+    <ng-template #content>
+
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+                <label for="startDate" class="label">Date</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                  <input class="input" type="date" id="startDate" [min]="earliestClassDate()"
+                         pattern="\d{4}-\d{2}-\d{2}"
+                         placeholder="yyyy-mm-dd">
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="startTime" class="label">Time</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><i class="far fa-clock"></i></span>
+                  <input type="time" id="startTime" class="input" pattern="[0-9]{2}:[0-9]{2}" step="300"
+                         placeholder="hh:mm">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+                <label for="classType" class="label">Class Type</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><span class="fas fa-list"></span></span>
+                  <div class="select is-fullwidth">
+                    <select (change)="selectValue('type', ct.value)" #ct id="classType">
+                      <option value="" selected>Select a type</option>
+                      <option *ngFor="let type of classTypes" [value]="type.id">{{type.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="tutor" class="label">Class Tutor</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><span class="fas fa-graduation-cap"></span></span>
+                  <div class="select is-fullwidth">
+                    <select (change)="selectValue('tutor', tutor.value)" #tutor id="tutor">
+                      <option value="" selected>Select a tutor</option>
+                      <option *ngFor="let t of tutors" [value]="t._id">{{t.forename}} {{t.surname}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+                <label for="location" class="label">Location</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><i class="fas fa-building"></i></span>
+                  <div class="select is-fullwidth">
+                    <select (change)="selectValue('location', location.value)" #location id="location">
+                      <option value="">Select a location</option>
+                      <option *ngFor="let loc of locations" [value]="loc._id">{{loc.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label for="venue" class="label">Venue</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><i class="fas fa-list"></i></span>
+                  <div class="select is-fullwidth">
+                    <select (change)="selectValue('venue', venue.value)" #venue id="venue"
+                            [disabled]="location.value === ''">
+                      <option value="">Select a venue</option>
+                      <option *ngFor="let venue of venues" [value]="venue.name">{{venue.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
+                <label for="price" class="label">Price</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><i class="fas fa-pound-sign"></i></span>
+                  <input id="price" type="number" min="0" class="input">
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <div class="field">
+                <label class="label" for="classSize">Class Size</label>
+                <div class="control has-icons-left">
+                  <span class="icon"><i class="fas fa-users"></i></span>
+                  <input id="classSize" type="number" min="1" [max]="maxClassSize" class="input"
+                         [disabled]="venue.value === '' || venue.disabled">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-6 is-offset-3">
+              <a (click)="saveClass()" class="button is-rounded is-success is-fullwidth">
+                <span class="icon"><i class="fas fa-save"></i></span>
+                <span>Save Details</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-template>
+
   </div>
 
-  <div class="field">
-    <label for="startTime" class="label">Time</label>
-    <input type="time" id="startTime" class="input" pattern="[0-9]{2}:[0-9]{2}" placeholder="hh:mm">
-  </div>
+</div>
 
-  <div class="field">
-    <label for="classType" class="label">Class Type</label>
-    <div class="select is-rounded">
-      <select (change)="selectValue('type', ct.value)" #ct id="classType">
-        <option value="" selected>Select a type</option>
-        <option *ngFor="let type of classTypes" [value]="type.id">{{type.name}}</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="field">
-    <label for="tutor" class="label">Class Tutor</label>
-    <div class="select is-rounded">
-      <select (change)="selectValue('tutor', tutor.value)" #tutor id="tutor">
-        <option value="" selected>Select a tutor</option>
-        <option *ngFor="let t of tutors" [value]="t._id">{{t.forename}} {{t.surname}}</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="field">
-    <label for="location" class="label">Location</label>
-    <div class="select is-rounded">
-      <select (change)="selectValue('location', location.value)" #location id="location">
-        <option value="">Select a location</option>
-        <option *ngFor="let loc of locations" [value]="loc._id">{{loc.name}}</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="field">
-    <label for="venue" class="label">Venue</label>
-    <div class="select is-rounded">
-      <select (change)="selectValue('venue', venue.value)" #venue id="venue">
-        <option value="">Select a venue</option>
-        <option *ngFor="let venue of venues" [value]="venue.name">{{venue.name}}</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="field">
-    <label for="price" class="label">Price</label>
-    <input id="price" type="number" min="0" class="input">
-  </div>
-
-  <div class="field">
-    <label class="label" for="classSize">Class Size</label>
-    <input id="classSize" type="number" min="1" [max]="maxClassSize" class="input">
-  </div>
-
-</ng-template>
