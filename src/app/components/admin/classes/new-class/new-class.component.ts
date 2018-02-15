@@ -20,25 +20,19 @@ export class NewClassComponent implements OnInit {
 
   tutors: Array<Tutor> = null;
   locations: Array<Location> = null;
+  venues = [];
+  maxClassSize;
   classTypes: Array<ClassType> = null;
-  _class: Class = new Class(
-    null,
-    null,
-    null,
-    [],
-    new Date(),
-    new Date(),
-    0,
-    0.00,
-    null,
-    null
-  );
-
-  /*
-    TODO: Add locations and show relevant venues
-    TODO: Set max class limit to size of currently selected venue
-    TODO: Set min date for start date
-   */
+  _class = {
+    classType: '',
+    tutor: '',
+    location: '',
+    venue: '',
+    classSize: '',
+    price: 0.00,
+    startDate: new Date(),
+    endDate: new Date()
+  };
 
   constructor(private _dataService: DataService) {
   }
@@ -111,6 +105,43 @@ export class NewClassComponent implements OnInit {
 
   selectValue(field, val) {
     this._class[field] = val;
-    console.log(this._class);
+    if (field === 'location') {
+      this.updateVenues(val);
+    }
+    if (field === 'venue') {
+      this.updateMaxClassSize(val);
+    }
+  }
+
+  updateVenues(location_id) {
+    if (location_id !== '') {
+      const location: Location = this.locations.filter(l => l._id === location_id)[0];
+      this.venues = location.venues;
+    } else {
+      this.venues = [];
+    }
+  }
+
+  updateMaxClassSize(venue_name) {
+    if (venue_name !== '') {
+      const location: Location = this.locations.filter(l => l._id === this._class.location)[0];
+      console.log(location);
+      location.venues.forEach((v: Venue) => {
+        if (v.name === venue_name) {
+          this.maxClassSize = v.capacity;
+          console.log(this.maxClassSize);
+        }
+      });
+    } else {
+      this.maxClassSize = '';
+    }
+  }
+
+  earliestClassDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+    return `${year}-${month}-${day}`;
   }
 }
