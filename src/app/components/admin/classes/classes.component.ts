@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from 'app/services/data.service';
-import { Class } from 'app/models/class';
-import { ClassType } from 'app/models/class-type';
-import { Tutor } from 'app/models/tutor';
-import { User } from 'app/models/user';
-import { Customer } from 'app/models/customer';
-import { Skill } from 'app/models/skill';
-import { Location } from 'app/models/location';
-import { OpenHours } from 'app/models/openHours';
-import { Venue } from 'app/models/venue';
+import {Component, OnInit} from '@angular/core';
+import {DataService} from 'app/services/data.service';
+import {Class} from 'app/models/class';
+import {ClassType} from 'app/models/class-type';
+import {Tutor} from 'app/models/tutor';
+import {User} from 'app/models/user';
+import {Customer} from 'app/models/customer';
+import {Skill} from 'app/models/skill';
+import {Location} from 'app/models/location';
+import {OpenHours} from 'app/models/openHours';
+import {Venue} from 'app/models/venue';
 
 @Component({
   selector: 'app-classes',
   templateUrl: './classes.component.html',
-  styleUrls: [ './classes.component.scss' ]
+  styleUrls: ['./classes.component.scss']
 })
 export class ClassesComponent implements OnInit {
 
@@ -21,7 +21,7 @@ export class ClassesComponent implements OnInit {
   messages = [];
   classes: Array<Class>;
 
-  constructor( private _dataService: DataService ) {
+  constructor(private _dataService: DataService) {
   }
 
   ngOnInit() {
@@ -31,11 +31,15 @@ export class ClassesComponent implements OnInit {
   private getClasses() {
     this._dataService.getClasses()
       .subscribe(res => {
-        const data = res[ 'data' ];
+        const data = res['data'];
         this.classes = data.map(c => {
           return new Class(
             c._id,
-            new ClassType(c.classType._id, c.classType.name, c.classType.description),
+            new ClassType(
+              c.classType._id,
+              c.classType.name,
+              c.classType.description
+            ),
             new Tutor(
               c.tutor._id,
               c.tutor.forename,
@@ -53,8 +57,9 @@ export class ClassesComponent implements OnInit {
               a.gender,
               new User(a.user.email, null, a.role)
             )),
-            c.startDate,
-            c.endDate,
+            c.date,
+            c.startTime,
+            c.endTime,
             c.classSize,
             c.price,
             new Location(

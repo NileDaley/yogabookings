@@ -105,18 +105,18 @@ router.post('/', (req, res) => {
 
   let Class = mongoose.model('Class', ClassSchema);
 
-  let {tutor, attendees, classSize, price, classType, startDate, endDate, location, venue} = req.body;
+  let {tutor, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
 
   let newClass = new Class({
-    tutor: mongoose.Types.ObjectId(tutor._id),
-    attendees: attendees.map(a => mongoose.Types.ObjectId(a._id)),
+    tutor: mongoose.Types.ObjectId(tutor),
     classSize,
-    classType: mongoose.Types.ObjectId(classType._id),
+    classType: mongoose.Types.ObjectId(classType),
     price,
-    startDate,
-    endDate,
-    location: mongoose.Types.ObjectId(location._id),
-    venue: mongoose.Types.ObjectId(venue._id)
+    date,
+    startTime,
+    endTime,
+    location: mongoose.Types.ObjectId(location),
+    venue
   });
 
   newClass.save()
@@ -134,7 +134,7 @@ router.patch('/:id', (req, res) => {
 
   let Class = mongoose.model('Class', ClassSchema);
 
-  let {tutor, attendees, classSize, price, classType, startDate, endDate, location, venue} = req.body;
+  let {tutor, attendees, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
 
   Class.findByIdAndUpdate(req.params.id,
     {
@@ -144,8 +144,9 @@ router.patch('/:id', (req, res) => {
         classSize,
         classType: mongoose.Types.ObjectId(classType._id),
         price,
-        startDate,
-        endDate,
+        date,
+        startTime,
+        endTime,
         location: mongoose.Types.ObjectId(location._id),
         venue: mongoose.Types.ObjectId(venue._id)
       }

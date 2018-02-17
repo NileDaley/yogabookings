@@ -8,29 +8,31 @@ export class Class {
   type: ClassType;
   tutor: Tutor;
   attendees: Array<Customer>;
-  startDate: Date;
-  endDate: Date;
+  date: string;
+  startTime: string;
+  endTime: string;
   classSize: number;
-  price: number;
+  price: string;
   location: Location;
-  venue: String;
+  venue: string;
 
-  constructor( id: String,
-               type: ClassType,
-               tutor: Tutor,
-               attendees: Array<Customer>,
-               startDate: Date,
-               endDate: Date,
-               classSize: number,
-               price: number,
-               location: Location,
-               venue: String ) {
+  constructor(id: string,
+              type: ClassType,
+              tutor: Tutor,
+              attendees: Array<Customer>,
+              date: string,
+              startTime: string,
+              endTime: string,
+              classSize: number,
+              price: string,
+              location: Location, venue: string) {
     this._id = id;
     this.type = type;
     this.tutor = tutor;
     this.attendees = attendees;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.date = date;
+    this.startTime = startTime;
+    this.endTime = endTime;
     this.classSize = classSize;
     this.price = price;
     this.location = location;

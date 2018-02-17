@@ -6,9 +6,10 @@ const ClassSchema = new Schema({
   attendees: [{type: Schema.Types.ObjectId, ref: 'Customer'}],
   classSize: Number,
   classType: {type: Schema.Types.ObjectId, ref: 'ClassType'},
-  price: Number,
-  startDate: Date,
-  endDate: Date,
+  price: String,
+  date: String,
+  startTime: String,
+  endTime: String,
   location: {type: Schema.Types.ObjectId, ref: 'Location'},
   venue: String
 });

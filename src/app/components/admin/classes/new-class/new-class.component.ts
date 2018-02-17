@@ -30,8 +30,9 @@ export class NewClassComponent implements OnInit {
     venue: '',
     classSize: '',
     price: 0.00,
-    startDate: new Date(),
-    endDate: new Date()
+    date: '',
+    startTime: '',
+    endTime: ''
   };
 
   constructor(private _dataService: DataService) {
@@ -103,7 +104,7 @@ export class NewClassComponent implements OnInit {
       || this.classTypes === null;
   }
 
-  selectValue(field, val) {
+  setValue(field: string, val: string) {
     this._class[field] = val;
     if (field === 'location') {
       this.updateVenues(val);
@@ -111,9 +112,10 @@ export class NewClassComponent implements OnInit {
     if (field === 'venue') {
       this.updateMaxClassSize(val);
     }
+    console.log(this._class);
   }
 
-  updateVenues(location_id) {
+  updateVenues(location_id: string) {
     if (location_id !== '') {
       const location: Location = this.locations.filter(l => l._id === location_id)[0];
       this.venues = location.venues;
@@ -122,7 +124,7 @@ export class NewClassComponent implements OnInit {
     }
   }
 
-  updateMaxClassSize(venue_name) {
+  updateMaxClassSize(venue_name: string) {
     if (venue_name !== '') {
       const location: Location = this.locations.filter(l => l._id === this._class.location)[0];
       console.log(location);
@@ -137,7 +139,7 @@ export class NewClassComponent implements OnInit {
     }
   }
 
-  earliestClassDate() {
+  earliestClassDate(): string {
     const date = new Date();
     const year = date.getFullYear();
     const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -146,6 +148,11 @@ export class NewClassComponent implements OnInit {
   }
 
   saveClass() {
-
+    this._dataService.insertClass(this._class)
+      .subscribe(res => {
+        console.log(res);
+      }, err => {
+        console.log(err);
+      });
   }
 }
