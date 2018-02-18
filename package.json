@@ -5,11 +5,11 @@
   "main": "server.js",
   "scripts": {
     "ng": "ng",
-    "start": "nodemon server",
+    "start": "nodemon server -w server/",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "watch": "ng build --watch --no-progress",
+    "watch": "ng build --watch",
     "dev": "run-p watch start",
     "postinstall": "ng build --aot --prod"
   },
@@ -33,6 +33,7 @@
     "core-js": "^2.4.1",
     "express": "^4.16.2",
     "lodash": "^4.17.4",
+    "moment": "^2.20.1",
     "mongodb": "^2.2.33",
     "mongoose": "^4.13.9",
     "rxjs": "^5.5.5",
