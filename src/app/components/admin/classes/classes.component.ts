@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {DataService} from 'app/services/data.service';
-import {Class} from 'app/models/class';
-import {ClassType} from 'app/models/class-type';
-import {Tutor} from 'app/models/tutor';
-import {User} from 'app/models/user';
-import {Customer} from 'app/models/customer';
-import {Skill} from 'app/models/skill';
-import {Location} from 'app/models/location';
-import {OpenHours} from 'app/models/openHours';
-import {Venue} from 'app/models/venue';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataService } from 'app/services/data.service';
+import { Class } from 'app/models/class';
+import { ClassType } from 'app/models/class-type';
+import { Tutor } from 'app/models/tutor';
+import { User } from 'app/models/user';
+import { Customer } from 'app/models/customer';
+import { Skill } from 'app/models/skill';
+import { Location } from 'app/models/location';
+import { OpenHours } from 'app/models/openHours';
+import { Venue } from 'app/models/venue';
+import { CalendarComponent } from 'ng-fullcalendar';
+import { Options } from 'fullcalendar';
 
 @Component({
   selector: 'app-classes',
@@ -20,12 +22,15 @@ export class ClassesComponent implements OnInit {
   loading = true;
   messages = [];
   classes: Array<Class>;
+  calendarOptions: Options;
+  @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
   constructor(private _dataService: DataService) {
   }
 
   ngOnInit() {
     this.getClasses();
+
   }
 
   private getClasses() {
@@ -74,9 +79,29 @@ export class ClassesComponent implements OnInit {
             c.venue
           );
         });
+        this.initCalendar();
         this.loading = false;
       }, err => {
         console.log(err);
       });
+  }
+
+  private initCalendar() {
+    this.calendarOptions = {
+      editable: true,
+      eventLimit: false,
+      fixedWeekCount: false,
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listMonth'
+      },
+      events: this.classes.map(c => {
+        return {
+          'title': c.type.name,
+          'start': `${c.date}T${c.startTime}`
+        };
+      })
+    };
   }
 }

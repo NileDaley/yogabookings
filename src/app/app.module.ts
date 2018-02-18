@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'app/routing/app-routing.module';
 
 import { AppComponent } from 'app/app.component';
+import { FullCalendarModule } from 'ng-fullcalendar';
 
 /* Common components */
 import { NavbarComponent } from 'app/components/navbar/navbar.component';
@@ -72,7 +73,8 @@ import { DataService } from 'app/services/data.service';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FullCalendarModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
