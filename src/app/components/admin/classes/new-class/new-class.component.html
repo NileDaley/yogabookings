@@ -9,6 +9,7 @@
     <ng-template #content>
 
       <div class="columns">
+
         <div class="column is-8 is-offset-2">
           <div class="columns">
             <div class="column is-6">
@@ -25,6 +26,7 @@
                 </div>
               </div>
             </div>
+
             <div class="column is-6">
               <div class="field">
                 <label for="tutor" class="label">Class Tutor</label>
@@ -62,6 +64,19 @@
             </div>
             <div class="column is-6">
               <div class="field">
+                <label for="repeatClass" class="label">Repeating Class</label>
+                <div class="control" id="repeatClass">
+                  <label class="checkbox">
+                    <input type="checkbox" (change)="setValue('repeating', repeating.checked)" #repeating>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-6">
+              <div class="field">
                 <label for="startTime" class="label">Start Time</label>
                 <div class="control has-icons-left">
                   <span class="icon"><i class="far fa-clock"></i></span>
@@ -77,9 +92,7 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="columns">
-            <div class="column is-6 is-offset-6">
+            <div class="column is-6">
               <div class="field">
                 <label for="endTime" class="label">End Time</label>
                 <div class="control has-icons-left">
@@ -90,9 +103,46 @@
                          pattern="[0-9]{2}:[0-9]{2}"
                          step="300"
                          placeholder="hh:mm"
+                         [min]="earliestEndTime()"
                          #endTime
                   >
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="columns" *ngIf="_class.repeating">
+            <div class="column is-6">
+              <div class="field">
+                <label for="" class="label">Repeat Every</label>
+                <div class="select is-fullwidth">
+                  <select id="repeatInterval" (change)="setValue('repeatInterval', repeatInterval.value)" #repeatInterval>
+                    <option value="week">Week</option>
+                    <option value="fortnight">Fortnight</option>
+                    <option value="month">Month</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="column is-6">
+              <label for="repeatCount" class="label">For</label>
+              <div class="field has-addons">
+                <p class="control">
+                  <input
+                    class="input"
+                    id="repeatCount"
+                    type="number"
+                    min="2"
+                    placeholder="10"
+                    (change)="setValue('repeatCount', repeatCount.value)"
+                    #repeatCount
+                  >
+                </p>
+                <p class="control">
+                  <a class="button is-static">
+                    {{_class.repeatInterval}}s
+                  </a>
+                </p>
               </div>
             </div>
           </div>
