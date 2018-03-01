@@ -161,7 +161,4 @@ export class NewClassComponent implements OnInit {
       });
   }
 
-  toggleRepeat(val) {
-    console.log(val);
-  }
 }

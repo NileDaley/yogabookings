@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const moment = require('moment');
+require('moment-recur');
 
-const ClassSchema = require('../schemas/ClassSchema');
-const ClassTypeSchema = require('../schemas/ClassTypeSchema');
-const LocationSchema = require('../schemas/Locations/LocationSchema');
-const TutorSchema = require('../schemas/Users/TutorSchema');
-const SkillSchema = require('../schemas/Users/SkillSchema');
-const UserSchema = require('../schemas/Users/UserSchema');
-const CustomerSchema = require('../schemas/Users/CustomerSchema');
+const ClassSchema = require('../../schemas/Classes/ClassSchema');
+const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
+const LocationSchema = require('../../schemas/Locations/LocationSchema');
+const TutorSchema = require('../../schemas/Users/TutorSchema');
+const SkillSchema = require('../../schemas/Users/SkillSchema');
+const UserSchema = require('../../schemas/Users/UserSchema');
+const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 
-const classTypeRoutes = require('../routes/classes/classTypeRoutes');
+const classTypeRoutes = require('./classTypeRoutes');
 
 // Error handling
 const sendError = (err, res) => {
@@ -105,9 +107,52 @@ router.post('/', (req, res) => {
 
   let Class = mongoose.model('Class', ClassSchema);
 
-  let {tutor, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
+  let {
+    tutor,
+    classSize,
+    price,
+    classType,
+    date,
+    startTime,
+    endTime,
+    location,
+    venue,
+    repeating,
+    repeatInterval,
+    repeatCount
+  } = req.body;
 
-  let newClass = new Class({
+  if (repeating) {
+
+    let m = moment(date);
+    let recurrence;
+
+    switch(repeatInterval){
+      case 'week': {
+        recurrence = m.recur().every(1, "weeks");
+        break;
+      }
+      case 'fortnight': {
+        recurrence = m.recur().every(2, "weeks");
+        break;
+      }
+      case 'month': {
+        recurrence = m.recur().every(1, "months");
+        break;
+      }
+    }
+
+    let events = recurrence.next(repeatCount);
+    events.forEach(event => console.log(event.format("YYYY-MM-DD")));
+
+    /*
+      TODO: [Recurring Classes] Create class group schema
+      TODO: [Recurring Classes] Create class group api route
+      TODO: [Recurring Classes] Save class group, then save a class for each of the dates, with a ref to the class group
+     */
+  }
+
+/*  let newClass = new Class({
     tutor: mongoose.Types.ObjectId(tutor),
     classSize,
     classType: mongoose.Types.ObjectId(classType),
@@ -117,16 +162,17 @@ router.post('/', (req, res) => {
     endTime,
     location: mongoose.Types.ObjectId(location),
     venue
-  });
+  });*/
 
-  newClass.save()
+  res.json({});
+  /*newClass.save()
     .then(insertedClass => {
       response.data = insertedClass;
       response.status = 201;
       res.json(response);
       response.status = 200;
     })
-    .catch(err => sendError(err, res));
+    .catch(err => sendError(err, res));*/
 
 });
 

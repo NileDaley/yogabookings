@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const ClassTypeSchema = require('../../schemas/ClassTypeSchema');
+const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
 // Error handling
 const sendError = (err, res) => {
   response.status = 501;

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const locationRoutes = require('./locationRoutes');
 const userRoutes = require('./userRoutes');
-const classRoutes = require('./classRoutes');
+const classRoutes = require('./classes/classRoutes');
 
 mongoose.connect('mongodb://admin:SurprisedBadger@ds151544.mlab.com:51544/yogabookings', {useMongoClient: true});
 mongoose.Promise = global.Promise;
