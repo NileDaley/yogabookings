@@ -1,22 +1,23 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {DataService} from 'app/services/data.service';
-import {Class} from 'app/models/class';
-import {ClassType} from 'app/models/class-type';
-import {Tutor} from 'app/models/tutor';
-import {User} from 'app/models/user';
-import {Customer} from 'app/models/customer';
-import {Skill} from 'app/models/skill';
-import {Location} from 'app/models/location';
-import {OpenHours} from 'app/models/openHours';
-import {Venue} from 'app/models/venue';
-import {CalendarComponent} from 'ng-fullcalendar';
-import {Options} from 'fullcalendar';
-import {Router, RouterStateSnapshot} from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataService } from 'app/services/data.service';
+import { Class } from 'app/models/class';
+import { ClassType } from 'app/models/class-type';
+import { Tutor } from 'app/models/tutor';
+import { User } from 'app/models/user';
+import { Customer } from 'app/models/customer';
+import { Skill } from 'app/models/skill';
+import { Location } from 'app/models/location';
+import { OpenHours } from 'app/models/openHours';
+import { Venue } from 'app/models/venue';
+import { CalendarComponent } from 'ng-fullcalendar';
+import { Options } from 'fullcalendar';
+import { Router, RouterStateSnapshot } from '@angular/router';
+import { ClassGroup } from '../../../models/class-group';
 
 @Component({
   selector: 'app-classes',
   templateUrl: './classes.component.html',
-  styleUrls: ['./classes.component.scss']
+  styleUrls: [ './classes.component.scss' ]
 })
 export class ClassesComponent implements OnInit {
 
@@ -26,7 +27,7 @@ export class ClassesComponent implements OnInit {
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  constructor(private _dataService: DataService, private router: Router ) {
+  constructor( private _dataService: DataService, private router: Router ) {
   }
 
   ngOnInit() {
@@ -37,7 +38,7 @@ export class ClassesComponent implements OnInit {
   private getClasses() {
     this._dataService.getClasses()
       .subscribe(res => {
-        const data = res['data'];
+        const data = res[ 'data' ];
         this.classes = data.map(c => {
           return new Class(
             c._id,
@@ -77,7 +78,15 @@ export class ClassesComponent implements OnInit {
               c.location.openHours.map(day => new OpenHours(day.day, day.isOpen, day.open, day.close)),
               c.location.venues.map(v => new Venue(v.name, v.capacity))
             ),
-            c.venue
+            c.venue,
+            c.hasOwnProperty('classGroup') ?
+              new ClassGroup(
+                c.classGroup._id,
+                c.classGroup.startDate,
+                c.classGroup.interval,
+                c.classGroup.count
+              )
+              : null
           );
         });
         this.initCalendar();
@@ -112,7 +121,7 @@ export class ClassesComponent implements OnInit {
     };
   }
 
-  eventClick(e) {
-    this.router.navigate([e.event.path]);
+  eventClick( e ) {
+    this.router.navigate([ e.event.path ]);
   }
 }

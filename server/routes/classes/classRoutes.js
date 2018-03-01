@@ -5,6 +5,7 @@ const moment = require('moment');
 require('moment-recur');
 
 const ClassSchema = require('../../schemas/Classes/ClassSchema');
+const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
 const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
 const LocationSchema = require('../../schemas/Locations/LocationSchema');
 const TutorSchema = require('../../schemas/Users/TutorSchema');
@@ -13,6 +14,7 @@ const UserSchema = require('../../schemas/Users/UserSchema');
 const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 
 const classTypeRoutes = require('./classTypeRoutes');
+const classGroupRoutes = require('./classGroupRoutes');
 
 // Error handling
 const sendError = (err, res) => {
@@ -30,6 +32,7 @@ let response = {
 };
 
 router.use('/types', classTypeRoutes);
+router.use('/groups', classGroupRoutes);
 
 router.get('/', (req, res) => {
   let Location = mongoose.model('Location', LocationSchema);
@@ -39,8 +42,10 @@ router.get('/', (req, res) => {
   let Customer = mongoose.model('Customer', CustomerSchema);
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   let Class = mongoose.model('Class', ClassSchema);
+  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
+
   Class.find()
-    .populate('location classType')
+    .populate('location classType classGroup')
     .populate({
       path: 'tutor',
       populate: [
@@ -75,8 +80,10 @@ router.get('/:id', (req, res) => {
   let Customer = mongoose.model('Customer', CustomerSchema);
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   let Class = mongoose.model('Class', ClassSchema);
+  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
+
   Class.findById(req.params.id)
-    .populate('location classType')
+    .populate('location classType classGroup')
     .populate({
       path: 'tutor',
       populate: [
@@ -106,6 +113,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
 
   let Class = mongoose.model('Class', ClassSchema);
+  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
   let {
     tutor,
@@ -122,12 +130,14 @@ router.post('/', (req, res) => {
     repeatCount
   } = req.body;
 
+  let events = [date];
+
   if (repeating) {
 
     let m = moment(date);
     let recurrence;
 
-    switch(repeatInterval){
+    switch (repeatInterval) {
       case 'week': {
         recurrence = m.recur().every(1, "weeks");
         break;
@@ -142,37 +152,72 @@ router.post('/', (req, res) => {
       }
     }
 
-    let events = recurrence.next(repeatCount);
-    events.forEach(event => console.log(event.format("YYYY-MM-DD")));
+    // Get n - 1 recurrences ( we already have the first one from the original date )
+    recurrence.next(repeatCount - 1).forEach(r => {
+      events.push(r.format('YYYY-MM-DD'));
+    });
 
-    /*
-      TODO: [Recurring Classes] Create class group schema
-      TODO: [Recurring Classes] Create class group api route
-      TODO: [Recurring Classes] Save class group, then save a class for each of the dates, with a ref to the class group
-     */
+    let classGroup = new ClassGroup({
+      startDate: date,
+      interval: repeatInterval,
+      count: repeatCount
+    });
+
+    classGroup.save()
+      .then(data => {
+        let classGroupId = data._id;
+
+        events = events.map(e => {
+          return {
+            tutor: mongoose.Types.ObjectId(tutor),
+            classSize,
+            classType: mongoose.Types.ObjectId(classType),
+            price,
+            date: e,
+            startTime,
+            endTime,
+            location: mongoose.Types.ObjectId(location),
+            venue,
+            classGroup: mongoose.Types.ObjectId(classGroupId)
+          }
+        });
+
+        Class.insertMany(events)
+          .then(data => {
+            response.data = data;
+            response.status = 201;
+            res.send(response);
+            response.status = 200;
+          })
+          .catch(err => sendError(err,res));
+
+      })
+      .catch(err => sendError(err, res));
+
+  } else {
+
+    let newClass = new Class({
+      tutor: mongoose.Types.ObjectId(tutor),
+      classSize,
+      classType: mongoose.Types.ObjectId(classType),
+      price,
+      date,
+      startTime,
+      endTime,
+      location: mongoose.Types.ObjectId(location),
+      venue
+    });
+
+    newClass.save()
+      .then(insertedClass => {
+        response.data = insertedClass;
+        response.status = 201;
+        res.json(response);
+        response.status = 200;
+      })
+      .catch(err => sendError(err, res));
+
   }
-
-/*  let newClass = new Class({
-    tutor: mongoose.Types.ObjectId(tutor),
-    classSize,
-    classType: mongoose.Types.ObjectId(classType),
-    price,
-    date,
-    startTime,
-    endTime,
-    location: mongoose.Types.ObjectId(location),
-    venue
-  });*/
-
-  res.json({});
-  /*newClass.save()
-    .then(insertedClass => {
-      response.data = insertedClass;
-      response.status = 201;
-      res.json(response);
-      response.status = 200;
-    })
-    .catch(err => sendError(err, res));*/
 
 });
 
