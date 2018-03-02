@@ -1,35 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const Response = require('../../Response');
+
 const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
 
-// Error handling
-const sendError = (err, res) => {
-  response.status = 501;
-  response.data = [];
-  response.message = typeof err === 'object' ? err.message : err;
-  res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-  status: 200,
-  data: [],
-  message: null
-};
-router.get('/', (req,res) => {
+router.get('/', (req, res) => {
   let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
   ClassGroup.find()
-    .then(data => {
-      response.data = data;
-      response.status = 200;
-      res.json(response);
+    .then(classGroups => {
+      if (!classGroups) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, classGroups);
+      }
     })
-    .catch(err => sendError(err,res));
+    .catch(err => Response.ERROR(res, err));
 });
-router.post('/', (req,res) => {
+router.post('/', (req, res) => {
 
-  let { startDate, interval, count } = req.body;
+  let {startDate, interval, count} = req.body;
   let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
   let classGroup = new ClassGroup({
@@ -39,13 +29,14 @@ router.post('/', (req,res) => {
   });
 
   classGroup.save()
-    .then(data => {
-      response.data = data;
-      response.status = 201;
-      res.json(response);
-      response.status = 200;
+    .then(insertedClassGroup => {
+      if(!insertedClassGroup){
+        Response.ERROR(res, 'An error occurred whilst inserting the class group');
+      } else {
+        Response.CREATED(res, insertedClassGroup);
+      }
     })
-    .catch(err => sendError(err,res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 module.exports = router;

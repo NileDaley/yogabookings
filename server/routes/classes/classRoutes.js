@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 require('moment-recur');
+const Response = require('../../Response');
 
 const ClassSchema = require('../../schemas/Classes/ClassSchema');
 const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
@@ -15,21 +16,6 @@ const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 
 const classTypeRoutes = require('./classTypeRoutes');
 const classGroupRoutes = require('./classGroupRoutes');
-
-// Error handling
-const sendError = (err, res) => {
-  response.status = 501;
-  response.data = [];
-  response.message = typeof err === 'object' ? err.message : err;
-  res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-  status: 200,
-  data: [],
-  message: null
-};
 
 router.use('/types', classTypeRoutes);
 router.use('/groups', classGroupRoutes);
@@ -66,10 +52,13 @@ router.get('/', (req, res) => {
       }
     })
     .then(classes => {
-      response.data = classes;
-      res.json(response);
+      if (!classes) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, classes);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.get('/:id', (req, res) => {
@@ -103,11 +92,14 @@ router.get('/:id', (req, res) => {
         select: 'email'
       }
     })
-    .then(classes => {
-      response.data = classes;
-      res.json(response);
+    .then(_class => {
+      if (!_class) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, _class);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.post('/', (req, res) => {
@@ -164,35 +156,41 @@ router.post('/', (req, res) => {
     });
 
     classGroup.save()
-      .then(data => {
-        let classGroupId = data._id;
+      .then(insertedClassGroup => {
 
-        events = events.map(e => {
-          return {
-            tutor: mongoose.Types.ObjectId(tutor),
-            classSize,
-            classType: mongoose.Types.ObjectId(classType),
-            price,
-            date: e,
-            startTime,
-            endTime,
-            location: mongoose.Types.ObjectId(location),
-            venue,
-            classGroup: mongoose.Types.ObjectId(classGroupId)
-          }
-        });
+        if (!insertedClassGroup) {
+          Response.ERROR(res, 'An error occurred whilst inserting the class group');
+        } else {
 
-        Class.insertMany(events)
-          .then(data => {
-            response.data = data;
-            response.status = 201;
-            res.send(response);
-            response.status = 200;
-          })
-          .catch(err => sendError(err,res));
+          let classGroupId = insertedClassGroup._id;
 
+          events = events.map(e => {
+            return {
+              tutor: mongoose.Types.ObjectId(tutor),
+              classSize,
+              classType: mongoose.Types.ObjectId(classType),
+              price,
+              date: e,
+              startTime,
+              endTime,
+              location: mongoose.Types.ObjectId(location),
+              venue,
+              classGroup: mongoose.Types.ObjectId(classGroupId)
+            }
+          });
+
+          Class.insertMany(events)
+            .then(insertedClasses => {
+              if (!insertedClasses) {
+                Response.ERROR(res, 'An error occurred whilst inserting the classes');
+              } else {
+                Response.CREATED(res, insertedClasses);
+              }
+            })
+            .catch(err => Response.ERROR(res, err));
+        }
       })
-      .catch(err => sendError(err, res));
+      .catch(err => Response.ERROR(res, err));
 
   } else {
 
@@ -210,12 +208,13 @@ router.post('/', (req, res) => {
 
     newClass.save()
       .then(insertedClass => {
-        response.data = insertedClass;
-        response.status = 201;
-        res.json(response);
-        response.status = 200;
+        if (!insertedClass) {
+          Response.ERROR(res, 'An error occurred whilst inserting the class');
+        } else {
+          Response.CREATED(res, insertedClass);
+        }
       })
-      .catch(err => sendError(err, res));
+      .catch(err => Response.ERROR(res, err));
 
   }
 
@@ -243,21 +242,28 @@ router.patch('/:id', (req, res) => {
       }
     })
     .then(updatedClass => {
-      response.data = updatedClass;
-      res.json(response);
+      if (!updatedClass) {
+        Response.ERROR(res, 'An error occurred whilst updating the class');
+      } else {
+        Response.OK(res, updatedClass);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.delete('/:id', (req, res) => {
   let Class = mongoose.model('Class', ClassSchema);
   Class.findByIdAndRemove(req.params.id)
     .then((data, err) => {
-      if (err) sendError(err, res);
-      response.data = data;
-      res.json(response);
+
+      if (err) {
+        Response.ERROR(res, err);
+      } else {
+        Response.OK(res);
+      }
+
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 module.exports = router;

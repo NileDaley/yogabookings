@@ -1,41 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const Response = require('../../Response');
 
 const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
-// Error handling
-const sendError = (err, res) => {
-  response.status = 501;
-  response.data = [];
-  response.message = typeof err === 'object' ? err.message : err;
-  res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-  status: 200,
-  data: [],
-  message: null
-};
 
 router.get('/', (req, res) => {
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   ClassType.find()
     .then(classTypes => {
-      response.data = classTypes;
-      res.json(response);
+      if (!classTypes) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, classTypes);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.get('/:id', (req, res) => {
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   ClassType.findById(req.params.id)
     .then(classType => {
-      response.data = classType;
-      res.json(response);
+      if (!classType) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, classType);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.post('/', (req, res) => {
@@ -50,12 +43,13 @@ router.post('/', (req, res) => {
 
   classType.save()
     .then(newClassType => {
-      response.data = newClassType;
-      response.status = 201;
-      res.json(response);
-      response.status = 200;
+      if (!newClassType) {
+        Response.ERROR(res, 'An error occurred whilst inserting the new class type');
+      } else {
+        Response.CREATED(res, newClassType);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.patch('/:id', (req, res) => {
@@ -68,22 +62,28 @@ router.patch('/:id', (req, res) => {
         name,
         description
       }
-    }
-  ).then(updatedClassType => {
-    response.data = updatedClassType;
-    res.json(response);
-  }).catch(err => sendError(err, res));
+    })
+    .then(updatedClassType => {
+      if (!updatedClassType) {
+        Response.ERROR(res, 'An error occurred whilst updating the class type');
+      } else {
+        Response.OK(updatedClassType);
+      }
+    })
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.delete('/:id', (req, res) => {
   let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   ClassType.findByIdAndRemove(req.params.id)
     .then((data, err) => {
-      if (err) sendError(err, res);
-      response.data = data;
-      res.send(response);
+      if (err) {
+        Response.ERROR(res, err)
+      } else {
+        Response.OK(res);
+      }
     })
-    .catch(err => sendError(err,res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 module.exports = router;

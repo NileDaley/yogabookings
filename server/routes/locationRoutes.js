@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const Response = require('../Response');
 
 const LocationSchema = require('../schemas/Locations/LocationSchema');
 const VenueSchema = require('../schemas/Locations/VenueSchema');
@@ -26,11 +27,12 @@ router.get('/', (req, res) => {
 
   let Location = mongoose.model('Location', LocationSchema);
   Location.find()
-    .then(data => {
-      response.data = data;
-      res.json(response);
+    .then(locations => {
+      if (!locations) Response.NOT_FOUND(res);
+      Response.OK(res, locations);
     })
-    .catch(err => sendError(err, res))
+    .catch(err => Response.ERROR(res, err));
+
 });
 
 // Insert Location
@@ -57,12 +59,14 @@ router.post('/', (req, res) => {
 
   location
     .save()
-    .then((results, err) => {
-      if (err) sendError(err, res);
-      response.data = results;
-      res.json(response);
+    .then(savedLocation => {
+      if (!savedLocation) {
+        Response.ERROR(res)
+      } else {
+        Response.OK(res, savedLocation);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 
 });
 
@@ -70,11 +74,14 @@ router.post('/', (req, res) => {
 router.get('/:id', (req, res) => {
   let Location = mongoose.model('Location', LocationSchema);
   Location.findById(req.params.id)
-    .then(data => {
-      response.data = data;
-      res.json(response);
+    .then(location => {
+      if (!location) {
+        Response.NOT_FOUND(res)
+      } else {
+        Response.OK(res, location);
+      }
     })
-    .catch(err => sendError(err, res))
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Update single location
@@ -84,19 +91,19 @@ router.patch('/:id', (req, res) => {
   let updateValues = req.body;
 
   location.update({_id: req.params.id}, {$set: updateValues})
-    .then((data, err) => {
-      if (err) sendError(err, res);
-      response.data = {
-        status: data['n'] > 0 && data['nModified'] > 0,
-        matched: data['n'],
-        modified: data['nModified']
-      };
-      res.json(response)
+    .then(data => {
+      if (!data) {
+        Response.NOT_FOUND(res);
+      } else {
+        status = {
+          status: data['n'] > 0 && data['nModified'] > 0,
+          matched: data['n'],
+          modified: data['nModified']
+        };
+        Response.OK(res, status);
+      }
     })
-    .catch(err => {
-      console.log("sending error... ");
-      sendError(err, res)
-    })
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Delete a location
@@ -104,12 +111,14 @@ router.delete('/:id', (req, res) => {
   Location = mongoose.model('Location', LocationSchema);
   Location
     .findByIdAndRemove(req.params.id)
-    .then((data, err) => {
-      if (err) sendError(err, res);
-      response.data = data;
-      res.send(response);
+    .then(data => {
+      if (!data) {
+        Response.ERROR(res);
+      } else {
+        Response.OK(res, data);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 module.exports = router;
