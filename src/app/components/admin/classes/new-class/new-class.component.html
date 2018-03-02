@@ -66,9 +66,18 @@
               <div class="field">
                 <label for="repeatClass" class="label">Repeating Class</label>
                 <div class="control" id="repeatClass">
-                  <label class="checkbox">
-                    <input type="checkbox" (change)="setValue('repeating', repeating.checked)" #repeating>
-                  </label>
+                  <div class="buttons has-addons">
+                    <span
+                      class="button"
+                      (click)="_class.repeating = true"
+                      [ngClass]="{'is-selected is-success': _class.repeating }"
+                      style="width: 50%;">Yes</span>
+                    <span
+                      class="button is-danger is-selected"
+                      (click)="_class.repeating = false"
+                      [ngClass]="{'is-selected is-danger': !_class.repeating }"
+                      style="width: 50%;">No</span>
+                  </div>
                 </div>
               </div>
             </div>
