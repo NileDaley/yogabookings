@@ -25,6 +25,11 @@ const adminRoutes: Routes = [
     path: 'admin', component: Dashboard,
     children: [
       {
+        path: '',
+        redirectTo: 'classes',
+        pathMatch: 'full'
+      },
+      {
         path: 'customers',
         component: AllCustomers
       },

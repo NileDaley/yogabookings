@@ -35,6 +35,7 @@
     "fullcalendar": "3.6.1",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
+    "moment-recur": "^1.0.7",
     "mongodb": "^2.2.33",
     "mongoose": "^4.13.9",
     "ng-fullcalendar": "^1.4.6",

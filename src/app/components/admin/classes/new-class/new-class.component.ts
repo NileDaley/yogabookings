@@ -32,7 +32,10 @@ export class NewClassComponent implements OnInit {
     price: 0.00,
     date: '',
     startTime: '',
-    endTime: ''
+    endTime: '',
+    repeating: false,
+    repeatInterval: 'week',
+    repeatCount: 2
   };
 
   constructor(private _dataService: DataService) {
@@ -112,7 +115,6 @@ export class NewClassComponent implements OnInit {
     if (field === 'venue') {
       this.updateMaxClassSize(val);
     }
-    console.log(this._class);
   }
 
   updateVenues(location_id: string) {
@@ -131,7 +133,6 @@ export class NewClassComponent implements OnInit {
       location.venues.forEach((v: Venue) => {
         if (v.name === venue_name) {
           this.maxClassSize = v.capacity;
-          console.log(this.maxClassSize);
         }
       });
     } else {
@@ -147,6 +148,10 @@ export class NewClassComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  earliestEndTime(): string {
+    return this._class.startTime || '';
+  }
+
   saveClass() {
     this._dataService.insertClass(this._class)
       .subscribe(res => {
@@ -155,4 +160,5 @@ export class NewClassComponent implements OnInit {
         console.log(err);
       });
   }
+
 }

@@ -11,7 +11,8 @@ const ClassSchema = new Schema({
   startTime: String,
   endTime: String,
   location: {type: Schema.Types.ObjectId, ref: 'Location'},
-  venue: String
+  venue: String,
+  classGroup: {type: Schema.Types.ObjectId, ref: 'ClassGroup'}
 });
 
 module.exports = ClassSchema;

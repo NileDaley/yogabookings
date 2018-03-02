@@ -27,9 +27,9 @@
   <div class="columns is-centered is-multiline">
     <ng-container *ngFor="let skill of filteredSkills">
       <div class="column is-4">
-        <div class="card" style="height:100%">
-          <div class="card-header">
-            <div class="card-header-title">
+        <div class="box" style="height:100%">
+          <div>
+            <div class="is-size-5 has-text-centered has-text-weight-semibold">
             <span class="is-capitalized">{{skill.name}}
               <span class="icon">
                 <a routerLink="/admin/tutors/skills/{{skill._id}}" class="link">
@@ -39,7 +39,7 @@
             </span>
             </div>
           </div>
-          <div class="card-content">
+          <div>
             <p class="has-text-centered">{{skill.description}}</p>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { Tutor } from 'app/models/tutor';
 import { Customer } from 'app/models/customer';
 import { ClassType } from 'app/models/class-type';
 import { Location } from 'app/models/location';
+import { ClassGroup } from 'app/models/class-group';
 
 export class Class {
   _id: String;
@@ -15,17 +16,20 @@ export class Class {
   price: string;
   location: Location;
   venue: string;
+  classGroup: ClassGroup;
 
-  constructor(id: string,
-              type: ClassType,
-              tutor: Tutor,
-              attendees: Array<Customer>,
-              date: string,
-              startTime: string,
-              endTime: string,
-              classSize: number,
-              price: string,
-              location: Location, venue: string) {
+  constructor( id: string,
+               type: ClassType,
+               tutor: Tutor,
+               attendees: Array<Customer>,
+               date: string,
+               startTime: string,
+               endTime: string,
+               classSize: number,
+               price: string,
+               location: Location,
+               venue: string,
+               classGroup?: ClassGroup ) {
     this._id = id;
     this.type = type;
     this.tutor = tutor;
@@ -37,6 +41,7 @@ export class Class {
     this.price = price;
     this.location = location;
     this.venue = venue;
+    this.classGroup = classGroup;
   }
 
 }
