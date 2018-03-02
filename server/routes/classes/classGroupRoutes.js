@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const Response = require('../../Response');
 
 const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
+let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
 router.get('/', (req, res) => {
-  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
   ClassGroup.find()
     .then(classGroups => {
       if (!classGroups) {
@@ -20,7 +20,6 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
 
   let {startDate, interval, count} = req.body;
-  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
   let classGroup = new ClassGroup({
     startDate,

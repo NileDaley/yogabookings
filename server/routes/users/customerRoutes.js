@@ -6,10 +6,12 @@ const Response = require('../../Response');
 const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
 
+let Customer = mongoose.model('Customer', CustomerSchema);
+let User = mongoose.model('User', UserSchema);
+
 // Get all customers
 router.get('/', (req, res) => {
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
+
   Customer.find()
     .populate('user')
     .then(customers => {
@@ -24,9 +26,6 @@ router.get('/', (req, res) => {
 
 // Insert customer
 router.post('/', (req, res) => {
-
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
 
   let {forename, surname, gender, phone} = req.body;
   let userValues = req.body.user;
@@ -65,9 +64,6 @@ router.post('/', (req, res) => {
 
 // Get single customer
 router.get('/:id', (req, res) => {
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
-
   Customer.findById(req.params.id)
     .populate('user')
     .then(user => {
@@ -78,9 +74,6 @@ router.get('/:id', (req, res) => {
 
 // Update customer
 router.patch('/:id', (req, res) => {
-
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
 
   let {forename, surname, phone, gender, user} = req.body;
 
@@ -121,10 +114,7 @@ router.patch('/:id', (req, res) => {
 // Delete customer
 router.delete('/:id', (req, res) => {
 
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
-
-  Customer.findById(req.params.id)
+ Customer.findById(req.params.id)
     .then(cust => {
 
       if (!cust) {

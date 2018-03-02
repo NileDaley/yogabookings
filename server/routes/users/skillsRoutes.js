@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const Response = require('../../Response');
 
 const SkillSchema = require('../../schemas/Users/SkillSchema');
+let Skill = mongoose.model('Skill', SkillSchema);
 
 router.get('/', (req, res) => {
-  let Skill = mongoose.model('Skill', SkillSchema);
   Skill.find()
     .then(skills => {
       if (!skills) {
@@ -20,7 +20,6 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
 
-  let Skill = mongoose.model('Skill', SkillSchema);
   let {name, description} = req.body;
 
   let skill = new Skill({
@@ -35,10 +34,10 @@ router.post('/', (req, res) => {
         Response.CREATED(res, newSkill);
       }
     }).catch(err => Response.ERROR(res, err));
+
 });
 
 router.get('/:id', (req, res) => {
-  let Skill = mongoose.model('Skill', SkillSchema);
   Skill.findById(req.params.id)
     .then(skill => {
       if (!skill) {
@@ -52,7 +51,6 @@ router.get('/:id', (req, res) => {
 
 router.patch('/:id', (req, res) => {
 
-  let Skill = mongoose.model('Skill', SkillSchema);
   let {_id, name, description} = req.body;
 
   Skill.update({_id}, {

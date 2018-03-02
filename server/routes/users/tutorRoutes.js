@@ -9,13 +9,14 @@ const TutorSchema = require('../../schemas/Users/TutorSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
 const SkillSchema = require('../../schemas/Users/SkillSchema');
 
+let Tutor = mongoose.model('Tutor', TutorSchema);
+let User = mongoose.model('User', UserSchema);
+let Skill = mongoose.model('Skill', SkillSchema);
+
 router.use('/skills', SkillsRoutes);
 
 // Get all tutors
 router.get('/', (req, res) => {
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
 
   Tutor.find()
     .populate('user skills')
@@ -27,13 +28,10 @@ router.get('/', (req, res) => {
       }
     })
     .catch(err => Response.ERROR(res, err));
+
 });
 
 router.post('/', (req, res) => {
-
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
 
   let values = req.body;
   let {forename, surname, gender, phone} = values;
@@ -81,9 +79,6 @@ router.post('/', (req, res) => {
 
 // Get single tutor
 router.get('/:id', (req, res) => {
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
   Tutor.findById(req.params.id)
     .populate('user skills')
     .then(tutors => {
@@ -98,9 +93,6 @@ router.get('/:id', (req, res) => {
 
 // Update tutor
 router.patch('/:id', (req, res) => {
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
 
   let newValues = req.body;
   let skills = newValues.skills.map(s => mongoose.Types.ObjectId(s._id));
@@ -128,7 +120,7 @@ router.patch('/:id', (req, res) => {
           matched: updatedTutor['n'],
           modified: updatedTutor['nModified']
         };
-        Response.OK(res,status);
+        Response.OK(res, status);
       }
     }).catch(err => Response.ERROR(res, err));
 

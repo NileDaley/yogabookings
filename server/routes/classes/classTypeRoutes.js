@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const Response = require('../../Response');
 
 const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
+let ClassType = mongoose.model('ClassType', ClassTypeSchema);
 
 router.get('/', (req, res) => {
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   ClassType.find()
     .then(classTypes => {
       if (!classTypes) {
@@ -19,7 +19,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
   ClassType.findById(req.params.id)
     .then(classType => {
       if (!classType) {
@@ -32,7 +31,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
 
   let {name, description} = req.body;
 
@@ -50,11 +48,13 @@ router.post('/', (req, res) => {
       }
     })
     .catch(err => Response.ERROR(res, err));
+
 });
 
 router.patch('/:id', (req, res) => {
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
+
   let {name, description} = req.body;
+
   ClassType.update(
     {_id: req.params.id},
     {
@@ -71,10 +71,11 @@ router.patch('/:id', (req, res) => {
       }
     })
     .catch(err => Response.ERROR(res, err));
+
 });
 
 router.delete('/:id', (req, res) => {
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
+
   ClassType.findByIdAndRemove(req.params.id)
     .then((data, err) => {
       if (err) {
@@ -84,6 +85,7 @@ router.delete('/:id', (req, res) => {
       }
     })
     .catch(err => Response.ERROR(res, err));
+
 });
 
 module.exports = router;

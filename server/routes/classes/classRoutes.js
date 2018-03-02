@@ -14,6 +14,15 @@ const SkillSchema = require('../../schemas/Users/SkillSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
 const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 
+let Location = mongoose.model('Location', LocationSchema);
+let Tutor = mongoose.model('Tutor', TutorSchema);
+let Skill = mongoose.model('Skill', SkillSchema);
+let User = mongoose.model('User', UserSchema);
+let Customer = mongoose.model('Customer', CustomerSchema);
+let ClassType = mongoose.model('ClassType', ClassTypeSchema);
+let Class = mongoose.model('Class', ClassSchema);
+let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
+
 const classTypeRoutes = require('./classTypeRoutes');
 const classGroupRoutes = require('./classGroupRoutes');
 
@@ -21,14 +30,6 @@ router.use('/types', classTypeRoutes);
 router.use('/groups', classGroupRoutes);
 
 router.get('/', (req, res) => {
-  let Location = mongoose.model('Location', LocationSchema);
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
-  let Class = mongoose.model('Class', ClassSchema);
-  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
   Class.find()
     .populate('location classType classGroup')
@@ -62,14 +63,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  let Location = mongoose.model('Location', LocationSchema);
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let ClassType = mongoose.model('ClassType', ClassTypeSchema);
-  let Class = mongoose.model('Class', ClassSchema);
-  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
   Class.findById(req.params.id)
     .populate('location classType classGroup')
@@ -103,9 +96,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-
-  let Class = mongoose.model('Class', ClassSchema);
-  let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
   let {
     tutor,
@@ -222,8 +212,6 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req, res) => {
 
-  let Class = mongoose.model('Class', ClassSchema);
-
   let {tutor, attendees, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
 
   Class.findByIdAndUpdate(req.params.id,
@@ -252,7 +240,6 @@ router.patch('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  let Class = mongoose.model('Class', ClassSchema);
   Class.findByIdAndRemove(req.params.id)
     .then((data, err) => {
 
