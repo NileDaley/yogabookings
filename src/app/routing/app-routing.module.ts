@@ -8,6 +8,7 @@ import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.
 import { AdminRoutingModule } from 'app/routing/admin-routing.module';
 import { StatusComponent } from 'app/components/status/status.component';
 import { LocationsComponent } from 'app/components/guest/locations/locations.component';
+import { TutorRoutingModule } from './tutor-routing.module';
 
 const appRoutes: Routes = [
   {
@@ -28,7 +29,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes), AdminRoutingModule],
+  imports: [RouterModule.forRoot(appRoutes), AdminRoutingModule, TutorRoutingModule],
   exports: [RouterModule]
 })
 

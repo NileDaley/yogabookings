@@ -41,6 +41,7 @@ import { LocationsComponent as GuestLocations } from 'app/components/guest/locat
 
 /* Services */
 import { DataService } from 'app/services/data.service';
+import { DashboardComponent } from './components/tutors/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { DataService } from 'app/services/data.service';
     AdminSingleCustomer,
     AdminClasses,
     AdminSingleClass,
-    AdminNewClass
+    AdminNewClass,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
