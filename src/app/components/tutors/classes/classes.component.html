@@ -22,7 +22,6 @@
             [ngClass]="{'is-selected is-danger': showAllClasses }"
             style="width: 50%;">All</span>
         </div>
-        <button class="button" (click)="deleteEvents()">Test</button>
         <div *ngIf="showAllClasses">
           <p class="label">Tutors</p>
           <p *ngFor="let tutor of tutorColors" class="is-capitalized">
