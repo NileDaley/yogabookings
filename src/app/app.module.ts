@@ -36,13 +36,15 @@ import { ClassesComponent as AdminClasses } from './components/admin/classes/cla
 import { ClassComponent as AdminSingleClass } from './components/admin/classes/class/class.component';
 import { NewClassComponent as AdminNewClass } from './components/admin/classes/new-class/new-class.component';
 
+/* Tutor Components */
+import { DashboardComponent as TutorDashboard } from './components/tutors/dashboard/dashboard.component';
+import { ClassesComponent as TutorClasses } from './components/tutors/classes/classes.component';
+
 /* Guest components */
 import { LocationsComponent as GuestLocations } from 'app/components/guest/locations/locations.component';
 
 /* Services */
 import { DataService } from 'app/services/data.service';
-import { DashboardComponent } from './components/tutors/dashboard/dashboard.component';
-
 
 @NgModule({
   declarations: [
@@ -69,7 +71,8 @@ import { DashboardComponent } from './components/tutors/dashboard/dashboard.comp
     AdminClasses,
     AdminSingleClass,
     AdminNewClass,
-    DashboardComponent
+    TutorDashboard,
+    TutorClasses
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,45 @@
+<app-loading *ngIf="loading; else content"></app-loading>
+<app-messages [messages]="messages"></app-messages>
+
+<ng-template #content>
+  <h1 class="subtitle is-3 has-text-centered">All Classes</h1>
+</ng-template>
+
+<div>
+  <div class="columns">
+    <div class="column is-narrow">
+      <div class="box">
+        <h1 class="subtitle has-text-centered">Filter</h1>
+        <div class="buttons has-addons">
+          <span
+            class="button"
+            (click)="showAllClasses = false"
+            [ngClass]="{'is-selected is-success': !showAllClasses }"
+            style="width: 50%;">Mine</span>
+          <span
+            class="button is-danger is-selected"
+            (click)="showAllClasses = true"
+            [ngClass]="{'is-selected is-danger': showAllClasses }"
+            style="width: 50%;">All</span>
+        </div>
+        <button class="button" (click)="deleteEvents()">Test</button>
+        <div *ngIf="showAllClasses">
+          <p class="label">Tutors</p>
+          <p *ngFor="let tutor of tutorColors" class="is-capitalized">
+          <span class="icon" [style.color]="tutor.color">
+            <i class="fas fa-square"></i>
+          </span>
+            {{tutor.tutorName}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="column" *ngIf="calendarOptions">
+      <ng-fullcalendar #ucCalendar
+                       [options]="calendarOptions"
+                       (eventClick)="eventClick($event.detail)"
+      ></ng-fullcalendar>
+    </div>
+    <div class="column is-1"></div>
+  </div>
+</div>
