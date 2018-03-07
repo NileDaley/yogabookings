@@ -17,6 +17,8 @@ router.get('/', (req, res) => {
     })
     .catch(err => Response.ERROR(res, err));
 });
+
+// TODO: isAdminOrTutor
 router.post('/', (req, res) => {
 
   let {startDate, interval, count} = req.body;

@@ -16,6 +16,7 @@ let Skill = mongoose.model('Skill', SkillSchema);
 router.use('/skills', SkillsRoutes);
 
 // Get all tutors
+// TODO: isAdminOrTutor
 router.get('/', (req, res) => {
 
   Tutor.find()
@@ -31,6 +32,7 @@ router.get('/', (req, res) => {
 
 });
 
+// TODO: isAdmin
 router.post('/', (req, res) => {
 
   let values = req.body;
@@ -92,6 +94,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Update tutor
+// TODO: isAdmin or isSelf
 router.patch('/:id', (req, res) => {
 
   let newValues = req.body;

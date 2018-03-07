@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../Response');
+const authMiddleware = require('../middleware/authentication')
+const { authenticate, hasRole } = authMiddleware;;
 
 const UserSchema = require('../schemas/Users/UserSchema');
 const adminRoutes = require('./users/adminRoutes');
@@ -15,6 +17,7 @@ router.use('/tutors', tutorRoutes);
 router.use('/admins', adminRoutes);
 
 // Get all users
+// TODO: isAdmin
 router.get('/', (req, res) => {
 
   User.find()
@@ -31,6 +34,7 @@ router.get('/', (req, res) => {
 });
 
 // Get single user
+// TODO: isAdmin or isSelf ( :id matches res.locals.user._id )
 router.get('/:id', (req, res) => {
   User.findById(req.params.id)
     .select('email role')
@@ -44,6 +48,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err))
 });
 
+// TODO: isAdmin
 router.delete('/:id', (req, res) => {
   User.findByIdAndRemove(req.params.id)
     .then(data => {

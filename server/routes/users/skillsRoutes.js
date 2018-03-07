@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
+// TODO: isAdmin
 router.post('/', (req, res) => {
 
   let {name, description} = req.body;
@@ -49,6 +50,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
+// TODO: isAdmin
 router.patch('/:id', (req, res) => {
 
   let {_id, name, description} = req.body;

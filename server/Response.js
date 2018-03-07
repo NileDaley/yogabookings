@@ -20,7 +20,7 @@ class Response {
 
   static FORBIDDEN(res, err = {}) {
     err = err !== {} ? err : 'Access is forbidden to the requested resource';
-    res.status(403).json({status: 503, err});
+    res.status(403).json({status: 403, err});
   }
 
   constructor(res, status, data = [], message = '') {

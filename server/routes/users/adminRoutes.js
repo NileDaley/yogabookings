@@ -9,6 +9,7 @@ const AdminSchema = require('../../schemas/Users/AdminSchema');
 let Admin = mongoose.model('Admin', AdminSchema);
 let User = mongoose.model('User', UserSchema);
 
+// TODO: isAdmin
 router.get('/', (req, res) => {
 
   Admin.find()

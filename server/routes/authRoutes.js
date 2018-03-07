@@ -8,6 +8,7 @@ const User = mongoose.model('User', UserSchema);
 
 router.post('/login', (req, res) => {
   let { email, password } = req.body;
+
   User.find({ "email": email })
     .then(data => {
       data = data[0];
@@ -17,8 +18,12 @@ router.post('/login', (req, res) => {
         if (password === data.password) {
 
           let expiresIn = 60 * 60;
+          let tokenData = JSON.stringify({
+            _id: data._id,
+            role: data.role
+          });
           let token = jwt.sign({
-            data: data._id
+            data: tokenData
           }, process.env.JWT_SECRET, { expiresIn });
 
           Response.OK(res, { token, expiresIn }, `Login matched`);
@@ -27,6 +32,6 @@ router.post('/login', (req, res) => {
         }
       }
     });
-})
+});
 
 module.exports = router;

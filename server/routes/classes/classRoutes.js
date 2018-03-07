@@ -3,6 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 require('moment-recur');
+const authMiddleware = require('../../middleware/authentication')
+const { authenticate, hasRole } = authMiddleware;
 const Response = require('../../Response');
 
 const ClassSchema = require('../../schemas/Classes/ClassSchema');
@@ -95,7 +97,8 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.post('/', (req, res) => {
+// TODO: isAdminOrTutor
+router.post('/', authenticate, (req, res) => {
 
   let {
     tutor,
@@ -210,7 +213,8 @@ router.post('/', (req, res) => {
 
 });
 
-router.patch('/:id', (req, res) => {
+// TODO: isAdminOrTutor
+router.patch('/:id', authenticate, (req, res) => {
 
   let {tutor, attendees, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
 
@@ -239,7 +243,8 @@ router.patch('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.delete('/:id', (req, res) => {
+// TODO: isAdminOrTutor
+router.delete('/:id', authenticate, (req, res) => {
   Class.findByIdAndRemove(req.params.id)
     .then((data, err) => {
 

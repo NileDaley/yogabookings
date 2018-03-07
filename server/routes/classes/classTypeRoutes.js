@@ -30,6 +30,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
+// TODO: isAdminOrTutor
 router.post('/', (req, res) => {
 
   let {name, description} = req.body;
@@ -51,6 +52,7 @@ router.post('/', (req, res) => {
 
 });
 
+// TODO: isAdminOrTutor
 router.patch('/:id', (req, res) => {
 
   let {name, description} = req.body;
@@ -74,6 +76,7 @@ router.patch('/:id', (req, res) => {
 
 });
 
+// TODO: isAdmin
 router.delete('/:id', (req, res) => {
 
   ClassType.findByIdAndRemove(req.params.id)

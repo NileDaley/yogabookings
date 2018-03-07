@@ -18,8 +18,8 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("id_token");
-    localStorage.removeItem("expires_at");
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
   }
 
   isLoggedIn() {
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   getExpiration() {
-    return localStorage.getItem("expiresAt");
+    return localStorage.getItem('expiresAt');
   }
 
 

@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from 'app/routing/app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -47,6 +47,7 @@ import { LocationsComponent as GuestLocations } from 'app/components/guest/locat
 /* Services */
 import { DataService } from 'app/services/data.service';
 import { AuthService } from './services/auth.service';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,11 @@ import { AuthService } from './services/auth.service';
     FullCalendarModule,
     ReactiveFormsModule
   ],
-  providers: [DataService, AuthService],
+  providers: [DataService, AuthService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  } ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

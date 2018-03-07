@@ -10,6 +10,7 @@ let Customer = mongoose.model('Customer', CustomerSchema);
 let User = mongoose.model('User', UserSchema);
 
 // Get all customers
+// TODO: isAdminOrTutor
 router.get('/', (req, res) => {
 
   Customer.find()
@@ -25,6 +26,7 @@ router.get('/', (req, res) => {
 });
 
 // Insert customer
+// TODO: isAdmin
 router.post('/', (req, res) => {
 
   let {forename, surname, gender, phone} = req.body;
@@ -63,6 +65,7 @@ router.post('/', (req, res) => {
 });
 
 // Get single customer
+// TODO: isAdmin or isSelf
 router.get('/:id', (req, res) => {
   Customer.findById(req.params.id)
     .populate('user')
@@ -73,6 +76,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Update customer
+// TODO: isAdmin or isSelf
 router.patch('/:id', (req, res) => {
 
   let {forename, surname, phone, gender, user} = req.body;
@@ -112,6 +116,7 @@ router.patch('/:id', (req, res) => {
 });
 
 // Delete customer
+// TODO: isAdmin
 router.delete('/:id', (req, res) => {
 
  Customer.findById(req.params.id)

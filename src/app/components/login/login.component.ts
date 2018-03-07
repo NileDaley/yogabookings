@@ -18,32 +18,27 @@ export class LoginComponent {
 
   private createForm() {
     this.loginForm = this.fb.group({
-      email: ['cust@cust.com', [
+      email: ['', [
         Validators.required,
         Validators.email
       ]],
-      password: ['customers', [Validators.required, Validators.minLength(6)]]
+      password: ['', Validators.required]
     });
   }
 
   login() {
-    let email = this.loginForm.get('email').value;
-    let password = this.loginForm.get('password').value;
+    const email = this.loginForm.get('email').value;
+    const password = this.loginForm.get('password').value;
     this._authService.login(email, password)
       .subscribe(
         response => {
           const data = response['data'];
           const { token, expiresIn } = data;
-          let expiresAt = moment().add(expiresIn, 'second').format('YYYY-MM-DD HH:mm:ss');
-          localStorage.setItem("token", token);
-          localStorage.setItem("expiresAt", expiresAt);
-          console.log(`Is logged in: ${this._authService.isLoggedIn()}`);
-          setTimeout(() => {
-            console.log(`Is logged in: ${this._authService.isLoggedIn()}`);
-          }, 3000);
+          const expiresAt = moment().add(expiresIn, 'second').format('YYYY-MM-DD HH:mm:ss');
+          localStorage.setItem('token', token);
+          localStorage.setItem('expiresAt', expiresAt);
         },
         error => {
-          console.log("ERROR");
           console.log(error);
         }
       );
