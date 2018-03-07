@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "ng": "ng",
-    "start": "nodemon server -w server/",
+    "start": "nodemon server -w server/ --config nodemon.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
