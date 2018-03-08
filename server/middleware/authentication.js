@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const moment = require('moment');
 const Response = require('../Response');
 
 const ROLES = {
@@ -15,7 +14,7 @@ exports.authenticate = (req, res, next) => {
       if (err) {
         Response.FORBIDDEN(res);
       } else {
-        let tokenData = JSON.parse(decoded.data);
+        const tokenData = JSON.parse(decoded.data);
         res.locals.user = tokenData;
         next();
       }
@@ -34,4 +33,4 @@ exports.hasRole = expectedRoles => {
       expectedRoles.includes(res.locals.user.role) ? next() : Response.FORBIDDEN(res);
     }
   }
-}
+};

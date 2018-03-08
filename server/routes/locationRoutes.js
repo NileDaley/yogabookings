@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authentication')
-const { authenticate } = authMiddleware;
+const authMiddleware = require('../middleware/authentication');
+const {authenticate, hasRole} = authMiddleware;
 
 const mongoose = require('mongoose');
 const Response = require('../Response');
@@ -27,8 +27,7 @@ router.get('/', (req, res) => {
 });
 
 // Insert Location
-// TODO: isAdmin
-router.post('/', authenticate,  (req, res) => {
+router.post('/', authenticate, hasRole(['admin']), (req, res) => {
 
   // Extract location fields from request
   let {name, email, phone, address, venues, openHours} = req.body;
@@ -72,8 +71,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Update single location
-// TODO: isAdmin
-router.patch('/:id', authenticate, (req, res) => {
+router.patch('/:id', authenticate, hasRole(['admin']), (req, res) => {
 
   let updateValues = req.body;
 
@@ -94,8 +92,7 @@ router.patch('/:id', authenticate, (req, res) => {
 });
 
 // Delete a location
-// TODO: isAdmin
-router.delete('/:id', authenticate, (req, res) => {
+router.delete('/:id', authenticate, hasRole(['admin']), (req, res) => {
   Location.findByIdAndRemove(req.params.id)
     .then(data => {
       if (!data) {

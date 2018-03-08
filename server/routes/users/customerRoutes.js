@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
+const {hasRole} = require('../../middleware/authentication');
 
 const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
@@ -10,8 +11,7 @@ let Customer = mongoose.model('Customer', CustomerSchema);
 let User = mongoose.model('User', UserSchema);
 
 // Get all customers
-// TODO: isAdminOrTutor
-router.get('/', (req, res) => {
+router.get('/', hasRole(['admin', 'tutor']), (req, res) => {
 
   Customer.find()
     .populate('user')
@@ -26,8 +26,7 @@ router.get('/', (req, res) => {
 });
 
 // Insert customer
-// TODO: isAdmin
-router.post('/', (req, res) => {
+router.post('/', hasRole(['admin']), (req, res) => {
 
   let {forename, surname, gender, phone} = req.body;
   let userValues = req.body.user;
@@ -65,8 +64,8 @@ router.post('/', (req, res) => {
 });
 
 // Get single customer
-// TODO: isAdmin or isSelf
-router.get('/:id', (req, res) => {
+// TODO: isSelf
+router.get('/:id', hasRole(['admin']), (req, res) => {
   Customer.findById(req.params.id)
     .populate('user')
     .then(user => {
@@ -76,8 +75,8 @@ router.get('/:id', (req, res) => {
 });
 
 // Update customer
-// TODO: isAdmin or isSelf
-router.patch('/:id', (req, res) => {
+// TODO: isSelf
+router.patch('/:id', hasRole(['admin']), (req, res) => {
 
   let {forename, surname, phone, gender, user} = req.body;
 
@@ -116,10 +115,9 @@ router.patch('/:id', (req, res) => {
 });
 
 // Delete customer
-// TODO: isAdmin
-router.delete('/:id', (req, res) => {
+router.delete('/:id', hasRole(['admin']), (req, res) => {
 
- Customer.findById(req.params.id)
+  Customer.findById(req.params.id)
     .then(cust => {
 
       if (!cust) {

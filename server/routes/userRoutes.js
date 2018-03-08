@@ -17,8 +17,7 @@ router.use('/tutors', tutorRoutes);
 router.use('/admins', adminRoutes);
 
 // Get all users
-// TODO: isAdmin
-router.get('/', (req, res) => {
+router.get('/', hasRole(['admin']), (req, res) => {
 
   User.find()
     .select('email role')
@@ -34,8 +33,8 @@ router.get('/', (req, res) => {
 });
 
 // Get single user
-// TODO: isAdmin or isSelf ( :id matches res.locals.user._id )
-router.get('/:id', (req, res) => {
+// TODO: isSelf ( :id matches res.locals.user._id )
+router.get('/:id', hasRole(['admin']), (req, res) => {
   User.findById(req.params.id)
     .select('email role')
     .then(user => {
@@ -48,8 +47,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err))
 });
 
-// TODO: isAdmin
-router.delete('/:id', (req, res) => {
+router.delete('/:id', hasRole(['admin']), (req, res) => {
   User.findByIdAndRemove(req.params.id)
     .then(data => {
       if (!data) {

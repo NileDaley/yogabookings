@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
+const { hasRole } = require('../../middleware/authentication');
 
 const SkillsRoutes = require('./skillsRoutes');
 
@@ -16,8 +17,7 @@ let Skill = mongoose.model('Skill', SkillSchema);
 router.use('/skills', SkillsRoutes);
 
 // Get all tutors
-// TODO: isAdminOrTutor
-router.get('/', (req, res) => {
+router.get('/', hasRole(['admin', 'tutor']), (req, res) => {
 
   Tutor.find()
     .populate('user skills')
@@ -32,8 +32,7 @@ router.get('/', (req, res) => {
 
 });
 
-// TODO: isAdmin
-router.post('/', (req, res) => {
+router.post('/', hasRole(['admin']), (req, res) => {
 
   let values = req.body;
   let {forename, surname, gender, phone} = values;
@@ -94,8 +93,8 @@ router.get('/:id', (req, res) => {
 });
 
 // Update tutor
-// TODO: isAdmin or isSelf
-router.patch('/:id', (req, res) => {
+// TODO: isSelf
+router.patch('/:id', hasRole(['admin']), (req, res) => {
 
   let newValues = req.body;
   let skills = newValues.skills.map(s => mongoose.Types.ObjectId(s._id));

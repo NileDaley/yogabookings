@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
+const { hasRole } = require('../../middleware/authentication');
 
 const SkillSchema = require('../../schemas/Users/SkillSchema');
 let Skill = mongoose.model('Skill', SkillSchema);
@@ -18,8 +19,7 @@ router.get('/', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// TODO: isAdmin
-router.post('/', (req, res) => {
+router.post('/', hasRole(['admin']), (req, res) => {
 
   let {name, description} = req.body;
 
@@ -50,8 +50,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// TODO: isAdmin
-router.patch('/:id', (req, res) => {
+router.patch('/:id', hasRole(['admin']), (req, res) => {
 
   let {_id, name, description} = req.body;
 

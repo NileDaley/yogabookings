@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
+const {authenticate, hasRole} = require('../../middleware/authentication');
 
 const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
 let ClassType = mongoose.model('ClassType', ClassTypeSchema);
@@ -30,8 +31,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// TODO: isAdminOrTutor
-router.post('/', (req, res) => {
+router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
   let {name, description} = req.body;
 
@@ -52,8 +52,7 @@ router.post('/', (req, res) => {
 
 });
 
-// TODO: isAdminOrTutor
-router.patch('/:id', (req, res) => {
+router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
   let {name, description} = req.body;
 
@@ -76,8 +75,7 @@ router.patch('/:id', (req, res) => {
 
 });
 
-// TODO: isAdmin
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
   ClassType.findByIdAndRemove(req.params.id)
     .then((data, err) => {

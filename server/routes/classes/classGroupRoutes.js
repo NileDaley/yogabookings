@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
+const { authenticate, hasRole } = require('../../middleware/authentication');
 
 const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
 let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
@@ -18,8 +19,7 @@ router.get('/', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// TODO: isAdminOrTutor
-router.post('/', (req, res) => {
+router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
   let {startDate, interval, count} = req.body;
 

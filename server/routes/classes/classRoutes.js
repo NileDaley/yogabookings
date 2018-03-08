@@ -3,8 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 require('moment-recur');
-const authMiddleware = require('../../middleware/authentication')
-const { authenticate, hasRole } = authMiddleware;
+const {authenticate, hasRole} = require('../../middleware/authentication');
 const Response = require('../../Response');
 
 const ClassSchema = require('../../schemas/Classes/ClassSchema');
@@ -97,8 +96,7 @@ router.get('/:id', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// TODO: isAdminOrTutor
-router.post('/', authenticate, (req, res) => {
+router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
   let {
     tutor,
@@ -213,8 +211,7 @@ router.post('/', authenticate, (req, res) => {
 
 });
 
-// TODO: isAdminOrTutor
-router.patch('/:id', authenticate, (req, res) => {
+router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
   let {tutor, attendees, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
 
@@ -243,8 +240,7 @@ router.patch('/:id', authenticate, (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// TODO: isAdminOrTutor
-router.delete('/:id', authenticate, (req, res) => {
+router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   Class.findByIdAndRemove(req.params.id)
     .then((data, err) => {
 
