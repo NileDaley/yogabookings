@@ -1,14 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import * as moment from 'moment';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) {
+  }
 
   login(email, password) {
-    return this.http.post('/api/auth/login', { email, password });
+    return this.http.post('/api/auth/login', {email, password});
   }
 
   private setSession(/* JWT */) {
@@ -18,16 +21,20 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiresAt');
+    this.router.navigate(['/']);
   }
 
-  isLoggedIn() {
-    return moment().isBefore(this.getExpiration());
-  }
+  isLoggedIn(): Observable<boolean> {
+    return new Observable<boolean>(observer => {
 
-  isLoggedOut() {
-    return !this.isLoggedIn();
+      setInterval(() => {
+        const value = this.getExpiration() !== null && moment().isBefore(this.getExpiration());
+        observer.next(value);
+      }, 1000);
+
+    });
   }
 
   getExpiration() {

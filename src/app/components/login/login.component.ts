@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {Component} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import * as moment from 'moment';
+import * as jwtDecode from 'jwt-decode';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private _authService: AuthService, private fb: FormBuilder) {
+  constructor(private _authService: AuthService, private fb: FormBuilder, private router: Router) {
     this.createForm();
   }
 
@@ -32,11 +34,18 @@ export class LoginComponent {
     this._authService.login(email, password)
       .subscribe(
         response => {
+
           const data = response['data'];
-          const { token, expiresIn } = data;
+          const {token, expiresIn} = data;
           const expiresAt = moment().add(expiresIn, 'second').format('YYYY-MM-DD HH:mm:ss');
+
           localStorage.setItem('token', token);
           localStorage.setItem('expiresAt', expiresAt);
+
+          const decoded = JSON.parse(jwtDecode(token)['data']);
+          const paths = ['customer', 'tutors', 'admin'];
+          this.router.navigate([paths[decoded.role / 10]]);
+
         },
         error => {
           console.log(error);
