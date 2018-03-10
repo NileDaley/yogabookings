@@ -48,6 +48,8 @@ import { LocationsComponent as GuestLocations } from 'app/components/guest/locat
 import { DataService } from 'app/services/data.service';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { RouterGuard } from './routing/router.guard';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,8 @@ import { AuthInterceptor } from './services/auth.interceptor';
     AdminSingleClass,
     AdminNewClass,
     TutorDashboard,
-    TutorClasses
+    TutorClasses,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +88,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
     FullCalendarModule,
     ReactiveFormsModule
   ],
-  providers: [DataService, AuthService, {
+  providers: [DataService, AuthService, RouterGuard, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true

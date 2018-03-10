@@ -9,6 +9,7 @@ import { AdminRoutingModule } from 'app/routing/admin-routing.module';
 import { StatusComponent } from 'app/components/status/status.component';
 import { LocationsComponent } from 'app/components/guest/locations/locations.component';
 import { TutorRoutingModule } from './tutor-routing.module';
+import { ForbiddenComponent } from '../components/forbidden/forbidden.component';
 
 const appRoutes: Routes = [
   {
@@ -22,6 +23,9 @@ const appRoutes: Routes = [
   },
   {
     path: 'status', component: StatusComponent
+  },
+  {
+    path: 'forbidden', component: ForbiddenComponent
   },
   {
     path: '**', component: PagenotfoundComponent
