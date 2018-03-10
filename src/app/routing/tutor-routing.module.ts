@@ -14,6 +14,11 @@ const tutorRoutes: Routes = [
     },
     children: [
       {
+        path: '',
+        redirectTo: 'classes',
+        pathMatch: 'full'
+      },
+      {
         path: 'classes',
         component: ClassesComponent
       }

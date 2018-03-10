@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import * as moment from 'moment';
+import * as jwtDecode from 'jwt-decode';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 
@@ -12,12 +13,6 @@ export class AuthService {
 
   login(email, password) {
     return this.http.post('/api/auth/login', {email, password});
-  }
-
-  private setSession(/* JWT */) {
-    // Use moment to set expiry time
-    // Add token to localStorage using setItem(key, value)
-    // Add expiresAt value to localStorage
   }
 
   logout() {
@@ -41,5 +36,19 @@ export class AuthService {
     return localStorage.getItem('expiresAt');
   }
 
+  getToken() {
+    const token = localStorage.getItem('token');
+    const decoded = JSON.parse(jwtDecode(token)['data']);
+    return decoded;
+  }
+
+  getIdentity() {
+
+    const token = localStorage.getItem('token');
+    const decoded = JSON.parse(jwtDecode(token)['data']);
+
+    return this.http.post('/api/users/identity', decoded);
+
+  }
 
 }

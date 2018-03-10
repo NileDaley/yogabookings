@@ -43,7 +43,7 @@ export class LoginComponent {
           localStorage.setItem('expiresAt', expiresAt);
 
           const decoded = JSON.parse(jwtDecode(token)['data']);
-          const paths = ['customer', 'tutors', 'admin'];
+          const paths = ['customer', 'tutor', 'admin'];
           this.router.navigate([paths[decoded.role / 10]]);
 
         },
