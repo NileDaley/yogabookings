@@ -1,14 +1,12 @@
-import {Component} from '@angular/core';
-import {AuthService} from '../../services/auth.service';
+import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-
 export class NavbarComponent {
-
   title = 'app';
   navActive = false;
   showAdminButtons = true;
@@ -20,9 +18,12 @@ export class NavbarComponent {
 
   // Subscribes to authService, which notifies of status every second
   watchLoginStatus(): void {
-    this.authService.isLoggedIn().subscribe(value => {
-      this.isLoggedIn = value;
-    }, err => console.log(err));
+    this.authService.isLoggedIn().subscribe(
+      value => {
+        this.isLoggedIn = value;
+      },
+      err => console.log(err)
+    );
   }
 
   // Mobile navbar toggling
@@ -33,5 +34,4 @@ export class NavbarComponent {
   logout(): void {
     this.authService.logout();
   }
-
 }

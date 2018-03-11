@@ -6,8 +6,8 @@ const TutorSchema = new Schema({
   surname: String,
   gender: String,
   phone: String,
-  skills: [{type: Schema.Types.ObjectId, ref: 'Skill'}],
-  user: {type: Schema.Types.ObjectId, ref: 'User'}
+  skills: [{ type: Schema.Types.ObjectId, ref: 'Skill' }],
+  user: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 module.exports = TutorSchema;

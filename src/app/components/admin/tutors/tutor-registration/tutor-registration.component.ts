@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {DataService} from '../../../../services/data.service';
-import {Tutor} from '../../../../models/tutor';
-import {Skill} from '../../../../models/skill';
-import {Role, User} from '../../../../models/user';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../../../services/data.service';
+import { Tutor } from '../../../../models/tutor';
+import { Skill } from '../../../../models/skill';
+import { Role, User } from '../../../../models/user';
 
 @Component({
   selector: 'app-tutor-registration',
@@ -10,14 +10,12 @@ import {Role, User} from '../../../../models/user';
   styleUrls: ['./tutor-registration.component.scss']
 })
 export class TutorRegistrationComponent implements OnInit {
-
   tutor: Tutor;
   availableSkills: Array<Skill>;
   messages = [];
   loading = true;
 
-  constructor(private _dataService: DataService) {
-  }
+  constructor(private _dataService: DataService) {}
 
   ngOnInit() {
     this.initializeTutor();
@@ -37,11 +35,12 @@ export class TutorRegistrationComponent implements OnInit {
   }
 
   private getSkills() {
-    this._dataService.getSkills().subscribe(res => {
-
+    this._dataService.getSkills().subscribe(
+      res => {
         let data = res['data'];
-        data = data
-          .map(skill => new Skill(skill._id, skill.name, skill.description));
+        data = data.map(
+          skill => new Skill(skill._id, skill.name, skill.description)
+        );
 
         // Remove skills from available skills if they are present in tutor.skills
         this.tutor.skills.forEach(s => {
@@ -54,31 +53,36 @@ export class TutorRegistrationComponent implements OnInit {
 
         this.availableSkills = data;
         this.loading = false;
-
       },
       err => {
         console.log(err);
-      });
+      }
+    );
   }
 
   insertTutor(): void {
-    this._dataService.insertTutor(this.tutor)
-      .subscribe(res => {
+    this._dataService.insertTutor(this.tutor).subscribe(
+      res => {
         const newTutor = res['data'];
         this.messages.push({
-          message: `${newTutor.forename} ${newTutor.surname} registered successfully`,
+          message: `${newTutor.forename} ${
+            newTutor.surname
+          } registered successfully`,
           type: 'success'
         });
 
         this.initializeTutor();
         this.getSkills();
-
-      }, () => {
+      },
+      () => {
         this.messages.push({
-          message: `An error occured while trying to register ${this.tutor.forename} ${this.tutor.surname}`,
+          message: `An error occured while trying to register ${
+            this.tutor.forename
+          } ${this.tutor.surname}`,
           type: 'error'
         });
-      });
+      }
+    );
   }
 
   removeSkill(skill) {

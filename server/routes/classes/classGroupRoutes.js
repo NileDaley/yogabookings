@@ -20,8 +20,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
-
-  let {startDate, interval, count} = req.body;
+  let { startDate, interval, count } = req.body;
 
   let classGroup = new ClassGroup({
     startDate,
@@ -29,10 +28,14 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
     count
   });
 
-  classGroup.save()
+  classGroup
+    .save()
     .then(insertedClassGroup => {
-      if(!insertedClassGroup){
-        Response.ERROR(res, 'An error occurred whilst inserting the class group');
+      if (!insertedClassGroup) {
+        Response.ERROR(
+          res,
+          'An error occurred whilst inserting the class group'
+        );
       } else {
         Response.CREATED(res, insertedClassGroup);
       }

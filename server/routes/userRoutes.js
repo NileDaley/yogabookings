@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../Response');
-const authMiddleware = require('../middleware/authentication')
-const { authenticate, hasRole } = authMiddleware;;
+const authMiddleware = require('../middleware/authentication');
+const { authenticate, hasRole } = authMiddleware;
 
 const UserSchema = require('../schemas/Users/UserSchema');
 const adminRoutes = require('./users/adminRoutes');
@@ -27,18 +27,16 @@ router.use('/admins', adminRoutes);
 
 // Get all users
 router.get('/', hasRole(['admin']), (req, res) => {
-
   User.find()
     .select('email role')
     .then(users => {
       if (!users) {
-        Response.NOT_FOUND(res)
-      }
-      else {
+        Response.NOT_FOUND(res);
+      } else {
         Response.OK(res, users);
       }
     })
-    .catch(err => Response.ERROR(res, err))
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Get single user
@@ -48,12 +46,12 @@ router.get('/:id', hasRole(['admin']), (req, res) => {
     .select('email role')
     .then(user => {
       if (!user) {
-        Response.NOT_FOUND(res)
+        Response.NOT_FOUND(res);
       } else {
         Response.OK(res, user);
       }
     })
-    .catch(err => Response.ERROR(res, err))
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.delete('/:id', hasRole(['admin']), (req, res) => {
@@ -69,14 +67,12 @@ router.delete('/:id', hasRole(['admin']), (req, res) => {
 });
 
 router.post('/identity', (req, res) => {
-
   const { role, _id } = req.body;
   let identity = null;
   switch (role) {
     case 0:
-      console.log("is a customer");
-      Customer
-        .find({ 'user': _id })
+      console.log('is a customer');
+      Customer.find({ user: _id })
         .populate('user')
         .then(customer => {
           identity = customer;
@@ -85,20 +81,21 @@ router.post('/identity', (req, res) => {
         .catch(err => Response.ERROR(res, err));
       break;
     case 10:
-      console.log("is a tutor");
-      Tutor
-        .find({'user': _id})
+      console.log('is a tutor');
+      Tutor.find({ user: _id })
         .populate('user')
         .then(tutor => {
           identity = tutor;
           Response.OK(res, ...identity);
         })
-        .catch(err => { console.log(err); Response.ERROR(res, err) });
+        .catch(err => {
+          console.log(err);
+          Response.ERROR(res, err);
+        });
       break;
     case 20:
-      console.log("is a admin");
-      Admin
-        .find({ 'user': _id })
+      console.log('is a admin');
+      Admin.find({ user: _id })
         .populate('user')
         .then(admin => {
           identity = admin;
@@ -107,7 +104,6 @@ router.post('/identity', (req, res) => {
         .catch(err => Response.ERROR(res, err));
       break;
   }
-
 });
 
 module.exports = router;

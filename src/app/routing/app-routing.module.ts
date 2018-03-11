@@ -13,28 +13,37 @@ import { ForbiddenComponent } from '../components/forbidden/forbidden.component'
 
 const appRoutes: Routes = [
   {
-    path: '', component: IndexComponent
+    path: '',
+    component: IndexComponent
   },
   {
-    path: 'login', component: LoginComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path: 'locations', component: LocationsComponent
+    path: 'locations',
+    component: LocationsComponent
   },
   {
-    path: 'status', component: StatusComponent
+    path: 'status',
+    component: StatusComponent
   },
   {
-    path: 'forbidden', component: ForbiddenComponent
+    path: 'forbidden',
+    component: ForbiddenComponent
   },
   {
-    path: '**', component: PagenotfoundComponent
+    path: '**',
+    component: PagenotfoundComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes), AdminRoutingModule, TutorRoutingModule],
+  imports: [
+    RouterModule.forRoot(appRoutes),
+    AdminRoutingModule,
+    TutorRoutingModule
+  ],
   exports: [RouterModule]
 })
-
-export class AppRoutingModule { }
+export class AppRoutingModule {}

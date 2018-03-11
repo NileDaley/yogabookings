@@ -6,12 +6,13 @@ describe('MessagesComponent', () => {
   let component: MessagesComponent;
   let fixture: ComponentFixture<MessagesComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MessagesComponent ]
+  beforeEach(
+    async(() => {
+      TestBed.configureTestingModule({
+        declarations: [MessagesComponent]
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MessagesComponent);

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {DataService} from 'app/services/data.service';
-import {Location} from 'app/models/location';
-import {find, pick} from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from 'app/services/data.service';
+import { Location } from 'app/models/location';
+import { find, pick } from 'lodash';
 
 @Component({
   selector: 'app-locations',
@@ -9,14 +9,12 @@ import {find, pick} from 'lodash';
   styleUrls: ['./locations.component.scss']
 })
 export class LocationsComponent implements OnInit {
-
   locations: Array<Location> = [];
   filteredLocations: Array<Location>;
   loading = true;
   messages = [];
 
-  constructor(private _dataService: DataService) {
-  }
+  constructor(private _dataService: DataService) {}
 
   ngOnInit() {
     this.getLocations();
@@ -25,8 +23,17 @@ export class LocationsComponent implements OnInit {
   private getLocations(): void {
     this._dataService.getLocations().subscribe(res => {
       const data: Array<any> = res['data'];
-      this.locations = data.map(l =>
-        new Location(l._id, l.name, l.address, l.email, l.phone, l.openHours, l.venues)
+      this.locations = data.map(
+        l =>
+          new Location(
+            l._id,
+            l.name,
+            l.address,
+            l.email,
+            l.phone,
+            l.openHours,
+            l.venues
+          )
       );
       this.filteredLocations = this.locations.map(l => l);
       this.loading = false;
@@ -49,7 +56,6 @@ export class LocationsComponent implements OnInit {
       const fields = ['name', 'address', 'phone', 'email'];
 
       fields.forEach(key => {
-
         // if the current key in location is an array, iterate it's values
         if (key === 'address') {
           for (const line of location[key]) {
@@ -66,17 +72,13 @@ export class LocationsComponent implements OnInit {
             return;
           }
         }
-
       });
 
       return match;
-
     });
-
   }
 
   resetFilter(): void {
     this.filteredLocations = this.locations.map(l => l);
   }
-
 }

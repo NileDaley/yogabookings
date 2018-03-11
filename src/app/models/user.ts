@@ -1,5 +1,4 @@
 export class User {
-
   email: string;
   password: string;
   role: number;
@@ -9,11 +8,10 @@ export class User {
     this.password = password;
     this.role = role;
   }
-
 }
 
 export enum Role {
   Customer = 0,
   Tutor = 10,
-  Admin = 20,
+  Admin = 20
 }

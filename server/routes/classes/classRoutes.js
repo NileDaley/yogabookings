@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 require('moment-recur');
-const {authenticate, hasRole} = require('../../middleware/authentication');
+const { authenticate, hasRole } = require('../../middleware/authentication');
 const Response = require('../../Response');
 
 const ClassSchema = require('../../schemas/Classes/ClassSchema');
@@ -31,7 +31,6 @@ router.use('/types', classTypeRoutes);
 router.use('/groups', classGroupRoutes);
 
 router.get('/', (req, res) => {
-
   Class.find()
     .populate('location classType classGroup')
     .populate({
@@ -40,7 +39,8 @@ router.get('/', (req, res) => {
         {
           path: 'user',
           select: 'email'
-        }, {
+        },
+        {
           path: 'skills',
           model: 'Skill'
         }
@@ -64,7 +64,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-
   Class.findById(req.params.id)
     .populate('location classType classGroup')
     .populate({
@@ -73,7 +72,8 @@ router.get('/:id', (req, res) => {
         {
           path: 'user',
           select: 'email'
-        }, {
+        },
+        {
           path: 'skills',
           model: 'Skill'
         }
@@ -97,7 +97,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
-
   let {
     tutor,
     classSize,
@@ -116,21 +115,20 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   let events = [date];
 
   if (repeating) {
-
     let m = moment(date);
     let recurrence;
 
     switch (repeatInterval) {
       case 'week': {
-        recurrence = m.recur().every(1, "weeks");
+        recurrence = m.recur().every(1, 'weeks');
         break;
       }
       case 'fortnight': {
-        recurrence = m.recur().every(2, "weeks");
+        recurrence = m.recur().every(2, 'weeks');
         break;
       }
       case 'month': {
-        recurrence = m.recur().every(1, "months");
+        recurrence = m.recur().every(1, 'months');
         break;
       }
     }
@@ -146,13 +144,15 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
       count: repeatCount
     });
 
-    classGroup.save()
+    classGroup
+      .save()
       .then(insertedClassGroup => {
-
         if (!insertedClassGroup) {
-          Response.ERROR(res, 'An error occurred whilst inserting the class group');
+          Response.ERROR(
+            res,
+            'An error occurred whilst inserting the class group'
+          );
         } else {
-
           let classGroupId = insertedClassGroup._id;
 
           events = events.map(e => {
@@ -167,13 +167,16 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
               location: mongoose.Types.ObjectId(location),
               venue,
               classGroup: mongoose.Types.ObjectId(classGroupId)
-            }
+            };
           });
 
           Class.insertMany(events)
             .then(insertedClasses => {
               if (!insertedClasses) {
-                Response.ERROR(res, 'An error occurred whilst inserting the classes');
+                Response.ERROR(
+                  res,
+                  'An error occurred whilst inserting the classes'
+                );
               } else {
                 Response.CREATED(res, insertedClasses);
               }
@@ -182,9 +185,7 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
         }
       })
       .catch(err => Response.ERROR(res, err));
-
   } else {
-
     let newClass = new Class({
       tutor: mongoose.Types.ObjectId(tutor),
       classSize,
@@ -197,7 +198,8 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
       venue
     });
 
-    newClass.save()
+    newClass
+      .save()
       .then(insertedClass => {
         if (!insertedClass) {
           Response.ERROR(res, 'An error occurred whilst inserting the class');
@@ -206,30 +208,37 @@ router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
         }
       })
       .catch(err => Response.ERROR(res, err));
-
   }
-
 });
 
 router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
+  let {
+    tutor,
+    attendees,
+    classSize,
+    price,
+    classType,
+    date,
+    startTime,
+    endTime,
+    location,
+    venue
+  } = req.body;
 
-  let {tutor, attendees, classSize, price, classType, date, startTime, endTime, location, venue} = req.body;
-
-  Class.findByIdAndUpdate(req.params.id,
-    {
-      $set: {
-        tutor: mongoose.Types.ObjectId(tutor._id),
-        attendees: attendees.map(a => mongoose.Types.ObjectId(a._id)),
-        classSize,
-        classType: mongoose.Types.ObjectId(classType._id),
-        price,
-        date,
-        startTime,
-        endTime,
-        location: mongoose.Types.ObjectId(location._id),
-        venue: mongoose.Types.ObjectId(venue._id)
-      }
-    })
+  Class.findByIdAndUpdate(req.params.id, {
+    $set: {
+      tutor: mongoose.Types.ObjectId(tutor._id),
+      attendees: attendees.map(a => mongoose.Types.ObjectId(a._id)),
+      classSize,
+      classType: mongoose.Types.ObjectId(classType._id),
+      price,
+      date,
+      startTime,
+      endTime,
+      location: mongoose.Types.ObjectId(location._id),
+      venue: mongoose.Types.ObjectId(venue._id)
+    }
+  })
     .then(updatedClass => {
       if (!updatedClass) {
         Response.ERROR(res, 'An error occurred whilst updating the class');
@@ -243,13 +252,11 @@ router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   Class.findByIdAndRemove(req.params.id)
     .then((data, err) => {
-
       if (err) {
         Response.ERROR(res, err);
       } else {
         Response.OK(res);
       }
-
     })
     .catch(err => Response.ERROR(res, err));
 });

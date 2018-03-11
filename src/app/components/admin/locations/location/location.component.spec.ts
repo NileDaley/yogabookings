@@ -10,14 +10,15 @@ describe('LocationComponent', () => {
   let component: LocationComponent;
   let fixture: ComponentFixture<LocationComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientModule, FormsModule, RouterTestingModule],
-      declarations: [LocationComponent],
-      providers: [DataService]
+  beforeEach(
+    async(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientModule, FormsModule, RouterTestingModule],
+        declarations: [LocationComponent],
+        providers: [DataService]
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LocationComponent);

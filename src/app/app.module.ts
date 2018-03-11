@@ -88,11 +88,16 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     FullCalendarModule,
     ReactiveFormsModule
   ],
-  providers: [DataService, AuthService, RouterGuard, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  } ],
+  providers: [
+    DataService,
+    AuthService,
+    RouterGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

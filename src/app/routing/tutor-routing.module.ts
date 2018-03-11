@@ -7,10 +7,11 @@ import { RouterGuard } from './router.guard';
 
 const tutorRoutes: Routes = [
   {
-    path: 'tutor', component: Dashboard,
+    path: 'tutor',
+    component: Dashboard,
     canActivate: [RouterGuard],
     data: {
-      expectedRole: 10,
+      expectedRole: 10
     },
     children: [
       {
@@ -27,9 +28,7 @@ const tutorRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(tutorRoutes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forChild(tutorRoutes)],
+  exports: [RouterModule]
 })
-
-export class TutorRoutingModule {
-}
+export class TutorRoutingModule {}

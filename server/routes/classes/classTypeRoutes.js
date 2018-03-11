@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
-const {authenticate, hasRole} = require('../../middleware/authentication');
+const { authenticate, hasRole } = require('../../middleware/authentication');
 
 const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
 let ClassType = mongoose.model('ClassType', ClassTypeSchema);
@@ -32,38 +32,40 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
-
-  let {name, description} = req.body;
+  let { name, description } = req.body;
 
   let classType = new ClassType({
     name,
     description
   });
 
-  classType.save()
+  classType
+    .save()
     .then(newClassType => {
       if (!newClassType) {
-        Response.ERROR(res, 'An error occurred whilst inserting the new class type');
+        Response.ERROR(
+          res,
+          'An error occurred whilst inserting the new class type'
+        );
       } else {
         Response.CREATED(res, newClassType);
       }
     })
     .catch(err => Response.ERROR(res, err));
-
 });
 
 router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
-
-  let {name, description} = req.body;
+  let { name, description } = req.body;
 
   ClassType.update(
-    {_id: req.params.id},
+    { _id: req.params.id },
     {
       $set: {
         name,
         description
       }
-    })
+    }
+  )
     .then(updatedClassType => {
       if (!updatedClassType) {
         Response.ERROR(res, 'An error occurred whilst updating the class type');
@@ -72,21 +74,18 @@ router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
       }
     })
     .catch(err => Response.ERROR(res, err));
-
 });
 
 router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
-
   ClassType.findByIdAndRemove(req.params.id)
     .then((data, err) => {
       if (err) {
-        Response.ERROR(res, err)
+        Response.ERROR(res, err);
       } else {
         Response.OK(res);
       }
     })
     .catch(err => Response.ERROR(res, err));
-
 });
 
 module.exports = router;

@@ -11,7 +11,6 @@ let Admin = mongoose.model('Admin', AdminSchema);
 let User = mongoose.model('User', UserSchema);
 
 router.get('/', hasRole(['admin']), (req, res) => {
-
   Admin.find()
     .populate('user')
     .then(data => {

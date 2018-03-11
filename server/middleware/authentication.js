@@ -9,7 +9,7 @@ const ROLES = {
 
 exports.authenticate = (req, res, next) => {
   if (req.headers['authorization']) {
-    const token = req.headers['authorization'].split("Bearer ")[1];
+    const token = req.headers['authorization'].split('Bearer ')[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         Response.FORBIDDEN(res);
@@ -30,7 +30,9 @@ exports.hasRole = expectedRoles => {
       Response.FORBIDDEN(res);
     } else {
       expectedRoles = expectedRoles.map(r => ROLES[r]);
-      expectedRoles.includes(res.locals.user.role) ? next() : Response.FORBIDDEN(res);
+      expectedRoles.includes(res.locals.user.role)
+        ? next()
+        : Response.FORBIDDEN(res);
     }
-  }
+  };
 };

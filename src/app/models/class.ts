@@ -18,18 +18,20 @@ export class Class {
   venue: string;
   classGroup: ClassGroup;
 
-  constructor( id: string,
-               type: ClassType,
-               tutor: Tutor,
-               attendees: Array<Customer>,
-               date: string,
-               startTime: string,
-               endTime: string,
-               classSize: number,
-               price: string,
-               location: Location,
-               venue: string,
-               classGroup?: ClassGroup ) {
+  constructor(
+    id: string,
+    type: ClassType,
+    tutor: Tutor,
+    attendees: Array<Customer>,
+    date: string,
+    startTime: string,
+    endTime: string,
+    classSize: number,
+    price: string,
+    location: Location,
+    venue: string,
+    classGroup?: ClassGroup
+  ) {
     this._id = id;
     this.type = type;
     this.tutor = tutor;
@@ -43,5 +45,4 @@ export class Class {
     this.venue = venue;
     this.classGroup = classGroup;
   }
-
 }
