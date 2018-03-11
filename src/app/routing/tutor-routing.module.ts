@@ -3,11 +3,22 @@ import { NgModule } from '@angular/core';
 
 import { DashboardComponent as Dashboard } from 'app/components/tutors/dashboard/dashboard.component';
 import { ClassesComponent } from '../components/tutors/classes/classes.component';
+import { RouterGuard } from './router.guard';
 
 const tutorRoutes: Routes = [
   {
-    path: 'tutor', component: Dashboard,
+    path: 'tutor',
+    component: Dashboard,
+    canActivate: [RouterGuard],
+    data: {
+      expectedRole: 10
+    },
     children: [
+      {
+        path: '',
+        redirectTo: 'classes',
+        pathMatch: 'full'
+      },
       {
         path: 'classes',
         component: ClassesComponent
@@ -17,9 +28,7 @@ const tutorRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(tutorRoutes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forChild(tutorRoutes)],
+  exports: [RouterModule]
 })
-
-export class TutorRoutingModule {
-}
+export class TutorRoutingModule {}

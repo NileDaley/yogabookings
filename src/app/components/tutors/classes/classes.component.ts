@@ -13,14 +13,15 @@ import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
 import { Router, RouterStateSnapshot } from '@angular/router';
 import { ClassGroup } from '../../../models/class-group';
+import { AuthService } from '../../../services/auth.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tutor-classes',
   templateUrl: './classes.component.html',
-  styleUrls: [ './classes.component.scss' ]
+  styleUrls: ['./classes.component.scss']
 })
 export class ClassesComponent implements OnInit {
-
   loading = true;
   messages = [];
   classes: Array<Class>;
@@ -47,80 +48,109 @@ export class ClassesComponent implements OnInit {
     '#4b6584'
   ];
   tutorColors = [];
-  showAllClasses = false;
+  showAllClasses = true;
+  tutor = null;
 
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  constructor( private _dataService: DataService, private router: Router ) {
-  }
+  constructor(
+    private _dataService: DataService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.authService.getIdentity().subscribe(
+      response => {
+        const t = response['data'];
+        this.tutor = new Tutor(
+          t._id,
+          t.forename,
+          t.surname,
+          t.gender,
+          t.phone,
+          t.user,
+          t.skills
+        );
+      },
+      error => console.log(error)
+    );
     this.getClasses();
   }
 
   private getClasses() {
-    this._dataService.getClasses()
-      .subscribe(res => {
-        const data = res[ 'data' ];
-        this.classes = data.map(c => {
-          return new Class(
-            c._id,
-            new ClassType(
-              c.classType._id,
-              c.classType.name,
-              c.classType.description
-            ),
-            new Tutor(
-              c.tutor._id,
-              c.tutor.forename,
-              c.tutor.surname,
-              c.tutor.gender,
-              c.tutor.phone,
-              new User(c.tutor.user.email, null, c.tutor.user.role),
-              c.tutor.skills.map(s => new Skill(s._id, s.name, s.description))
-            ),
-            c.attendees.map(a => new Customer(
-              a._id,
-              a.forename,
-              a.surname,
-              a.phone,
-              a.gender,
-              new User(a.user.email, null, a.role)
-            )),
-            c.date,
-            c.startTime,
-            c.endTime,
-            c.classSize,
-            c.price,
-            new Location(
-              c.location._id,
-              c.location.name,
-              c.location.address,
-              c.location.email,
-              c.location.phone,
-              c.location.openHours.map(day => new OpenHours(day.day, day.isOpen, day.open, day.close)),
-              c.location.venues.map(v => new Venue(v.name, v.capacity))
-            ),
-            c.venue,
-            c.hasOwnProperty('classGroup') ?
-              new ClassGroup(
-                c.classGroup._id,
-                c.classGroup.startDate,
-                c.classGroup.interval,
-                c.classGroup.count
-              )
-              : null
-          );
-        });
+    this._dataService.getClasses().subscribe(
+      res => {
+        const data = res['data'];
+        this.classes = data
+          // .filter(c => {
+          //   return moment(`${c.date} ${c.startTime}`).isAfter(moment());
+          // })
+          .map(c => {
+            return new Class(
+              c._id,
+              new ClassType(
+                c.classType._id,
+                c.classType.name,
+                c.classType.description
+              ),
+              new Tutor(
+                c.tutor._id,
+                c.tutor.forename,
+                c.tutor.surname,
+                c.tutor.gender,
+                c.tutor.phone,
+                new User(c.tutor.user.email, null, c.tutor.user.role),
+                c.tutor.skills.map(s => new Skill(s._id, s.name, s.description))
+              ),
+              c.attendees.map(
+                a =>
+                  new Customer(
+                    a._id,
+                    a.forename,
+                    a.surname,
+                    a.phone,
+                    a.gender,
+                    new User(a.user.email, null, a.role)
+                  )
+              ),
+              c.date,
+              c.startTime,
+              c.endTime,
+              c.classSize,
+              c.price,
+              new Location(
+                c.location._id,
+                c.location.name,
+                c.location.address,
+                c.location.email,
+                c.location.phone,
+                c.location.openHours.map(
+                  day => new OpenHours(day.day, day.isOpen, day.open, day.close)
+                ),
+                c.location.venues.map(v => new Venue(v.name, v.capacity))
+              ),
+              c.venue,
+              c.hasOwnProperty('classGroup')
+                ? new ClassGroup(
+                    c.classGroup._id,
+                    c.classGroup.startDate,
+                    c.classGroup.interval,
+                    c.classGroup.count
+                  )
+                : null
+            );
+          });
         this.initCalendar();
         this.loading = false;
-      }, err => {
+      },
+      err => {
         console.log(err);
-      });
+      }
+    );
   }
 
   private initCalendar() {
-
     // After the tutor colors have been set, set the calendar options
     this.setTutorColours()
       .then(() => {
@@ -136,54 +166,70 @@ export class ClassesComponent implements OnInit {
             center: 'title',
             right: 'month,agendaWeek,agendaDay,listMonth'
           },
-          events: this.classes.map(c => {
-            return {
-              'title': c.type.name,
-              'start': `${c.date}T${c.startTime}:00`,
-              'end': `${c.date}T${c.endTime}:00`,
-              'path': `/admin/classes/${c._id}`,
-              'color': this.tutorColors.filter(t => t.tutorName === `${c.tutor.forename} ${c.tutor.surname}`)[ 0 ].color
-            };
-          })
+          events: this.mapClassesToEvents(this.classes)
         };
       })
-      .catch(() => console.log('An error occurred whilst trying to set the tutor colors'));
+      .catch(() =>
+        console.log('An error occurred whilst trying to set the tutor colors')
+      );
+  }
 
+  private mapClassesToEvents(classes) {
+    return classes.map(c => {
+      return {
+        title: c.type.name,
+        start: `${c.date}T${c.startTime}:00`,
+        end: `${c.date}T${c.endTime}:00`,
+        path: `/admin/classes/${c._id}`,
+        color: this.tutorColors.filter(
+          t => t.tutorName === `${c.tutor.forename} ${c.tutor.surname}`
+        )[0].color
+      };
+    });
   }
 
   // Set the color for each tutor, then return the promise
   private setTutorColours(): Promise<boolean> {
-
     return new Promise<boolean>(resolve => {
-
       this.classes.forEach(c => {
-
-        if ( this.tutorColors.filter(t => t.tutorName === `${c.tutor.forename} ${c.tutor.surname}`).length === 0 ) {
-          if ( this.colors.length > 0 ) {
+        if (
+          this.tutorColors.filter(
+            t => t.tutorName === `${c.tutor.forename} ${c.tutor.surname}`
+          ).length === 0
+        ) {
+          if (this.colors.length > 0) {
             const randomIndex = Math.floor(Math.random() * this.colors.length);
             this.tutorColors.push({
               tutorName: `${c.tutor.forename} ${c.tutor.surname}`,
-              color: this.colors[ randomIndex ]
+              color: this.colors[randomIndex]
             });
             this.colors.splice(randomIndex, 1);
           } else {
             this.tutorColors.push({
               tutorName: `${c.tutor.forename} ${c.tutor.surname}`,
-              color: this.colors[ '#3a87ad' ]
+              color: this.colors['#3a87ad']
             });
           }
         }
-
       });
 
       resolve(true);
-
     });
-
   }
 
-  eventClick( e ) {
-    this.router.navigate([ e.event.path ]);
+  toggleAllClasses() {
+    this.showAllClasses = !this.showAllClasses;
+    if (this.showAllClasses) {
+      this.ucCalendar.renderEvents(this.mapClassesToEvents(this.classes));
+    } else {
+      const filteredClasses = this.classes.filter(
+        c => c.tutor._id === this.tutor._id
+      );
+      this.ucCalendar.renderEvents(this.mapClassesToEvents(filteredClasses));
+    }
   }
 
+  eventClick(e) {
+    this.router.navigate([e.event.path]);
+  }
 }

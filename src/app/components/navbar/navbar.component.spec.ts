@@ -6,13 +6,14 @@ describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [NavbarComponent],
-      imports: [ RouterTestingModule ]
+  beforeEach(
+    async(() => {
+      TestBed.configureTestingModule({
+        declarations: [NavbarComponent],
+        imports: [RouterTestingModule]
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);

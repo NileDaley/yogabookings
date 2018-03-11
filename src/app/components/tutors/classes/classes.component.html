@@ -13,12 +13,12 @@
         <div class="buttons has-addons">
           <span
             class="button"
-            (click)="showAllClasses = false"
+            (click)="toggleAllClasses()"
             [ngClass]="{'is-selected is-success': !showAllClasses }"
             style="width: 50%;">Mine</span>
           <span
-            class="button is-danger is-selected"
-            (click)="showAllClasses = true"
+            class="button is-danger"
+            (click)="toggleAllClasses()"
             [ngClass]="{'is-selected is-danger': showAllClasses }"
             style="width: 50%;">All</span>
         </div>

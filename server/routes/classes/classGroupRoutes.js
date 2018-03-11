@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
+const { authenticate, hasRole } = require('../../middleware/authentication');
 
 const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
 let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
@@ -17,9 +18,9 @@ router.get('/', (req, res) => {
     })
     .catch(err => Response.ERROR(res, err));
 });
-router.post('/', (req, res) => {
 
-  let {startDate, interval, count} = req.body;
+router.post('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
+  let { startDate, interval, count } = req.body;
 
   let classGroup = new ClassGroup({
     startDate,
@@ -27,10 +28,14 @@ router.post('/', (req, res) => {
     count
   });
 
-  classGroup.save()
+  classGroup
+    .save()
     .then(insertedClassGroup => {
-      if(!insertedClassGroup){
-        Response.ERROR(res, 'An error occurred whilst inserting the class group');
+      if (!insertedClassGroup) {
+        Response.ERROR(
+          res,
+          'An error occurred whilst inserting the class group'
+        );
       } else {
         Response.CREATED(res, insertedClassGroup);
       }

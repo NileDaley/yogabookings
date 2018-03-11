@@ -7,8 +7,5 @@ import { DataService } from 'app/services/data.service';
   styleUrls: ['./index.component.scss']
 })
 export class IndexComponent {
-
-  constructor() {
-  }
-
+  constructor() {}
 }

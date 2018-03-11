@@ -7,11 +7,10 @@ import { DataService } from 'app/services/data.service';
   styleUrls: ['./locations.component.scss']
 })
 export class LocationsComponent implements OnInit {
-
   locations: Array<any>;
   loading = true;
 
-  constructor(private _dataService: DataService) { }
+  constructor(private _dataService: DataService) {}
 
   ngOnInit() {
     this._dataService.getLocations().subscribe(res => {
@@ -19,5 +18,4 @@ export class LocationsComponent implements OnInit {
       this.loading = false;
     });
   }
-
 }

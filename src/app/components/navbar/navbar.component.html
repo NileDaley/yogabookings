@@ -36,12 +36,19 @@
       </div>
     </div>
     <div class="navbar-end">
-      <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-info">
-        <span class="icon"><i class="fas fa-sign-in-alt"></i></span> Login
-      </a>
-      <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-info">
-        <span class="icon"><i class="fas fa-user"></i></span> Register
-      </a>
+      <ng-container *ngIf="!isLoggedIn">
+        <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-info">
+          <span class="icon"><i class="fas fa-sign-in-alt"></i></span> Login
+        </a>
+        <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-info">
+          <span class="icon"><i class="fas fa-user"></i></span> Register
+        </a>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <a (click)="logout()" class="navbar-item">
+          <span class="icon"><i class="fas fa-sign-out-alt"></i></span> Logout
+        </a>
+      </ng-container>
     </div>
   </div>
 </nav>

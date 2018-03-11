@@ -2,8 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from 'app/routing/app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from 'app/app.component';
 import { FullCalendarModule } from 'ng-fullcalendar';
@@ -45,6 +46,10 @@ import { LocationsComponent as GuestLocations } from 'app/components/guest/locat
 
 /* Services */
 import { DataService } from 'app/services/data.service';
+import { AuthService } from './services/auth.service';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { RouterGuard } from './routing/router.guard';
+import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -72,16 +77,27 @@ import { DataService } from 'app/services/data.service';
     AdminSingleClass,
     AdminNewClass,
     TutorDashboard,
-    TutorClasses
+    TutorClasses,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    FullCalendarModule
+    FullCalendarModule,
+    ReactiveFormsModule
   ],
-  providers: [DataService],
+  providers: [
+    DataService,
+    AuthService,
+    RouterGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

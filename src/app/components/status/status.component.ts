@@ -7,14 +7,12 @@ import { DataService } from 'app/services/data.service';
   styleUrls: ['./status.component.scss']
 })
 export class StatusComponent implements OnInit {
-
   users: Array<any>;
-  constructor(private _dataService: DataService) { }
+  constructor(private _dataService: DataService) {}
 
   ngOnInit() {
     this._dataService.getCustomers().subscribe(res => {
       this.users = res['data'];
     });
   }
-
 }

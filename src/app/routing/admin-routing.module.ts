@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { DashboardComponent as Dashboard } from 'app/components/admin/dashboard/dashboard.component';
@@ -16,13 +16,17 @@ import { SkillsComponent as Skills } from 'app/components/admin/tutors/skills/sk
 import { SkillComponent as SingleSkill } from 'app/components/admin/tutors/skills/skill/skill.component';
 import { TutorRegistrationComponent as TutorRegistration } from 'app/components/admin/tutors/tutor-registration/tutor-registration.component';
 
-import { ClassesComponent as Classes} from '../components/admin/classes/classes.component';
-import { ClassComponent as SingleClass} from '../components/admin/classes/class/class.component';
-import { NewClassComponent as NewClass} from '../components/admin/classes/new-class/new-class.component';
+import { ClassesComponent as Classes } from '../components/admin/classes/classes.component';
+import { ClassComponent as SingleClass } from '../components/admin/classes/class/class.component';
+import { NewClassComponent as NewClass } from '../components/admin/classes/new-class/new-class.component';
 
+import { RouterGuard } from '../routing/router.guard';
 const adminRoutes: Routes = [
   {
-    path: 'admin', component: Dashboard,
+    path: 'admin',
+    component: Dashboard,
+    canActivate: [RouterGuard],
+    data: { expectedRole: 20 },
     children: [
       {
         path: '',
@@ -86,9 +90,7 @@ const adminRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(adminRoutes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forChild(adminRoutes)],
+  exports: [RouterModule]
 })
-
-export class AdminRoutingModule {
-}
+export class AdminRoutingModule {}
