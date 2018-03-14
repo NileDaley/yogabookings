@@ -1,0 +1,214 @@
+<app-loading *ngIf="loading; else content"></app-loading>
+<ng-template #content>
+  <div class="section"
+       (keydown.esc)="modalActive = false">
+    <div class="container">
+      <div class="columns">
+
+        <!-- Filters -->
+        <div class="column is-offset-1 is-narrow">
+          <div class="box">
+
+            <p id="filterHeader"
+               class="subtitle">Filter Classes</p>
+
+            <div id="classFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="class">Class</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="class"
+                            (change)="filterClasses('selectedClassType', classTypeSelect.value)"
+                            #classTypeSelect>
+                      <option value="">All Classes</option>
+                      <option *ngFor="let class of classTypes"
+                              value="{{class.id}}">{{class.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div id="locationFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="location">Location</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="location"
+                            (change)="filterClasses('selectedLocation', locationSelect.value)"
+                            #locationSelect>
+                      <option value="">All Locations</option>
+                      <option *ngFor="let location of locations"
+                              value="{{location._id}}">{{location.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div id="tutorFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="tutor">Tutor</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="tutor"
+                            (change)="filterClasses('selectedTutor', tutorSelect.value)"
+                            #tutorSelect>
+                      <option value="">All Tutors</option>
+                      <option *ngFor="let tutor of tutors"
+                              value="{{tutor._id}}">{{tutor.forename}} {{tutor.surname}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Classes -->
+        <div class="column is-offset-1">
+          <div class="box">
+            <h1 class="subtitle is-size-4">Classes</h1>
+            <app-messages [messages]="messages"
+                          class='has-text-centered'></app-messages>
+            <div *ngIf="!isLoggedIn"
+                 class="notification is-warning has-text-centered">
+              <span class="has-text-weight-semibold">Please note:</span> Customers must be logged in to book a class
+            </div>
+            <div class="box"
+                 *ngFor="let c of filteredClasses">
+
+              <div class="columns">
+                <div class="column">
+                  <p class="has-text-weight-semibold is-capitalized">{{c.type.name}} -
+                    <span class="icon">
+                      <i class="fas fa-user"></i>
+                    </span>
+                    {{c.tutor.forename}} {{c.tutor.surname}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-calendar-alt"></i>
+                    </span> {{c.date}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span> {{c.startTime}} - {{c.endTime}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-building"></i>
+                    </span> {{c.location.name}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-users"></i>
+                    </span> {{c.attendees.length}} / {{c.classSize}}
+                  </p>
+                  <div *ngIf="c.classGroup"
+                       class="tags has-addons"
+                       style="margin-top: 5px;">
+                    <span class="tag is-dark">Repeats every</span>
+                    <span class="tag is-info is-capitalized">{{c.classGroup.interval}}</span>
+                  </div>
+                </div>
+                <div class="is-divider-vertical is-hidden-mobile"></div>
+                <div class="column is-3 center-vertical">
+                  <button (click)="showBookingModal(c)"
+                          class="button is-link is-fullwidth is-paddingless"
+                          [disabled]="!isLoggedIn || this.role !== 0"
+                          [title]="isLoggedIn ? '' : 'You must be logged in to book a class'">
+                    £{{c.price}}
+                  </button>
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf="filteredClasses.length === 0"
+                 class="has-text-centered">
+              <p class="has-text-centered has-text-weight-semibold">No classes avaliable</p>
+              <br>
+              <a (click)="resetFilters()"
+                 class="button is-link is-outlined">Reset Filters</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacing helper -->
+        <div class="column is-1"></div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal"
+       *ngIf="modalActive"
+       [class.is-active]="modalActive">
+    <div class="modal-background"
+         (click)="modalActive = false"></div>
+    <div class="modal-content">
+      <div class="box">
+        <div class="columns">
+          <div class="column is-10 is-offset-1">
+            <p class="subtitle has-text-centered">Book Class</p>
+            <div class="columns">
+              <div class="column"
+                   id="classDetails">
+                <p class="has-text-weight-semibold">{{selectedClass.type.name}}</p>
+                <p class="is-capitalized">
+                  <span class="icon">
+                    <i class="fas fa-graduation-cap"></i>
+                  </span> {{selectedClass.tutor.forename}} {{selectedClass.tutor.surname}}
+                </p>
+                <p>
+                  <span class="icon">
+                    <i class="far fa-calendar-alt"></i>
+                  </span> {{selectedClass.date}}
+                </p>
+                <p>
+                  <span class="icon">
+                    <i class="far fa-clock"></i>
+                  </span> {{selectedClass.startTime}} - {{selectedClass.endTime}}
+                </p>
+                <p>
+                  <span class="icon">
+                    <i class="fas fa-building"></i>
+                  </span> {{selectedClass.location.name}}
+                </p>
+                <p>
+                  <span class="icon">
+                    <i class="fas fa-users"></i>
+                  </span> {{selectedClass.attendees.length}} / {{selectedClass.classSize}}
+                </p>
+              </div>
+              <div class="is-divider-vertical is-hidden-mobile"></div>
+              <div class="column"
+                   [class.center-vertical]="!selectedClass.classGroup">
+                <a class="button is-fullwidth is-info"
+                   (click)="bookClasses([selectedClass])">Book</a>
+                <div *ngIf="selectedClass.classGroup">
+                  <div class="is-divider"
+                       data-content="OR"></div>
+                  <a class="button is-fullwidth is-warning">Make a Repeat Booking</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <button (click)="modalActive = false"
+            class="modal-close is-large"
+            aria-label="close"></button>
+  </div>
+</ng-template>

@@ -111,4 +111,8 @@ export class DataService {
   deleteClassType(id) {
     return this.http.delete(`${this.baseURL}/classes/types/${id}`);
   }
+
+  insertBookings(bookings) {
+    return this.http.post(`${this.baseURL}/bookings/`, bookings);
+  }
 }

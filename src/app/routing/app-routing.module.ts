@@ -10,6 +10,7 @@ import { StatusComponent } from 'app/components/status/status.component';
 import { LocationsComponent } from 'app/components/guest/locations/locations.component';
 import { TutorRoutingModule } from './tutor-routing.module';
 import { ForbiddenComponent } from '../components/forbidden/forbidden.component';
+import { ClassesComponent } from '../components/guest/classes/classes.component';
 
 const appRoutes: Routes = [
   {
@@ -19,6 +20,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'classes',
+    component: ClassesComponent
   },
   {
     path: 'locations',

@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const authMiddleware = require('../middleware/authentication');
-const { authenticate, hasRole } = authMiddleware;
+const { authenticate } = authMiddleware;
 
 const locationRoutes = require('./locationRoutes');
 const userRoutes = require('./userRoutes');
 const classRoutes = require('./classes/classRoutes');
 const authRoutes = require('./authRoutes');
+const bookingRoutes = require('./bookingRoutes');
 
 mongoose.connect(process.env.DB_CONNECTION, { useMongoClient: true });
 mongoose.Promise = global.Promise;
@@ -20,14 +21,6 @@ router.use('/locations', locationRoutes);
 router.use('/users', authenticate, userRoutes);
 router.use('/classes', classRoutes);
 router.use('/auth', authRoutes);
-
-router.get(
-  '/protected',
-  authenticate,
-  hasRole(['customer']),
-  (req, res, next) => {
-    res.status(200).send('GOT TO PROTECTED');
-  }
-);
+router.use('/bookings', authenticate, bookingRoutes);
 
 module.exports = router;
