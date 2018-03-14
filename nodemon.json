@@ -1,0 +1,6 @@
+{
+  "env": {
+    "JWT_SECRET": "AsynchronousSpottedJellyfish",
+    "DB_CONNECTION": "mongodb://admin:SurprisedBadger@ds151544.mlab.com:51544/yogabookings"
+  }
+}
