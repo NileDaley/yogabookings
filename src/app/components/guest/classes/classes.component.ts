@@ -22,6 +22,7 @@ export class ClassesComponent implements OnInit {
   loading = true;
   messages = [];
   modalActive = false;
+  bookingView = 'single';
 
   isLoggedIn: boolean = null;
   customer: Customer = null;
@@ -37,6 +38,7 @@ export class ClassesComponent implements OnInit {
   selectedLocation = '';
   selectedTutor = '';
   selectedClass = null;
+  repeatBookings = [];
 
   constructor(
     private dataService: DataService,
@@ -223,6 +225,47 @@ export class ClassesComponent implements OnInit {
     this.modalActive = true;
   }
 
+  closeModal() {
+    this.modalActive = false;
+    this.repeatBookings = [];
+    this.selectedClass = null;
+  }
+
+  toggleBookingView(view) {
+    this.bookingView = view;
+  }
+
+  toggleRepeatBooking(_class) {
+    if (this.repeatBookings.indexOf(_class._id) !== -1) {
+      const index = this.repeatBookings.indexOf(_class._id);
+      this.repeatBookings.splice(index, 1);
+    } else {
+      this.repeatBookings.push(_class._id);
+    }
+  }
+
+  getClassesByGroup(classGroup) {
+    return this.classes.filter(c => c.classGroup._id === classGroup._id);
+  }
+
+  removeRepeatBookings() {
+    this.repeatBookings = [];
+  }
+
+  addAllRepeatBookings() {
+    this.repeatBookings = [];
+    this.repeatBookings = this.getClassesByGroup(
+      this.selectedClass.classGroup
+    ).map(c => c._id);
+  }
+
+  // Transform the list of class id's to existing class objects
+  getRepeatClasses() {
+    return this.repeatBookings.map(r => {
+      return this.classes.find(c => c._id === r);
+    });
+  }
+
   bookClasses(classes) {
     this.dataService
       .insertBookings({
@@ -232,13 +275,14 @@ export class ClassesComponent implements OnInit {
       .subscribe(
         response => {
           const data = response['data'];
-          if (data['nModified'] > 0) {
+          if (data[0]['nModified'] > 0) {
             this.messages.push({
               message: 'Congratulations, your booking has been confirmed!',
               type: 'success'
             });
             this.modalActive = false;
             this.selectedClass = null;
+            this.repeatBookings = [];
           } else {
             this.messages.push({
               message:

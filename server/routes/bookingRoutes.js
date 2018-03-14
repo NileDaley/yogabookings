@@ -12,31 +12,36 @@ const Class = mongoose.model('Class', ClassSchema);
 
 router.post('/', hasRole(['admin', 'customer']), (req, res) => {
   const { classes, customer } = req.body;
-  console.log('Got into booking post');
   Customer.findById(customer._id)
     .then(foundCustomer => {
       if (!foundCustomer) {
         Response.NOT_FOUND(res);
       } else {
-        Class.where('_id')
-          .in([...classes.map(c => c._id)])
-          .update({
-            $push: {
-              attendees: mongoose.Types.ObjectId(customer._id)
-            }
-          })
+        let promises = [];
+        for (let index = 0; index < classes.length; index++) {
+          promises.push(
+            new Promise((resolve, reject) => {
+              Class.update(
+                { _id: classes[index]._id },
+                { $push: { attendees: mongoose.Types.ObjectId(customer._id) } }
+              )
+                .then(result => resolve(result))
+                .catch(error => reject(error));
+            })
+          );
+        }
+        Promise.all(promises)
           .then(data => {
             Response.OK(res, data);
           })
-          .catch(err => Response.ERROR(res, err));
-        /*
-          For each class
-            Find the class
-            Add it to the array
-        */
+          .catch(err => {
+            Response.ERROR(res, err);
+          });
       }
     })
-    .catch(err => Response.ERROR(res, err));
+    .catch(err => {
+      Response.ERROR(res, err);
+    });
 });
 
 module.exports = router;

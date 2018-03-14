@@ -89,7 +89,9 @@
 
               <div class="columns">
                 <div class="column">
-                  <p class="has-text-weight-semibold is-capitalized">{{c.type.name}} -
+                  <p class="has-text-weight-semibold is-capitalized">
+                    <span class="icon"></span>
+                    {{c.type.name}} -
                     <span class="icon">
                       <i class="fas fa-user"></i>
                     </span>
@@ -117,7 +119,7 @@
                   </p>
                   <div *ngIf="c.classGroup"
                        class="tags has-addons"
-                       style="margin-top: 5px;">
+                       style="margin-top: 5px; margin-left: 32px;">
                     <span class="tag is-dark">Repeats every</span>
                     <span class="tag is-info is-capitalized">{{c.classGroup.interval}}</span>
                   </div>
@@ -150,64 +152,129 @@
       </div>
     </div>
   </div>
+
+  <!-- Booking Modal -->
   <div class="modal"
        *ngIf="modalActive"
        [class.is-active]="modalActive">
     <div class="modal-background"
-         (click)="modalActive = false"></div>
+         (click)="closeModal()"></div>
     <div class="modal-content">
       <div class="box">
         <div class="columns">
           <div class="column is-10 is-offset-1">
-            <p class="subtitle has-text-centered">Book Class</p>
-            <div class="columns">
-              <div class="column"
-                   id="classDetails">
-                <p class="has-text-weight-semibold">{{selectedClass.type.name}}</p>
-                <p class="is-capitalized">
-                  <span class="icon">
-                    <i class="fas fa-graduation-cap"></i>
-                  </span> {{selectedClass.tutor.forename}} {{selectedClass.tutor.surname}}
-                </p>
-                <p>
-                  <span class="icon">
-                    <i class="far fa-calendar-alt"></i>
-                  </span> {{selectedClass.date}}
-                </p>
-                <p>
-                  <span class="icon">
-                    <i class="far fa-clock"></i>
-                  </span> {{selectedClass.startTime}} - {{selectedClass.endTime}}
-                </p>
-                <p>
-                  <span class="icon">
-                    <i class="fas fa-building"></i>
-                  </span> {{selectedClass.location.name}}
-                </p>
-                <p>
-                  <span class="icon">
-                    <i class="fas fa-users"></i>
-                  </span> {{selectedClass.attendees.length}} / {{selectedClass.classSize}}
-                </p>
-              </div>
-              <div class="is-divider-vertical is-hidden-mobile"></div>
-              <div class="column"
-                   [class.center-vertical]="!selectedClass.classGroup">
-                <a class="button is-fullwidth is-info"
-                   (click)="bookClasses([selectedClass])">Book</a>
-                <div *ngIf="selectedClass.classGroup">
-                  <div class="is-divider"
-                       data-content="OR"></div>
-                  <a class="button is-fullwidth is-warning">Make a Repeat Booking</a>
+
+            <p class="subtitle has-text-centered">{{selectedClass.type.name}}</p>
+
+            <div class="tabs is-centered">
+              <ul>
+                <li [class.is-active]="bookingView === 'single'">
+                  <a (click)="toggleBookingView('single')">Single</a>
+                </li>
+                <li [class.is-active]="bookingView === 'multiple'">
+                  <a (click)="toggleBookingView('multiple')">Multiple</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Single Booking View -->
+            <div *ngIf="bookingView === 'single'; else multipleBookings">
+
+              <div class="columns">
+                <!-- Single Booking - Left Column -->
+                <div class="column"
+                     id="classDetails">
+                  <p class="is-capitalized">
+                    <span class="icon">
+                      <i class="fas fa-graduation-cap"></i>
+                    </span> {{selectedClass.tutor.forename}} {{selectedClass.tutor.surname}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-calendar-alt"></i>
+                    </span> {{selectedClass.date}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span> {{selectedClass.startTime}} - {{selectedClass.endTime}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-building"></i>
+                    </span> {{selectedClass.location.name}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-users"></i>
+                    </span> {{selectedClass.attendees.length}} / {{selectedClass.classSize}}
+                  </p>
+
+                </div>
+
+                <div class="is-divider-vertical is-hidden-mobile"></div>
+
+                <!-- Single Booking - Right Column -->
+                <div class="column center-vertical">
+                  <div class="has-text-centered"
+                       style="width:100%">
+                    <p class="subtitle">£{{selectedClass.price}}</p>
+                    <a class="button is-fullwidth is-info"
+                       (click)="bookClasses([selectedClass])">Confirm Booking</a>
+                  </div>
                 </div>
               </div>
+
             </div>
+
+            <ng-template #multipleBookings>
+              <div class="columns">
+                <div class="column">
+                  <div>
+                    <p class="label has-text-centered">Available Dates</p>
+                    <div class="buttons is-centered has-addons">
+                      <a class="button is-small is-success"
+                         (click)="addAllRepeatBookings()">Select All</a>
+                      <a class="button is-small is-danger"
+                         (click)="removeRepeatBookings()">Remove All</a>
+                    </div>
+                    <div *ngFor="let c of getClassesByGroup(selectedClass.classGroup)">
+                      <div class="tags has-addons"
+                           style="padding: 5px">
+                        <div class="tag"
+                             [class.is-info]="!repeatBookings.includes(c._id)"
+                             [class.is-danger]="repeatBookings.includes(c._id)">
+                          <a class="has-text-white"
+                             (click)="toggleRepeatBooking(c)">
+                            {{repeatBookings.includes(c._id) ? 'remove' : 'select'}}
+                          </a>
+                        </div>
+                        <div class="tag">{{c.date}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="is-divider-vertical is-hidden-mobile"></div>
+
+                <div class="column center-vertical">
+                  <div class="has-text-centered"
+                       style="width:100%">
+                    <p class="subtitle">£{{ selectedClass.price * repeatBookings.length}}</p>
+                    <button class="button is-fullwidth is-info"
+                            (click)="bookClasses(getRepeatClasses())"
+                            [disabled]="repeatBookings.length === 0">Confirm Booking</button>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
 
           </div>
         </div>
       </div>
     </div>
-    <button (click)="modalActive = false"
+    <button (click)="closeModal()"
             class="modal-close is-large"
             aria-label="close"></button>
   </div>
