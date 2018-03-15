@@ -29,7 +29,6 @@ exports.hasRole = expectedRoles => {
     if (!res.locals.user) {
       Response.FORBIDDEN(res);
     } else {
-      console.log(expectedRoles);
       expectedRoles.map(r => ROLES[r]).includes(res.locals.user.role)
         ? next()
         : Response.FORBIDDEN(res);

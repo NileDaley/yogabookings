@@ -21,9 +21,10 @@ router.post('/', hasRole(['admin', 'customer']), (req, res) => {
         for (let index = 0; index < classes.length; index++) {
           promises.push(
             new Promise((resolve, reject) => {
-              Class.update(
-                { _id: classes[index]._id },
-                { $push: { attendees: mongoose.Types.ObjectId(customer._id) } }
+              Class.findByIdAndUpdate(
+                classes[index]._id,
+                { $push: { attendees: mongoose.Types.ObjectId(customer._id) } },
+                { new: true }
               )
                 .then(result => resolve(result))
                 .catch(error => reject(error));

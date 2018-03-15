@@ -68,7 +68,7 @@ export class ClassesComponent implements OnInit {
     });
   }
 
-  private getClasses() {
+  private getClasses(): Promise<any> {
     return this.dataService
       .getClasses()
       .toPromise()
@@ -148,19 +148,19 @@ export class ClassesComponent implements OnInit {
       .catch(err => console.log(err));
   }
 
-  private setClassTypes() {
+  private setClassTypes(): void {
     this.classTypes = this.getUniques(this.classes, 'type', 'id');
   }
 
-  private setLocations() {
+  private setLocations(): void {
     this.locations = this.getUniques(this.classes, 'location', '_id');
   }
 
-  private setTutors() {
+  private setTutors(): void {
     this.tutors = this.getUniques(this.classes, 'tutor', '_id');
   }
 
-  private setCustomer() {
+  private setCustomer(): void {
     this.authService.getIdentity().subscribe(
       response => {
         const cust = response['data'];
@@ -180,7 +180,7 @@ export class ClassesComponent implements OnInit {
     );
   }
 
-  private getUniques(source, element, identifier) {
+  private getUniques(source, element, identifier): Array<any> {
     const uniques = [];
     for (const item of source) {
       const el = item[element];
@@ -202,40 +202,52 @@ export class ClassesComponent implements OnInit {
    * @param category 'classType' || 'tutor' || 'location'
    * @param value Option selected
    */
-  filterClasses(category, value) {
+  filterClasses(category, value): void {
     this[category] = value;
-    this.filteredClasses = this.classes.filter(c => {
-      // Uses .includes() so that an empty filter will still match
-      return (
-        c.location._id.includes(this.selectedLocation) &&
-        c.type.id.includes(this.selectedClassType) &&
-        c.tutor._id.includes(this.selectedTutor)
-      );
-    });
+    this.filteredClasses = this.classes
+      .filter(c => {
+        // Uses .includes() so that an empty filter will still match
+        return (
+          c.location._id.includes(this.selectedLocation) &&
+          c.type.id.includes(this.selectedClassType) &&
+          c.tutor._id.includes(this.selectedTutor) &&
+          moment().isBefore(moment(`${c.date} ${c.startTime}`)) &&
+          !c.attendees.map(a => a._id).includes(this.customer._id) &&
+          c.attendees.length < c.classSize
+        );
+      })
+      .sort((a, b) => {
+        // Sort classes in chronological order
+        return moment(`${b.date} ${b.startTime}`).isBefore(
+          moment(`${a.date} ${a.startTime}`)
+        )
+          ? 1
+          : -1;
+      });
   }
 
-  resetFilters() {
+  resetFilters(): void {
     ['Location', 'Tutor', 'ClassType'].forEach(i =>
       this.filterClasses(`selected${i}`, '')
     );
   }
 
-  showBookingModal(c) {
+  showBookingModal(c): void {
     this.selectedClass = c;
     this.modalActive = true;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.modalActive = false;
     this.repeatBookings = [];
     this.selectedClass = null;
   }
 
-  toggleBookingView(view) {
+  toggleBookingView(view): void {
     this.bookingView = view;
   }
 
-  toggleRepeatBooking(_class) {
+  toggleRepeatBooking(_class): void {
     if (this.repeatBookings.indexOf(_class._id) !== -1) {
       const index = this.repeatBookings.indexOf(_class._id);
       this.repeatBookings.splice(index, 1);
@@ -244,15 +256,15 @@ export class ClassesComponent implements OnInit {
     }
   }
 
-  getClassesByGroup(classGroup) {
+  getClassesByGroup(classGroup): Array<Class> {
     return this.classes.filter(c => c.classGroup._id === classGroup._id);
   }
 
-  removeRepeatBookings() {
+  removeRepeatBookings(): void {
     this.repeatBookings = [];
   }
 
-  addAllRepeatBookings() {
+  addAllRepeatBookings(): void {
     this.repeatBookings = [];
     this.repeatBookings = this.getClassesByGroup(
       this.selectedClass.classGroup
@@ -260,13 +272,13 @@ export class ClassesComponent implements OnInit {
   }
 
   // Transform the list of class id's to existing class objects
-  getRepeatClasses() {
+  getRepeatClasses(): Array<Class> {
     return this.repeatBookings.map(r => {
       return this.classes.find(c => c._id === r);
     });
   }
 
-  bookClasses(classes) {
+  bookClasses(classes): void {
     this.dataService
       .insertBookings({
         classes,
@@ -275,7 +287,7 @@ export class ClassesComponent implements OnInit {
       .subscribe(
         response => {
           const data = response['data'];
-          if (data[0]['nModified'] > 0) {
+          if (data.length > 0) {
             this.messages.push({
               message: 'Congratulations, your booking has been confirmed!',
               type: 'success'
@@ -283,6 +295,16 @@ export class ClassesComponent implements OnInit {
             this.modalActive = false;
             this.selectedClass = null;
             this.repeatBookings = [];
+
+            /* Filter the classes to remove ones the customer just booked*/
+            data.forEach(c => {
+              const index = this.classes
+                .map(_class => _class._id)
+                .indexOf(c._id);
+              this.classes.splice(index, 1);
+            });
+
+            this.resetFilters();
           } else {
             this.messages.push({
               message:
