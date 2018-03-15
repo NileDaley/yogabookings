@@ -26,7 +26,7 @@ export class AuthService {
           this.getExpiration() !== null &&
           moment().isBefore(this.getExpiration());
         observer.next(value);
-      }, 1000);
+      }, 250);
     });
   }
 

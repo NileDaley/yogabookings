@@ -50,6 +50,7 @@ import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { RouterGuard } from './routing/router.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { ClassesComponent } from './components/guest/classes/classes.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
     AdminNewClass,
     TutorDashboard,
     TutorClasses,
-    ForbiddenComponent
+    ForbiddenComponent,
+    ClassesComponent
   ],
   imports: [
     BrowserModule,

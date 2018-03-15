@@ -71,22 +71,28 @@ router.post('/identity', (req, res) => {
   let identity = null;
   switch (role) {
     case 0:
-      console.log('is a customer');
       Customer.find({ user: _id })
         .populate('user')
         .then(customer => {
-          identity = customer;
-          Response.OK(res, ...identity);
+          if (!customer) {
+            Response.NOT_FOUND(res);
+          } else {
+            identity = customer;
+            Response.OK(res, ...identity);
+          }
         })
         .catch(err => Response.ERROR(res, err));
       break;
     case 10:
-      console.log('is a tutor');
       Tutor.find({ user: _id })
         .populate('user')
         .then(tutor => {
-          identity = tutor;
-          Response.OK(res, ...identity);
+          if (!tutor) {
+            Response.NOT_FOUND(res);
+          } else {
+            identity = tutor;
+            Response.OK(res, ...identity);
+          }
         })
         .catch(err => {
           console.log(err);
@@ -94,12 +100,15 @@ router.post('/identity', (req, res) => {
         });
       break;
     case 20:
-      console.log('is a admin');
       Admin.find({ user: _id })
         .populate('user')
         .then(admin => {
-          identity = admin;
-          Response.OK(res, ...identity);
+          if (!admin) {
+            Response.NOT_FOUND(res);
+          } else {
+            identity = admin;
+            Response.OK(res, ...identity);
+          }
         })
         .catch(err => Response.ERROR(res, err));
       break;
