@@ -12,6 +12,23 @@
             <p id="filterHeader"
                class="subtitle">Filter Classes</p>
 
+            <div id="dateFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="dateSelect">Date</label>
+                <div class="control">
+                  <input type="date"
+                         class="input"
+                         id="dateSelect"
+                         [min]="minimumDate"
+                         (change)="filterClasses('selectedDate', dateSelect.value)"
+                         #dateSelect>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
             <div id="classFilter">
               <div class="field">
                 <label class="has-text-weight-semibold"

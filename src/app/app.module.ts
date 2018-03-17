@@ -51,6 +51,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { RouterGuard } from './routing/router.guard';
 import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ClassesComponent } from './components/guest/classes/classes.component';
+import { CustomerProfileComponent } from './components/customer/customer-profile/customer-profile.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { ClassesComponent } from './components/guest/classes/classes.component';
     TutorDashboard,
     TutorClasses,
     ForbiddenComponent,
-    ClassesComponent
+    ClassesComponent,
+    CustomerProfileComponent
   ],
   imports: [
     BrowserModule,

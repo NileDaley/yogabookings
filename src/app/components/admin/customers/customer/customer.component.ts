@@ -39,7 +39,12 @@ export class CustomerComponent implements OnInit {
           data.surname,
           data.phone,
           data.gender,
-          new User(data.user.email, data.user.password, data.user.role)
+          new User(
+            data.user._id,
+            data.user.email,
+            data.user.password,
+            data.user.role
+          )
         );
         this.loading = false;
       },

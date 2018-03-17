@@ -100,7 +100,12 @@ export class ClassesComponent implements OnInit {
                 c.tutor.surname,
                 c.tutor.gender,
                 c.tutor.phone,
-                new User(c.tutor.user.email, null, c.tutor.user.role),
+                new User(
+                  c.tutor.user._id,
+                  c.tutor.user.email,
+                  null,
+                  c.tutor.user.role
+                ),
                 c.tutor.skills.map(s => new Skill(s._id, s.name, s.description))
               ),
               c.attendees.map(
@@ -111,7 +116,7 @@ export class ClassesComponent implements OnInit {
                     a.surname,
                     a.phone,
                     a.gender,
-                    new User(a.user.email, null, a.role)
+                    new User(a.user._id, a.user.email, null, a.role)
                   )
               ),
               c.date,

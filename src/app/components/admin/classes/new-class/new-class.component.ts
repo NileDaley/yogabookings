@@ -56,7 +56,7 @@ export class NewClassComponent implements OnInit {
           t.surname,
           t.gender,
           t.phone,
-          new User(t.user.email, null, t.user.role),
+          new User(t.user._id, t.user.email, null, t.user.role),
           t.skills.map(s => new Skill(s._id, s.name, s.description))
         );
       });

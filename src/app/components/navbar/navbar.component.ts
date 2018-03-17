@@ -13,12 +13,13 @@ export class NavbarComponent {
   isLoggedIn: boolean;
 
   constructor(private authService: AuthService) {
+    this.isLoggedIn = this.authService.isLoggedIn();
     this.watchLoginStatus();
   }
 
   // Subscribes to authService, which notifies of status every second
   watchLoginStatus(): void {
-    this.authService.isLoggedIn().subscribe(
+    this.authService.watchLoginStatus().subscribe(
       value => {
         this.isLoggedIn = value;
       },

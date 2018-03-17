@@ -19,13 +19,16 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  isLoggedIn(): Observable<boolean> {
+  isLoggedIn(): boolean {
+    return (
+      this.getExpiration() !== null && moment().isBefore(this.getExpiration())
+    );
+  }
+
+  watchLoginStatus(): Observable<boolean> {
     return new Observable<boolean>(observer => {
       setInterval(() => {
-        const value =
-          this.getExpiration() !== null &&
-          moment().isBefore(this.getExpiration());
-        observer.next(value);
+        observer.next(this.isLoggedIn());
       }, 250);
     });
   }
@@ -43,7 +46,6 @@ export class AuthService {
   getIdentity() {
     const token = localStorage.getItem('token');
     const decoded = JSON.parse(jwtDecode(token)['data']);
-
     return this.http.post('/api/users/identity', decoded);
   }
 }

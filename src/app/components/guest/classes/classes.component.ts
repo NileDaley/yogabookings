@@ -23,6 +23,7 @@ export class ClassesComponent implements OnInit {
   messages = [];
   modalActive = false;
   bookingView = 'single';
+  minimumDate = moment().format('YYYY-MM-DD');
 
   isLoggedIn: boolean = null;
   customer: Customer = null;
@@ -34,6 +35,7 @@ export class ClassesComponent implements OnInit {
   classes: Array<Class>;
   tutors: Array<Tutor>;
 
+  selectedDate = '';
   selectedClassType = '';
   selectedLocation = '';
   selectedTutor = '';
@@ -47,7 +49,7 @@ export class ClassesComponent implements OnInit {
 
   ngOnInit() {
     this.getClasses().then(() => {
-      this.authService.isLoggedIn().subscribe(
+      this.authService.watchLoginStatus().subscribe(
         value => {
           this.isLoggedIn = value;
           if (value === true) {
@@ -102,7 +104,12 @@ export class ClassesComponent implements OnInit {
                 c.tutor.surname,
                 c.tutor.gender,
                 c.tutor.phone,
-                new User(c.tutor.user.email, null, c.tutor.user.role),
+                new User(
+                  c.tutor.user._id,
+                  c.tutor.user.email,
+                  null,
+                  c.tutor.user.role
+                ),
                 c.tutor.skills.map(s => new Skill(s._id, s.name, s.description))
               ),
               c.attendees.map(
@@ -113,7 +120,7 @@ export class ClassesComponent implements OnInit {
                     a.surname,
                     a.phone,
                     a.gender,
-                    new User(a.user.email, null, a.role)
+                    new User(a.user._id, a.user.email, null, a.role)
                   )
               ),
               c.date,
@@ -170,7 +177,7 @@ export class ClassesComponent implements OnInit {
           cust.surname,
           cust.phone,
           cust.gender,
-          new User(cust.user.email, null, 0)
+          new User(cust.user._id, cust.user.email, null, 0)
         );
         this.classes = this.filteredClasses = this.filteredClasses.filter(c => {
           return !c.attendees.map(a => a._id).includes(this.customer._id);
@@ -204,15 +211,20 @@ export class ClassesComponent implements OnInit {
    */
   filterClasses(category, value): void {
     this[category] = value;
+    console.log(this.filteredClasses);
+    console.log(typeof this.selectedDate);
     this.filteredClasses = this.classes
       .filter(c => {
-        // Uses .includes() so that an empty filter will still match
+        console.log(c.date);
         return (
+          (this.selectedDate !== '' ? c.date === this.selectedDate : true) &&
+          (this.customer
+            ? c.attendees.map(a => a._id === this.customer._id)
+            : true) &&
           c.location._id.includes(this.selectedLocation) &&
           c.type.id.includes(this.selectedClassType) &&
           c.tutor._id.includes(this.selectedTutor) &&
           moment().isBefore(moment(`${c.date} ${c.startTime}`)) &&
-          !c.attendees.map(a => a._id).includes(this.customer._id) &&
           c.attendees.length < c.classSize
         );
       })
@@ -224,10 +236,11 @@ export class ClassesComponent implements OnInit {
           ? 1
           : -1;
       });
+    console.log(this.filteredClasses);
   }
 
   resetFilters(): void {
-    ['Location', 'Tutor', 'ClassType'].forEach(i =>
+    ['Location', 'Tutor', 'ClassType', 'Date'].forEach(i =>
       this.filterClasses(`selected${i}`, '')
     );
   }

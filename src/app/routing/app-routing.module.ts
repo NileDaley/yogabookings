@@ -11,6 +11,7 @@ import { LocationsComponent } from 'app/components/guest/locations/locations.com
 import { TutorRoutingModule } from './tutor-routing.module';
 import { ForbiddenComponent } from '../components/forbidden/forbidden.component';
 import { ClassesComponent } from '../components/guest/classes/classes.component';
+import { CustomerRoutingModule } from './customer-routing.module';
 
 const appRoutes: Routes = [
   {
@@ -47,7 +48,8 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(appRoutes),
     AdminRoutingModule,
-    TutorRoutingModule
+    TutorRoutingModule,
+    CustomerRoutingModule
   ],
   exports: [RouterModule]
 })

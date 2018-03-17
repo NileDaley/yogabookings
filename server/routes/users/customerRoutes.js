@@ -76,27 +76,25 @@ router.get('/:id', hasRole(['admin']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-// Update customer
-// TODO: isSelf
-router.patch('/:id', hasRole(['admin']), (req, res) => {
+router.patch('/:id', hasRole(['admin'], true), (req, res) => {
   let { forename, surname, phone, gender, user } = req.body;
-
-  User.update(
-    { _id: user._id },
+  User.findByIdAndUpdate(
+    user._id,
     {
       $set: {
         email: user.email,
         password: user.password,
         role: user.role
       }
-    }
+    },
+    { new: true }
   )
     .then(updatedUser => {
       if (!updatedUser) {
         Response.ERROR(res, 'An error occurred whilst updating the user');
       } else {
-        Customer.update(
-          { _id: req.params.id },
+        Customer.findByIdAndUpdate(
+          req.params.id,
           {
             $set: {
               forename,
@@ -105,7 +103,8 @@ router.patch('/:id', hasRole(['admin']), (req, res) => {
               gender,
               user: mongoose.Types.ObjectId(updatedUser._id)
             }
-          }
+          },
+          { new: true }
         )
           .then(updatedCustomer => {
             Response.OK(res, updatedCustomer);
