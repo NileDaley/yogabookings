@@ -1,54 +1,192 @@
-<nav class="navbar is-dark" role="navigation" aria-label="main navigation" (click)="toggleNav()">
+<nav class="navbar is-dark"
+     role="navigation"
+     aria-label="main navigation"
+     (click)="toggleNav()">
+
   <div class="navbar-brand">
-    <a class="navbar-item" routerLink="/">
+    <a class="navbar-item"
+       routerLink="/">
       YogaBookings
     </a>
 
-    <button class="button navbar-burger is-dark" [ngClass]="{'is-active': navActive}" >
+    <button class="button navbar-burger is-dark"
+            [ngClass]="{'is-active': navActive}">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </div>
-  <div class="navbar-menu" [ngClass]="{'is-active': navActive}">
+
+  <div class="navbar-menu"
+       [ngClass]="{'is-active': navActive}">
+
     <div class="navbar-start">
-      <a routerLink="/" routerLinkActive="has-text-info" [routerLinkActiveOptions]="{'exact': true}" class="navbar-item">
-        <span class="icon"><i class="fas fa-home"></i></span> Home
+
+      <a routerLink="/"
+         routerLinkActive="has-text-info"
+         [routerLinkActiveOptions]="{'exact': true}"
+         class="navbar-item">
+        <span class="icon">
+          <i class="fas fa-home"></i>
+        </span> Home
       </a>
-      <a routerLink="/classes" routerLinkActive="has-text-info" class="navbar-item">
-        <span class="icon"><i class="fas fa-search"></i></span> Browse
+      <a routerLink="/classes"
+         routerLinkActive="has-text-info"
+         class="navbar-item">
+        <span class="icon">
+          <i class="fas fa-search"></i>
+        </span> Browse
       </a>
-      <a routerLink="/locations" routerLinkActive="has-text-info" class="navbar-item">
-        <span class="icon"><i class="fas fa-building"></i></span> Locations
+      <a routerLink="/locations"
+         routerLinkActive="has-text-info"
+         class="navbar-item">
+        <span class="icon">
+          <i class="fas fa-building"></i>
+        </span> Locations
       </a>
-      <div *ngIf="showAdminButtons" class="navbar-item has-dropdown is-hoverable">
-        <a routerLink="/admin" routerLinkActive="has-text-info" class="navbar-link">
-          <span class="icon"><i class="fas fa-lock"></i></span> Admin
+
+      <div *ngIf="isTutor()"
+           class="navbar-item has-dropdown is-hoverable">
+        <a routerLink="/tutor"
+           routerLinkActive="has-text-info"
+           class="navbar-link">
+          <span class="icon">
+            <i class="fas fa-graduation-cap"></i>
+          </span>
+          <span>Tutor</span>
         </a>
         <div class="navbar-dropdown">
-          <a routerLink="/admin/classes" routerLinkActive="has-text-info" class="navbar-item"><span class="icon"><i class="fas fa-calendar-alt"></i></span> Classes</a>
-          <a routerLink="/admin/customers" routerLinkActive="has-text-info" class="navbar-item"><span class="icon"><i class="fas fa-users"></i></span> Customers</a>
-          <a routerLink="/admin/tutors" routerLinkActive="has-text-info" class="navbar-item"><span class="icon"><i class="fas fa-graduation-cap"></i></span>Tutors</a>
-          <a routerLink="/admin/locations" routerLinkActive="has-text-info" class="navbar-item"><span class="icon"><i class="fa fa-building"></i></span> Locations</a>
-          <hr class="navbar-divider">
-          <a routerLink="/status" routerLinkActive="has-text-info" class="navbar-item"><span class="icon"><i class="fas fa-tachometer-alt"></i></span> System Status</a>
+          <a routerLink="/tutor/classes"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </span>
+            <span>Classes</span>
+          </a>
+          <a routerLink="/tutor/classes/new"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-calendar-plus"></i>
+            </span>
+            <span>New Class</span>
+          </a>
+          <a routerLink="/tutor/customers"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-users"></i>
+            </span>
+            <span>Customers</span>
+          </a>
+          <a routerLink="/tutor/reports"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-chart-line"></i>
+            </span>
+            <span>Reports</span>
+          </a>
         </div>
       </div>
+
+      <div *ngIf="isAdmin()"
+           class="navbar-item has-dropdown is-hoverable">
+        <a routerLink="/admin"
+           routerLinkActive="has-text-info"
+           class="navbar-link">
+          <span class="icon">
+            <i class="fas fa-lock"></i>
+          </span> Admin
+        </a>
+        <div class="navbar-dropdown">
+          <a routerLink="/admin/classes"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-calendar-alt"></i>
+            </span> Classes</a>
+          <a routerLink="/admin/customers"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-users"></i>
+            </span> Customers</a>
+          <a routerLink="/admin/tutors"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-graduation-cap"></i>
+            </span>Tutors</a>
+          <a routerLink="/admin/locations"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fa fa-building"></i>
+            </span> Locations</a>
+          <hr class="navbar-divider">
+          <a routerLink="/status"
+             routerLinkActive="has-text-info"
+             class="navbar-item">
+            <span class="icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </span> System Status</a>
+        </div>
+      </div>
+
     </div>
+
     <div class="navbar-end">
       <ng-container *ngIf="!isLoggedIn">
-        <a class="navbar-item" routerLink="/login" routerLinkActive="has-text-info">
-          <span class="icon"><i class="fas fa-sign-in-alt"></i></span> Login
+        <a class="navbar-item"
+           routerLink="/login"
+           routerLinkActive="has-text-info">
+          <span class="icon">
+            <i class="fas fa-sign-in-alt"></i>
+          </span> Login
         </a>
-        <a class="navbar-item" routerLink="/register" routerLinkActive="has-text-info">
-          <span class="icon"><i class="fas fa-user"></i></span> Register
+        <a class="navbar-item"
+           routerLink="/register"
+           routerLinkActive="has-text-info">
+          <span class="icon">
+            <i class="fas fa-user"></i>
+          </span> Register
         </a>
       </ng-container>
       <ng-container *ngIf="isLoggedIn">
-        <a (click)="logout()" class="navbar-item">
-          <span class="icon"><i class="fas fa-sign-out-alt"></i></span> Logout
-        </a>
+        <div class="navbar-item has-dropdown is-hoverable"
+             *ngIf="identity !== null">
+          <a class="navbar-link"
+             routerLinkActive="has-text-info"
+             [routerLink]="getIdentityLink()">
+            <span class="icon">
+              <i class="far fa-user"></i>
+            </span>
+            <span>{{identity.forename}} {{identity.surname}}</span>
+          </a>
+          <div class="navbar-dropdown">
+            <a *ngIf="identity.user.role === 0"
+               routerLink="/customer"
+               routerLinkActive="has-text-info"
+               class="navbar-item">
+              <span class="icon">
+                <i class="far fa-user"></i>
+              </span>
+              <span>Profile</span>
+            </a>
+            <a (click)="logout()"
+               class="navbar-item">
+              <span class="icon">
+                <i class="fas fa-sign-out-alt"></i>
+              </span>
+              <span>Logout</span>
+            </a>
+          </div>
+        </div>
       </ng-container>
     </div>
+
   </div>
+
 </nav>
