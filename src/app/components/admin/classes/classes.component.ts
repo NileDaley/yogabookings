@@ -13,6 +13,7 @@ import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
 import { Router, RouterStateSnapshot } from '@angular/router';
 import { ClassGroup } from '../../../models/class-group';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-admin-classes',
@@ -49,6 +50,7 @@ export class ClassesComponent implements OnInit {
   }
 
   private initCalendar() {
+    const scrollTime = moment.duration(moment().format('HH') + ':00:00');
     this.calendarOptions = {
       editable: false,
       eventLimit: false,
@@ -56,6 +58,7 @@ export class ClassesComponent implements OnInit {
       allDaySlot: false,
       eventColor: '#3273dc',
       timeFormat: 'HH:mm',
+      scrollTime,
       defaultView: 'agendaWeek',
       header: {
         left: 'prev,next today',

@@ -102,6 +102,7 @@ export class ClassesComponent implements OnInit {
     // After the tutor colors have been set, set the calendar options
     this.setTutorColours()
       .then(() => {
+        const scrollTime = moment.duration(moment().format('HH') + ':00:00');
         this.calendarOptions = {
           editable: false,
           eventLimit: false,
@@ -109,6 +110,7 @@ export class ClassesComponent implements OnInit {
           allDaySlot: false,
           timeFormat: 'HH:mm',
           defaultView: 'agendaWeek',
+          scrollTime: scrollTime,
           header: {
             left: 'prev,next today',
             center: 'title',
@@ -139,6 +141,7 @@ export class ClassesComponent implements OnInit {
   // Set the color for each tutor, then return the promise
   private setTutorColours(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
+      let count = 0;
       this.classes.forEach(c => {
         if (
           this.tutorColors.filter(
@@ -146,12 +149,11 @@ export class ClassesComponent implements OnInit {
           ).length === 0
         ) {
           if (this.colors.length > 0) {
-            const randomIndex = Math.floor(Math.random() * this.colors.length);
             this.tutorColors.push({
               tutorName: `${c.tutor.forename} ${c.tutor.surname}`,
-              color: this.colors[randomIndex]
+              color: this.colors[count]
             });
-            this.colors.splice(randomIndex, 1);
+            this.colors.splice(count, 1);
           } else {
             this.tutorColors.push({
               tutorName: `${c.tutor.forename} ${c.tutor.surname}`,
@@ -159,6 +161,7 @@ export class ClassesComponent implements OnInit {
             });
           }
         }
+        count++;
       });
 
       resolve(true);
