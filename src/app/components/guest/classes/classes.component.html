@@ -12,6 +12,23 @@
             <p id="filterHeader"
                class="subtitle">Filter Classes</p>
 
+            <div id="dateFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="dateSelect">Date</label>
+                <div class="control">
+                  <input type="date"
+                         class="input"
+                         id="dateSelect"
+                         [min]="minimumDate"
+                         (change)="filterClasses('selectedDate', dateSelect.value)"
+                         #dateSelect>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
             <div id="classFilter">
               <div class="field">
                 <label class="has-text-weight-semibold"
@@ -124,14 +141,20 @@
                     <span class="tag is-info is-capitalized">{{c.classGroup.interval}}</span>
                   </div>
                 </div>
-                <div class="is-divider-vertical is-hidden-mobile"></div>
+                <div class="is-divider-vertical is-hidden-mobile"
+                     style="padding: 1em;"></div>
                 <div class="column is-3 center-vertical">
-                  <button (click)="showBookingModal(c)"
-                          class="button is-link is-fullwidth is-paddingless"
-                          [disabled]="!isLoggedIn || this.role !== 0"
-                          [title]="isLoggedIn ? '' : 'You must be logged in to book a class'">
-                    £{{c.price}}
-                  </button>
+                  <div style="width: 100%">
+                    <button class="button is-fullwidth"
+                            [routerLink]="getClassLink(c._id)"
+                            style="margin-bottom: 1em;">More details</button>
+                    <button (click)="showBookingModal(c)"
+                            class="button is-link is-fullwidth"
+                            [disabled]="!isLoggedIn || this.role !== 0"
+                            [title]="isLoggedIn ? '' : 'You must be logged in to book a class'">
+                      £{{c.price}}
+                    </button>
+                  </div>
                 </div>
               </div>
 

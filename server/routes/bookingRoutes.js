@@ -45,4 +45,29 @@ router.post('/', hasRole(['admin', 'customer']), (req, res) => {
     });
 });
 
+router.post('/cancel', hasRole(['admin', 'customer']), (req, res) => {
+  const { classes, customer } = req.body;
+  let promises = [];
+  for (let index = 0; index < classes.length; index++) {
+    promises.push(
+      new Promise((resolve, reject) => {
+        Class.findByIdAndUpdate(
+          classes[index]._id,
+          { $pull: { attendees: mongoose.Types.ObjectId(customer._id) } },
+          { new: true }
+        )
+          .then(result => resolve(result))
+          .catch(error => reject(error));
+      })
+    );
+  }
+  Promise.all(promises)
+    .then(data => {
+      Response.OK(res, data);
+    })
+    .catch(err => {
+      Response.ERROR(res, err);
+    });
+});
+
 module.exports = router;

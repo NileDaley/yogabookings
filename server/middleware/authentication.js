@@ -12,7 +12,7 @@ exports.authenticate = (req, res, next) => {
     const token = req.headers['authorization'].split('Bearer ')[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        console.log('Not authenticated');
+        Response.ERROR(res, err);
       } else {
         const tokenData = JSON.parse(decoded.data);
         res.locals.user = tokenData;
@@ -24,14 +24,18 @@ exports.authenticate = (req, res, next) => {
   }
 };
 
-exports.hasRole = expectedRoles => {
+exports.hasRole = (expectedRoles, overrideIfSelf = false) => {
   return (req, res, next) => {
     if (!res.locals.user) {
       Response.FORBIDDEN(res);
     } else {
-      expectedRoles.map(r => ROLES[r]).includes(res.locals.user.role)
-        ? next()
-        : Response.FORBIDDEN(res);
+      if (overrideIfSelf === true) {
+        next();
+      } else {
+        expectedRoles.map(r => ROLES[r]).includes(res.locals.user.role)
+          ? next()
+          : Response.FORBIDDEN(res);
+      }
     }
   };
 };

@@ -21,7 +21,7 @@ export class DataService {
   }
 
   updateCustomer(id, values) {
-    return this.http.patch(`${this.baseURL}/users/customers/`, values);
+    return this.http.patch(`${this.baseURL}/users/customers/${id}`, values);
   }
 
   deleteCustomer(id) {
@@ -114,5 +114,9 @@ export class DataService {
 
   insertBookings(bookings) {
     return this.http.post(`${this.baseURL}/bookings/`, bookings);
+  }
+
+  cancelBookings(bookings) {
+    return this.http.post(`${this.baseURL}/bookings/cancel`, bookings);
   }
 }

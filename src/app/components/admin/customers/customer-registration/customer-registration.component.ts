@@ -16,7 +16,7 @@ export class CustomerRegistrationComponent implements OnInit {
   constructor(private _dataService: DataService, private router: Router) {}
 
   ngOnInit() {
-    this.customer = new Customer('', '', '', '', '', new User('', '', 0));
+    this.customer = new Customer('', '', '', '', '', new User(null, '', '', 0));
   }
 
   insertCustomer() {

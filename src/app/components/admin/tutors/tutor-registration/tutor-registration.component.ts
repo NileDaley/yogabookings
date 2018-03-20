@@ -29,7 +29,7 @@ export class TutorRegistrationComponent implements OnInit {
       '',
       '',
       '',
-      new User('', '', Role.Tutor),
+      new User(null, '', '', Role.Tutor),
       []
     );
   }

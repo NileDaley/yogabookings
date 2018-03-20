@@ -10,13 +10,18 @@ export class RouterGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const expectedRole = route.data.expectedRole;
     const token = localStorage.getItem('token');
-    const decoded = JSON.parse(jwtDecode(token)['data']);
-
-    if (!this.authService.isLoggedIn() || decoded.role !== expectedRole) {
+    if (!token) {
       this.router.navigate(['/forbidden']);
       return false;
-    }
+    } else {
+      const decoded = JSON.parse(jwtDecode(token)['data']);
 
-    return true;
+      if (!this.authService.isLoggedIn() || decoded.role !== expectedRole) {
+        this.router.navigate(['/forbidden']);
+        return false;
+      }
+
+      return true;
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from 'app/services/data.service';
-import { Class } from 'app/models/class';
+import { Class, getInstance } from 'app/models/class';
 import { ClassType } from 'app/models/class-type';
 import { Tutor } from 'app/models/tutor';
 import { User } from 'app/models/user';
@@ -87,59 +87,7 @@ export class ClassesComponent implements OnInit {
           //   return moment(`${c.date} ${c.startTime}`).isAfter(moment());
           // })
           .map(c => {
-            return new Class(
-              c._id,
-              new ClassType(
-                c.classType._id,
-                c.classType.name,
-                c.classType.description
-              ),
-              new Tutor(
-                c.tutor._id,
-                c.tutor.forename,
-                c.tutor.surname,
-                c.tutor.gender,
-                c.tutor.phone,
-                new User(c.tutor.user.email, null, c.tutor.user.role),
-                c.tutor.skills.map(s => new Skill(s._id, s.name, s.description))
-              ),
-              c.attendees.map(
-                a =>
-                  new Customer(
-                    a._id,
-                    a.forename,
-                    a.surname,
-                    a.phone,
-                    a.gender,
-                    new User(a.user.email, null, a.role)
-                  )
-              ),
-              c.date,
-              c.startTime,
-              c.endTime,
-              c.classSize,
-              c.price,
-              new Location(
-                c.location._id,
-                c.location.name,
-                c.location.address,
-                c.location.email,
-                c.location.phone,
-                c.location.openHours.map(
-                  day => new OpenHours(day.day, day.isOpen, day.open, day.close)
-                ),
-                c.location.venues.map(v => new Venue(v.name, v.capacity))
-              ),
-              c.venue,
-              c.hasOwnProperty('classGroup')
-                ? new ClassGroup(
-                    c.classGroup._id,
-                    c.classGroup.startDate,
-                    c.classGroup.interval,
-                    c.classGroup.count
-                  )
-                : null
-            );
+            return getInstance(c);
           });
         this.initCalendar();
         this.loading = false;
@@ -154,6 +102,7 @@ export class ClassesComponent implements OnInit {
     // After the tutor colors have been set, set the calendar options
     this.setTutorColours()
       .then(() => {
+        const scrollTime = moment.duration(moment().format('HH') + ':00:00');
         this.calendarOptions = {
           editable: false,
           eventLimit: false,
@@ -161,6 +110,7 @@ export class ClassesComponent implements OnInit {
           allDaySlot: false,
           timeFormat: 'HH:mm',
           defaultView: 'agendaWeek',
+          scrollTime: scrollTime,
           header: {
             left: 'prev,next today',
             center: 'title',
@@ -191,6 +141,7 @@ export class ClassesComponent implements OnInit {
   // Set the color for each tutor, then return the promise
   private setTutorColours(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
+      let count = 0;
       this.classes.forEach(c => {
         if (
           this.tutorColors.filter(
@@ -198,12 +149,11 @@ export class ClassesComponent implements OnInit {
           ).length === 0
         ) {
           if (this.colors.length > 0) {
-            const randomIndex = Math.floor(Math.random() * this.colors.length);
             this.tutorColors.push({
               tutorName: `${c.tutor.forename} ${c.tutor.surname}`,
-              color: this.colors[randomIndex]
+              color: this.colors[count]
             });
-            this.colors.splice(randomIndex, 1);
+            this.colors.splice(count, 1);
           } else {
             this.tutorColors.push({
               tutorName: `${c.tutor.forename} ${c.tutor.surname}`,
@@ -211,6 +161,7 @@ export class ClassesComponent implements OnInit {
             });
           }
         }
+        count++;
       });
 
       resolve(true);
