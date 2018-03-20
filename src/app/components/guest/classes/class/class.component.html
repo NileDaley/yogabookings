@@ -1,0 +1,106 @@
+<app-loading *ngIf="loading; else content"></app-loading>
+<ng-template #content>
+  <div class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-8 is-offset-2">
+          <div class="box">
+
+            <h1 class="subtitle is-size-4">{{_class.type.name}}</h1>
+
+            <div class="columns">
+
+              <div id="classDetails-left"
+                   class="column">
+
+                <p>
+                  <span class='icon'>
+                    <i class='far fa-calendar-alt'></i>
+                  </span>
+                  <span>{{_class.date}}</span>
+                </p>
+
+                <p>
+                  <span class='icon'>
+                    <i class='far fa-clock'></i>
+                  </span>
+                  <span>{{_class.startTime}} - {{_class.endTime}}</span>
+                </p>
+
+                <br>
+
+                <p>
+                  <span class='icon'>
+                    <i class='fas fa-users'></i>
+                  </span>
+                  <span> {{_class.attendees.length}} / {{_class.classSize}} </span>
+                </p>
+
+                <br>
+
+                <p>
+                  <span class='icon'>
+                    <i class='fas fa-building'></i>
+                  </span>
+                  <span>{{_class.location.name}}</span>
+                </p>
+
+                <p *ngFor="let line of _class.location.address">
+                  <span class="icon"></span>
+                  <span>{{line}}</span>
+                </p>
+
+              </div>
+
+              <div class="is-divider-vertical is-hidden-mobile"></div>
+
+              <div id="classDetails-right"
+                   class="column is-one-third has-text-centered">
+
+                <div class="box"
+                     id="tutorDetails">
+
+                  <h2 class="subtitle">
+                    <span class='icon'>
+                      <i class='fas fa-graduation-cap'></i>
+                    </span>
+                    <span>{{_class.tutor.forename}} {{_class.tutor.surname}}</span>
+                  </h2>
+
+                  <p class="label">Skills</p>
+                  <div class="tags is-centered">
+                    <ng-container *ngFor="let skill of _class.tutor.skills">
+                      <span class="tag is-rounded is-info">{{skill.name}}</span>
+                    </ng-container>
+                  </div>
+
+                  <p class="label">Contact Details</p>
+                  <p>
+                    <span class='icon'>
+                      <i class='fas fa-phone'></i>
+                    </span>
+                    <span>
+                      <a [href]="getTutorLink('phone')">{{_class.tutor.phone}}</a>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span class='icon'>
+                      <i class='fas fa-envelope'></i>
+                    </span>
+                    <span>
+                      <a [href]="getTutorLink('email')">{{_class.tutor.user.email}}</a>
+                    </span>
+                  </p>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -143,12 +143,17 @@
                 </div>
                 <div class="is-divider-vertical is-hidden-mobile"></div>
                 <div class="column is-3 center-vertical">
-                  <button (click)="showBookingModal(c)"
-                          class="button is-link is-fullwidth is-paddingless"
-                          [disabled]="!isLoggedIn || this.role !== 0"
-                          [title]="isLoggedIn ? '' : 'You must be logged in to book a class'">
-                    £{{c.price}}
-                  </button>
+                  <div>
+                    <button class="button is-fullwidth"
+                            [routerLink]="getClassLink(c._id)"
+                            style="margin-bottom: 1em;">More details</button>
+                    <button (click)="showBookingModal(c)"
+                            class="button is-link is-fullwidth"
+                            [disabled]="!isLoggedIn || this.role !== 0"
+                            [title]="isLoggedIn ? '' : 'You must be logged in to book a class'">
+                      £{{c.price}}
+                    </button>
+                  </div>
                 </div>
               </div>
 
