@@ -47,7 +47,8 @@
                           <span>{{c.startTime}}</span>
                         </p>
                       </div>
-                      <div class="column is-narrow center-vertical">
+                      <div class="column is-narrow center-vertical"
+                           *ngIf="activeView === 'upcoming'">
                         <div class="buttons">
                           <a class="button is-link is-outlined"
                              routerLink="/classes/{{c._id}}">More Info</a>

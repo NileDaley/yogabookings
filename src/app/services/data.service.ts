@@ -8,6 +8,9 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
+  /*
+   * Customers
+   */
   getCustomers() {
     return this.http.get(`${this.baseURL}/users/customers`);
   }
@@ -28,6 +31,9 @@ export class DataService {
     return this.http.delete(`${this.baseURL}/users/customers/${id}`);
   }
 
+  /*
+   * Locations
+   */
   getLocations(): Observable<any> {
     return this.http.get(`${this.baseURL}/locations`);
   }
@@ -40,6 +46,9 @@ export class DataService {
     return this.http.patch(`${this.baseURL}/locations/${_id}`, newValues);
   }
 
+  /*
+   * Tutors
+   */
   getTutors() {
     return this.http.get(`${this.baseURL}/users/tutors/`);
   }
@@ -56,6 +65,9 @@ export class DataService {
     return this.http.post(`${this.baseURL}/users/tutors/`, values);
   }
 
+  /*
+   * Skills
+   */
   getSkills() {
     return this.http.get(`${this.baseURL}/users/tutors/skills`);
   }
@@ -72,12 +84,19 @@ export class DataService {
     return this.http.post(`${this.baseURL}/users/tutors/skills/`, skill);
   }
 
+  /*
+   * Classes
+   */
   getClasses() {
     return this.http.get(`${this.baseURL}/classes`);
   }
 
   getClass(id) {
     return this.http.get(`${this.baseURL}/classes/${id}`);
+  }
+
+  getClassesByGroup(groupID) {
+    return this.http.get(`${this.baseURL}/classes/groups/${groupID}`);
   }
 
   insertClass(newClass) {
@@ -92,6 +111,16 @@ export class DataService {
     return this.http.delete(`${this.baseURL}/classes/${id}`);
   }
 
+  /*
+   * Class Groups
+  */
+  deleteClassGroup(groupID) {
+    return this.http.delete(`${this.baseURL}/classes/groups/${groupID}`);
+  }
+
+  /*
+   * Class Types
+   */
   getClassTypes() {
     return this.http.get(`${this.baseURL}/classes/types`);
   }
@@ -112,6 +141,9 @@ export class DataService {
     return this.http.delete(`${this.baseURL}/classes/types/${id}`);
   }
 
+  /*
+   * Bookings
+   */
   insertBookings(bookings) {
     return this.http.post(`${this.baseURL}/bookings/`, bookings);
   }

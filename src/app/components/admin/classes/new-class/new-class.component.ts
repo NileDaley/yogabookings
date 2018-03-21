@@ -8,6 +8,7 @@ import { Skill } from '../../../../models/skill';
 import { OpenHours } from '../../../../models/openHours';
 import { Venue } from '../../../../models/venue';
 import { Class } from '../../../../models/class';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-class',
@@ -37,7 +38,7 @@ export class NewClassComponent implements OnInit {
     repeatCount: 2
   };
 
-  constructor(private _dataService: DataService) {}
+  constructor(private _dataService: DataService, private router: Router) {}
 
   ngOnInit() {
     this.loading = true;
@@ -165,7 +166,7 @@ export class NewClassComponent implements OnInit {
   saveClass() {
     this._dataService.insertClass(this._class).subscribe(
       res => {
-        console.log(res);
+        this.router.navigate(['/admin/classes']);
       },
       err => {
         console.log(err);

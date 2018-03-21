@@ -249,16 +249,27 @@ router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
-  Class.findByIdAndRemove(req.params.id)
-    .then((data, err) => {
-      if (err) {
+router.post(
+  '/cancel',
+  authenticate,
+  hasRole(['admin', 'tutor']),
+  (req, res) => {
+    const { classes } = req.body;
+    const promises = classes.map(c => Class.remove({ _id: c }));
+    Promise.all(promises)
+      .then(data => {
+        Response.OK(res, data);
+      })
+      .catch(err => {
         Response.ERROR(res, err);
-      } else {
-        Response.OK(res);
-      }
-    })
-    .catch(err => Response.ERROR(res, err));
+      });
+  }
+);
+
+router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
+  Class.remove({ _id: req.params.id })
+    .then(response => Response.OK(res, response))
+    .catch(error => Response.ERROR(res, error));
 });
 
 module.exports = router;
