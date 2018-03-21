@@ -70,7 +70,7 @@ export class ClassesComponent implements OnInit {
           title: c.type.name,
           start: `${c.date}T${c.startTime}:00`,
           end: `${c.date}T${c.endTime}:00`,
-          path: `/admin/classes/${c._id}`
+          path: `/classes/${c._id}`
         };
       })
     };

@@ -3,11 +3,13 @@ import { DataService } from 'app/services/data.service';
 import { Tutor } from 'app/models/tutor';
 import { Location } from 'app/models/location';
 import { ClassType } from 'app/models/class-type';
-import { User } from '../../../../models/user';
-import { Skill } from '../../../../models/skill';
-import { OpenHours } from '../../../../models/openHours';
-import { Venue } from '../../../../models/venue';
-import { Class } from '../../../../models/class';
+import { User } from 'app/models/user';
+import { Skill } from 'app/models/skill';
+import { OpenHours } from 'app/models/openHours';
+import { Venue } from 'app/models/venue';
+import { Class } from 'app/models/class';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-class',
@@ -15,12 +17,12 @@ import { Class } from '../../../../models/class';
   styleUrls: ['./new-class.component.scss']
 })
 export class NewClassComponent implements OnInit {
-  loading: boolean;
+  loading = true;
   messages = [];
-  tutors: Array<Tutor> = null;
+  tutor: Tutor = null;
   locations: Array<Location> = null;
   venues = [];
-  maxClassSize;
+  maxClassSize: number;
   classTypes: Array<ClassType> = null;
   _class = {
     classType: '',
@@ -37,11 +39,15 @@ export class NewClassComponent implements OnInit {
     repeatCount: 2
   };
 
-  constructor(private _dataService: DataService) {}
+  constructor(
+    private _dataService: DataService,
+    private _authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loading = true;
-    Promise.all([this.getTutors(), this.getLocations(), this.getClassTypes()])
+    Promise.all([this.getIdentity(), this.getLocations(), this.getClassTypes()])
       .then(() => {
         this.loading = false;
       })
@@ -53,23 +59,22 @@ export class NewClassComponent implements OnInit {
       });
   }
 
-  private getTutors(): Promise<any> {
-    return this._dataService
-      .getTutors()
+  private getIdentity(): Promise<any> {
+    return this._authService
+      .getIdentity()
       .toPromise()
-      .then(res => {
-        const data = res['data'];
-        this.tutors = data.map(t => {
-          return new Tutor(
-            t._id,
-            t.forename,
-            t.surname,
-            t.gender,
-            t.phone,
-            new User(t.user._id, t.user.email, null, t.user.role),
-            t.skills.map(s => new Skill(s._id, s.name, s.description))
-          );
-        });
+      .then(response => {
+        const identity = response['data'];
+        this.tutor = new Tutor(
+          identity._id,
+          identity.forename,
+          identity.surname,
+          identity.phone,
+          identity.phone,
+          new User(identity.user._id, identity.user.email, null, 10),
+          identity.skills.map(s => new Skill(s._id, s.name, s.description))
+        );
+        this._class.tutor = this.tutor._id;
       });
   }
 
@@ -103,13 +108,13 @@ export class NewClassComponent implements OnInit {
       .toPromise()
       .then(res => {
         const data = res['data'];
-        this.classTypes = data.map(ct => {
-          return new ClassType(ct._id, ct.name, ct.description);
-        });
+        this.classTypes = data.map(
+          ct => new ClassType(ct._id, ct.name, ct.description)
+        );
       });
   }
 
-  setValue(field: string, val: string) {
+  setValue(field: string, val: string): void {
     this._class[field] = val;
     if (field === 'location') {
       this.updateVenues(val);
@@ -119,7 +124,7 @@ export class NewClassComponent implements OnInit {
     }
   }
 
-  updateVenues(location_id: string) {
+  updateVenues(location_id: string): void {
     if (location_id !== '') {
       const location: Location = this.locations.filter(
         l => l._id === location_id
@@ -130,7 +135,7 @@ export class NewClassComponent implements OnInit {
     }
   }
 
-  updateMaxClassSize(venue_name: string) {
+  updateMaxClassSize(venue_name: string): void {
     if (venue_name !== '') {
       const location: Location = this.locations.filter(
         l => l._id === this._class.location
@@ -142,7 +147,7 @@ export class NewClassComponent implements OnInit {
         }
       });
     } else {
-      this.maxClassSize = '';
+      this.maxClassSize = null;
     }
   }
 
@@ -162,13 +167,17 @@ export class NewClassComponent implements OnInit {
     return this._class.startTime || '';
   }
 
-  saveClass() {
+  saveClass(): void {
     this._dataService.insertClass(this._class).subscribe(
       res => {
-        console.log(res);
+        this.router.navigate(['/tutor']);
       },
       err => {
-        console.log(err);
+        this.messages.push({
+          type: 'error',
+          message:
+            'An error occurred whilst booking that class. Please try again'
+        });
       }
     );
   }

@@ -1,18 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Class, getInstance } from 'app/models/class';
-import { ClassType } from 'app/models/class-type';
 import { Tutor } from 'app/models/tutor';
-import { User } from 'app/models/user';
-import { Customer } from 'app/models/customer';
 import { Skill } from 'app/models/skill';
 import { Location } from 'app/models/location';
 import { OpenHours } from 'app/models/openHours';
 import { Venue } from 'app/models/venue';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
-import { Router, RouterStateSnapshot } from '@angular/router';
-import { ClassGroup } from '../../../models/class-group';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import * as moment from 'moment';
 
@@ -130,7 +126,7 @@ export class ClassesComponent implements OnInit {
         title: c.type.name,
         start: `${c.date}T${c.startTime}:00`,
         end: `${c.date}T${c.endTime}:00`,
-        path: `/admin/classes/${c._id}`,
+        path: `/classes/${c._id}`,
         color: this.tutorColors.filter(
           t => t.tutorName === `${c.tutor.forename} ${c.tutor.surname}`
         )[0].color

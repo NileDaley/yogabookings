@@ -35,27 +35,6 @@
               </div>
             </div>
 
-            <div class="column is-6">
-              <div class="field">
-                <label for="tutor"
-                       class="label">Class Tutor</label>
-                <div class="control has-icons-left">
-                  <span class="icon">
-                    <span class="fas fa-graduation-cap"></span>
-                  </span>
-                  <div class="select is-fullwidth">
-                    <select (change)="setValue('tutor', tutor.value)"
-                            #tutor
-                            id="tutor">
-                      <option value=""
-                              selected>Select a tutor</option>
-                      <option *ngFor="let t of tutors"
-                              [value]="t._id">{{t.forename}} {{t.surname}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
           <hr>
 

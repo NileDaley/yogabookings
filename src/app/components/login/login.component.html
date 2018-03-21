@@ -2,17 +2,25 @@
   <div class="section has-text-centered">
     <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
       <h1 class="title">Login</h1>
-      <form [formGroup]="loginForm" novalidate>
+      <app-messages [messages]="messages"></app-messages>
+      <form [formGroup]="loginForm"
+            novalidate>
         <div class="field">
           <label class="label">Email Address</label>
           <div class="control">
-            <input type="email" formControlName="email" class="input has-text-centered" required>
+            <input type="email"
+                   formControlName="email"
+                   class="input has-text-centered"
+                   required>
           </div>
         </div>
         <div class="field">
           <label class="label">Password</label>
           <div class="control">
-            <input type="password" formControlName="password" class="input has-text-centered" required>
+            <input type="password"
+                   formControlName="password"
+                   class="input has-text-centered"
+                   required>
           </div>
         </div>
         <div class="columns">
@@ -21,7 +29,9 @@
         </div>
         <div class="columns">
           <div class="column is-8 is-offset-2">
-            <button (click)="login()" [disabled]="loginForm.status === 'INVALID' ? 'disabled' : '' " class="button is-info is-fullwidth">Login</button>
+            <button (click)="login()"
+                    [disabled]="loginForm.status === 'INVALID' ? 'disabled' : '' "
+                    class="button is-info is-fullwidth">Login</button>
           </div>
         </div>
       </form>

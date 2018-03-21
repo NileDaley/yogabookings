@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  messages = [];
 
   constructor(
     private _authService: AuthService,
@@ -29,6 +30,8 @@ export class LoginComponent {
   }
 
   login() {
+    this.messages = [];
+
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
     this._authService.login(email, password).subscribe(
@@ -47,7 +50,13 @@ export class LoginComponent {
         this.router.navigate([paths[decoded.role / 10]]);
       },
       error => {
-        console.log(error);
+        const message = {
+          type: 'error',
+          message: 'Invalid username or password, please try again'
+        };
+        this.messages.push(message);
+        const messageIndex = this.messages.indexOf(message);
+        setTimeout(() => this.messages.splice(messageIndex, 1), 2000);
       }
     );
   }

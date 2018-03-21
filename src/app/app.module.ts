@@ -53,7 +53,7 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { ClassesComponent } from './components/guest/classes/classes.component';
 import { CustomerProfileComponent } from './components/customer/customer-profile/customer-profile.component';
 import { ClassComponent } from './components/guest/classes/class/class.component';
-
+import { NewClassComponent as TutorNewClass } from './components/tutors/new-class/new-class.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -84,7 +84,8 @@ import { ClassComponent } from './components/guest/classes/class/class.component
     ForbiddenComponent,
     ClassesComponent,
     CustomerProfileComponent,
-    ClassComponent
+    ClassComponent,
+    TutorNewClass
   ],
   imports: [
     BrowserModule,
