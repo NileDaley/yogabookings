@@ -28,8 +28,10 @@ export class NavbarComponent {
       value => {
         this.isLoggedIn = value;
         if (this.isLoggedIn === true && this.identity === null) {
-          this.authService.getIdentity().subscribe(
-            response => {
+          this.authService
+            .getIdentity()
+            .toPromise()
+            .then(response => {
               const data = response['data'];
               switch (data.user.role) {
                 case 0:
@@ -65,9 +67,8 @@ export class NavbarComponent {
                   );
                   break;
               }
-            },
-            error => console.error(error)
-          );
+            })
+            .catch(error => console.log(error));
         }
       },
       err => console.log(err)
