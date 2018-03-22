@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Response = require('../../Response');
-const { hasRole } = require('../../middleware/authentication');
+const { hasRole, authenticate } = require('../../middleware/authentication');
 
 const SkillsRoutes = require('./skillsRoutes');
 
@@ -17,7 +17,7 @@ let Skill = mongoose.model('Skill', SkillSchema);
 router.use('/skills', SkillsRoutes);
 
 // Get all tutors
-router.get('/', hasRole(['admin', 'tutor']), (req, res) => {
+router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   Tutor.find()
     .populate('user skills')
     .then(tutor => {
@@ -30,7 +30,7 @@ router.get('/', hasRole(['admin', 'tutor']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.post('/', hasRole(['admin']), (req, res) => {
+router.post('/', authenticate, hasRole(['admin']), (req, res) => {
   let values = req.body;
   let { forename, surname, gender, phone } = values;
 
@@ -91,7 +91,7 @@ router.get('/:id', (req, res) => {
 
 // Update tutor
 // TODO: isSelf
-router.patch('/:id', hasRole(['admin']), (req, res) => {
+router.patch('/:id', authenticate, hasRole(['admin']), (req, res) => {
   let newValues = req.body;
   let skills = newValues.skills.map(s => mongoose.Types.ObjectId(s._id));
   let user = mongoose.Types.ObjectId(newValues.user._id);

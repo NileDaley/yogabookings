@@ -13,6 +13,7 @@ import { ForbiddenComponent } from '../components/forbidden/forbidden.component'
 import { ClassesComponent } from '../components/guest/classes/classes.component';
 import { CustomerRoutingModule } from './customer-routing.module';
 import { ClassComponent } from '../components/guest/classes/class/class.component';
+import { RegisterComponent } from '../components/guest/register/register.component';
 
 const appRoutes: Routes = [
   {
@@ -22,6 +23,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'classes/:id',

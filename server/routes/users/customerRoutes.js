@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Response = require('../../Response');
-const { hasRole } = require('../../middleware/authentication');
+const { hasRole, authenticate } = require('../../middleware/authentication');
 
 const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
@@ -11,7 +12,7 @@ let Customer = mongoose.model('Customer', CustomerSchema);
 let User = mongoose.model('User', UserSchema);
 
 // Get all customers
-router.get('/', hasRole(['admin', 'tutor']), (req, res) => {
+router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   Customer.find()
     .populate('user')
     .then(customers => {
@@ -25,13 +26,15 @@ router.get('/', hasRole(['admin', 'tutor']), (req, res) => {
 });
 
 // Insert customer
-router.post('/', hasRole(['admin']), (req, res) => {
-  let { forename, surname, gender, phone } = req.body;
-  let userValues = req.body.user;
-
-  let user = new User(userValues);
-  user
-    .save()
+router.post('/', (req, res) => {
+  let { forename, surname, gender, phone, user } = req.body;
+  let { email, password, role } = user;
+  const encryptedPassword = bcrypt.hashSync(password, 10);
+  User.create({
+    email,
+    password: encryptedPassword,
+    role
+  })
     .then(newUser => {
       if (!newUser) {
         Response.ERROR(
@@ -67,7 +70,7 @@ router.post('/', hasRole(['admin']), (req, res) => {
 
 // Get single customer
 // TODO: isSelf
-router.get('/:id', hasRole(['admin']), (req, res) => {
+router.get('/:id', authenticate, hasRole(['admin']), (req, res) => {
   Customer.findById(req.params.id)
     .populate('user')
     .then(user => {
@@ -76,7 +79,7 @@ router.get('/:id', hasRole(['admin']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.patch('/:id', hasRole(['admin'], true), (req, res) => {
+router.patch('/:id', authenticate, hasRole(['admin'], true), (req, res) => {
   let { forename, surname, phone, gender, user } = req.body;
   User.findByIdAndUpdate(
     user._id,
@@ -116,7 +119,7 @@ router.patch('/:id', hasRole(['admin'], true), (req, res) => {
 });
 
 // Delete customer
-router.delete('/:id', hasRole(['admin']), (req, res) => {
+router.delete('/:id', authenticate, hasRole(['admin']), (req, res) => {
   Customer.findById(req.params.id).then(cust => {
     if (!cust) {
       Response.ERROR(res, 'Could not retrieve the customer to be deleted');

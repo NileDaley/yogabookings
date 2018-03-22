@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 const Response = require('../Response');
 const UserSchema = require('../schemas/Users/UserSchema');
 const User = mongoose.model('User', UserSchema);
+const bcrypt = require('bcrypt');
 
 router.post('/login', (req, res) => {
   let { email, password } = req.body;
-
   User.find({ email: email }).then(data => {
     data = data[0];
     if (!data || data.length === 0) {
@@ -17,7 +17,7 @@ router.post('/login', (req, res) => {
         'No user was found with the provided email address'
       );
     } else {
-      if (password === data.password) {
+      if (bcrypt.compareSync(password, data.password)) {
         let expiresIn = 60 * 60;
         let tokenData = JSON.stringify({
           _id: data._id,

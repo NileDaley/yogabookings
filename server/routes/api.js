@@ -18,21 +18,9 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => console.log('Connected to mongodb via mongoose...'));
 
 router.use('/locations', locationRoutes);
-router.use('/users', authenticate, userRoutes);
+router.use('/users', userRoutes);
 router.use('/classes', classRoutes);
 router.use('/auth', authRoutes);
 router.use('/bookings', authenticate, bookingRoutes);
-
-router.get('/clear', (req, res) => {
-  const Class = mongoose.model(
-    'Class',
-    require('../schemas/Classes/ClassSchema')
-  );
-  Class.update({}, { $set: { attendees: [] } }, { multi: true })
-    .then(response => {
-      res.status(200).json(response);
-    })
-    .catch(err => res.status(500).send(err));
-});
 
 module.exports = router;
