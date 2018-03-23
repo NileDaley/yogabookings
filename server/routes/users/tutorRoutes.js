@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Response = require('../../Response');
 const { hasRole, authenticate } = require('../../middleware/authentication');
 
@@ -32,11 +33,10 @@ router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
 
 router.post('/', authenticate, hasRole(['admin']), (req, res) => {
   let values = req.body;
-  let { forename, surname, gender, phone } = values;
-
-  let user = new User(values.user);
-  user
-    .save()
+  let { forename, surname, gender, phone, user } = values;
+  let { email, password, role } = user;
+  const encryptedPassword = bcrypt.hashSync(password, 10);
+  User.create({ email, password: encryptedPassword, role })
     .then(newUser => {
       if (!newUser) {
         Response.ERROR(res, 'An error occurred whilst inserting the new user');

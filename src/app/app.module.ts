@@ -55,6 +55,7 @@ import { CustomerProfileComponent } from './components/customer/customer-profile
 import { ClassComponent } from './components/guest/classes/class/class.component';
 import { NewClassComponent as TutorNewClass } from './components/tutors/new-class/new-class.component';
 import { RegisterComponent } from './components/guest/register/register.component';
+import { CustomersComponent } from './components/tutors/customers/customers.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -87,7 +88,8 @@ import { RegisterComponent } from './components/guest/register/register.componen
     CustomerProfileComponent,
     ClassComponent,
     TutorNewClass,
-    RegisterComponent
+    RegisterComponent,
+    CustomersComponent
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import { DashboardComponent as Dashboard } from 'app/components/tutors/dashboard
 import { ClassesComponent } from '../components/tutors/classes/classes.component';
 import { RouterGuard } from './router.guard';
 import { NewClassComponent } from '../components/tutors/new-class/new-class.component';
+import { CustomersComponent } from 'app/components/tutors/customers/customers.component';
 
 const tutorRoutes: Routes = [
   {
@@ -27,6 +28,10 @@ const tutorRoutes: Routes = [
       {
         path: 'classes',
         component: ClassesComponent
+      },
+      {
+        path: 'customers',
+        component: CustomersComponent
       }
     ]
   }
