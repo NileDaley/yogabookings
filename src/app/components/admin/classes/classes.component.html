@@ -3,15 +3,16 @@
 
 <ng-template #content>
   <h1 class="subtitle is-3 has-text-centered">All Classes</h1>
-</ng-template>
-
-<div *ngIf="calendarOptions">
-  <div class="columns">
-    <div class="column is-10 is-offset-1">
-      <ng-fullcalendar #ucCalendar
-                       [options]="calendarOptions"
-                       (eventClick)="eventClick($event.detail)"
-      ></ng-fullcalendar>
+  <p class="has-text-centered has-text-info"
+    style="margin-top: -1em; margin-bottom: 1em;">Select a class to view more details, or select an empty time slot to add a new class</p>
+  <div *ngIf="calendarOptions">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+        <ng-fullcalendar #ucCalendar
+          [options]="calendarOptions"
+          (eventClick)="eventClick($event.detail)"
+          (select)="selectTime($event)"></ng-fullcalendar>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>

@@ -60,6 +60,7 @@ export class ClassesComponent implements OnInit {
       timeFormat: 'HH:mm',
       scrollTime,
       defaultView: 'agendaWeek',
+      selectable: true,
       header: {
         left: 'prev,next today',
         center: 'title',
@@ -78,5 +79,16 @@ export class ClassesComponent implements OnInit {
 
   eventClick(e) {
     this.router.navigate([e.event.path]);
+  }
+
+  selectTime(e) {
+    let { start, end } = e.detail;
+    start = moment(start).format('YYYY-MM-DD HH:mm:ss');
+    end = moment(end).format('YYYY-MM-DD HH:mm:ss');
+    if (moment().isBefore(start)) {
+      this.router.navigate(['/admin/classes/new'], {
+        queryParams: { start, end }
+      });
+    }
   }
 }

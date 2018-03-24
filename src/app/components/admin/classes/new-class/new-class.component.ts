@@ -8,7 +8,7 @@ import { Skill } from '../../../../models/skill';
 import { OpenHours } from '../../../../models/openHours';
 import { Venue } from '../../../../models/venue';
 import { Class } from '../../../../models/class';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-new-class',
@@ -38,12 +38,17 @@ export class NewClassComponent implements OnInit {
     repeatCount: 2
   };
 
-  constructor(private _dataService: DataService, private router: Router) {}
+  constructor(
+    private _dataService: DataService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.loading = true;
     Promise.all([this.getTutors(), this.getLocations(), this.getClassTypes()])
       .then(() => {
+        this.setSelectedDate();
         this.loading = false;
       })
       .catch(err => {
@@ -52,6 +57,17 @@ export class NewClassComponent implements OnInit {
         }
         this.messages.push({ type: 'error', message: err });
       });
+  }
+
+  private setSelectedDate() {
+    const params = this.route.snapshot.queryParamMap;
+    const start = params.get('start');
+    const end = params.get('end');
+    if (start && end) {
+      this._class.date = start.split(' ')[0];
+      this._class.startTime = start.split(' ')[1];
+      this._class.endTime = end.split(' ')[1];
+    }
   }
 
   private getTutors(): Promise<any> {

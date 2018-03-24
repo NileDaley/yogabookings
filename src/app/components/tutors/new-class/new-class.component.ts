@@ -9,7 +9,8 @@ import { OpenHours } from 'app/models/openHours';
 import { Venue } from 'app/models/venue';
 import { Class } from 'app/models/class';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-new-class',
@@ -42,7 +43,8 @@ export class NewClassComponent implements OnInit {
   constructor(
     private _dataService: DataService,
     private _authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class NewClassComponent implements OnInit {
     Promise.all([this.getIdentity(), this.getLocations(), this.getClassTypes()])
       .then(() => {
         this.loading = false;
+        this.setSelectedDate();
       })
       .catch(err => {
         if (!navigator.onLine) {
@@ -57,6 +60,17 @@ export class NewClassComponent implements OnInit {
         }
         this.messages.push({ type: 'error', message: err });
       });
+  }
+
+  private setSelectedDate() {
+    const params = this.route.snapshot.queryParamMap;
+    const start = params.get('start');
+    const end = params.get('end');
+    if (start && end) {
+      this._class.date = start.split(' ')[0];
+      this._class.startTime = start.split(' ')[1];
+      this._class.endTime = end.split(' ')[1];
+    }
   }
 
   private getIdentity(): Promise<any> {
@@ -140,7 +154,6 @@ export class NewClassComponent implements OnInit {
       const location: Location = this.locations.filter(
         l => l._id === this._class.location
       )[0];
-      console.log(location);
       location.venues.forEach((v: Venue) => {
         if (v.name === venue_name) {
           this.maxClassSize = v.capacity;
@@ -152,15 +165,7 @@ export class NewClassComponent implements OnInit {
   }
 
   earliestClassDate(): string {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month =
-      date.getMonth() + 1 < 10
-        ? `0${date.getMonth() + 1}`
-        : `${date.getMonth() + 1}`;
-    const day =
-      date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-    return `${year}-${month}-${day}`;
+    return moment().format('YYYY-MM-DD');
   }
 
   earliestEndTime(): string {
