@@ -1,3 +1,50 @@
-<p>
-  customers works!
-</p>
+<div class="columns">
+  <div class="column is-8 is-offset-2">
+    <h1 class="subtitle is-size-3 has-text-centered">Customers</h1>
+    <div class="columns">
+      <div class="column is-4 is-offset-4">
+        <div class="field">
+          <div class="control">
+            <input type="text"
+              class="input has-text-centered"
+              placeholder="Search"
+              (keyup)="filterCustomers(search.value.trim().toLowerCase())"
+              #search>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table is-fullwidth is-hoverable">
+      <tr>
+        <th>
+          <span>Forename</span>
+          <span class="icon is-pulled-right"
+            (click)="sortCustomers('forename')">
+            <i class="fas fa-sort-alpha-down"
+              [class.fa-sort-alpha-up]="sortOrder && sortOrder.field === 'forename' && sortOrder.order === 'desc'"></i>
+          </span>
+        </th>
+        <th>
+          <span>Surname</span>
+          <span class="icon is-pulled-right"
+            (click)="sortCustomers('surname')">
+            <i class="fas fa-sort-alpha-down"
+              [class.fa-sort-alpha-up]="sortOrder && sortOrder.field === 'surname' && sortOrder.order === 'desc'"></i>
+          </span>
+        </th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+      <tr *ngFor="let customer of filteredCustomers">
+        <td class="is-capitalized"
+          [ngStyle]="{'background-color': sortOrder && sortOrder.field === 'forename'? '#fafafa': null}">{{customer.forename}}</td>
+        <td class="is-capitalized"
+          [ngStyle]="{'background-color': sortOrder && sortOrder.field === 'surname'? '#fafafa': null}">{{customer.surname}}</td>
+        <td>
+          <a href="mailto:{{customer.user.email}}">{{customer.user.email}}</a>
+        </td>
+        <td>{{customer.phone || '-'}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
