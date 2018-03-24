@@ -54,7 +54,7 @@ export class CustomersComponent implements OnInit {
     }
   }
 
-  sortCustomers(field, order) {
+  sortCustomers(field, order = null) {
     if (!order) {
       if (this.sortOrder && this.sortOrder.field === field) {
         this.sortOrder.order = this.sortOrder.order === 'asc' ? 'desc' : 'asc';
