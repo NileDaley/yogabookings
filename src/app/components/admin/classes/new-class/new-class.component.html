@@ -87,6 +87,75 @@
                 </div>
 
                 <div class="is-divider"
+                  data-content="WHERE"></div>
+
+                <div class="columns">
+                  <div class="column is-6">
+                    <div class="field">
+                      <label for="location"
+                        class="label">Location</label>
+                      <div class="control has-icons-left">
+                        <span class="icon">
+                          <i class="fas fa-building"></i>
+                        </span>
+                        <div class="select is-fullwidth">
+                          <select (change)="setValue('location', location.value)"
+                            #location
+                            id="location">
+                            <option value="">Select a location</option>
+                            <option *ngFor="let loc of locations"
+                              [value]="loc._id">{{loc.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column is-6">
+                    <div class="field">
+                      <label for="venue"
+                        class="label">Venue</label>
+                      <div class="control has-icons-left">
+                        <span class="icon">
+                          <i class="fas fa-list"></i>
+                        </span>
+                        <div class="select is-fullwidth">
+                          <select (change)="setValue('venue', venue.value)"
+                            id="venue"
+                            [disabled]="location.value === ''"
+                            #venue>
+                            <option value="">Select a venue</option>
+                            <option *ngFor="let venue of venues"
+                              [value]="venue.name">{{venue.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="columns">
+                  <div class="column is-6 is-offset-3">
+                    <div class="field">
+                      <label class="label"
+                        for="classSize">Class Size</label>
+                      <div class="control has-icons-left">
+                        <span class="icon">
+                          <i class="fas fa-users"></i>
+                        </span>
+                        <input (change)="setValue('classSize', classSize.value)"
+                          id="classSize"
+                          type="number"
+                          min="1"
+                          [max]="maxClassSize"
+                          class="input"
+                          [disabled]="venue.value === '' || venue.disabled"
+                          #classSize>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="is-divider"
                   data-content="WHEN"></div>
 
                 <div class="columns">
@@ -214,84 +283,16 @@
                   </div>
                 </div>
 
-                <div class="is-divider"
-                  data-content="WHERE"></div>
-
-                <div class="columns">
-                  <div class="column is-6">
-                    <div class="field">
-                      <label for="location"
-                        class="label">Location</label>
-                      <div class="control has-icons-left">
-                        <span class="icon">
-                          <i class="fas fa-building"></i>
-                        </span>
-                        <div class="select is-fullwidth">
-                          <select (change)="setValue('location', location.value)"
-                            #location
-                            id="location">
-                            <option value="">Select a location</option>
-                            <option *ngFor="let loc of locations"
-                              [value]="loc._id">{{loc.name}}</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column is-6">
-                    <div class="field">
-                      <label for="venue"
-                        class="label">Venue</label>
-                      <div class="control has-icons-left">
-                        <span class="icon">
-                          <i class="fas fa-list"></i>
-                        </span>
-                        <div class="select is-fullwidth">
-                          <select (change)="setValue('venue', venue.value)"
-                            id="venue"
-                            [disabled]="location.value === ''"
-                            #venue>
-                            <option value="">Select a venue</option>
-                            <option *ngFor="let venue of venues"
-                              [value]="venue.name">{{venue.name}}</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <div class="columns">
                   <div class="column is-6 is-offset-3">
-                    <div class="field">
-                      <label class="label"
-                        for="classSize">Class Size</label>
-                      <div class="control has-icons-left">
-                        <span class="icon">
-                          <i class="fas fa-users"></i>
-                        </span>
-                        <input (change)="setValue('classSize', classSize.value)"
-                          id="classSize"
-                          type="number"
-                          min="1"
-                          [max]="maxClassSize"
-                          class="input"
-                          [disabled]="venue.value === '' || venue.disabled"
-                          #classSize>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns">
-                  <div class="column is-6 is-offset-3">
-                    <a (click)="saveClass()"
+                    <button (click)="saveClass()"
+                      [disabled]="formIsValid() === false"
                       class="button is-success is-fullwidth">
                       <span class="icon">
                         <i class="fas fa-save"></i>
                       </span>
                       <span>Save Details</span>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>

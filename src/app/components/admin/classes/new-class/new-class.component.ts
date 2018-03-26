@@ -9,6 +9,7 @@ import { OpenHours } from '../../../../models/openHours';
 import { Venue } from '../../../../models/venue';
 import { Class } from '../../../../models/class';
 import { Router, ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-new-class',
@@ -23,6 +24,7 @@ export class NewClassComponent implements OnInit {
   venues = [];
   maxClassSize;
   classTypes: Array<ClassType> = null;
+  classes = null;
   _class = {
     classType: '',
     tutor: '',
@@ -46,7 +48,12 @@ export class NewClassComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    Promise.all([this.getTutors(), this.getLocations(), this.getClassTypes()])
+    Promise.all([
+      this.getTutors(),
+      this.getLocations(),
+      this.getClassTypes(),
+      this.getAllClasses()
+    ])
       .then(() => {
         this.setSelectedDate();
         this.loading = false;
@@ -126,6 +133,17 @@ export class NewClassComponent implements OnInit {
       });
   }
 
+  private getAllClasses(): Promise<any> {
+    return this._dataService
+      .getClasses()
+      .toPromise()
+      .then(response => {
+        this.classes = response['data'].filter(c =>
+          moment().isBefore(`${c.date} ${c.startTime}`)
+        );
+      });
+  }
+
   setValue(field: string, val: string) {
     this._class[field] = val;
     if (field === 'location') {
@@ -152,7 +170,6 @@ export class NewClassComponent implements OnInit {
       const location: Location = this.locations.filter(
         l => l._id === this._class.location
       )[0];
-      console.log(location);
       location.venues.forEach((v: Venue) => {
         if (v.name === venue_name) {
           this.maxClassSize = v.capacity;
@@ -179,14 +196,138 @@ export class NewClassComponent implements OnInit {
     return this._class.startTime || '';
   }
 
-  saveClass() {
-    this._dataService.insertClass(this._class).subscribe(
-      res => {
-        this.router.navigate(['/admin/classes']);
-      },
-      err => {
-        console.log(err);
+  private anyFieldsEmpty(): boolean {
+    for (const f in this._class) {
+      if (this._class.hasOwnProperty(f)) {
+        if (this._class[f] === '') {
+          return true;
+        }
       }
+    }
+    return false;
+  }
+
+  private isValidDate(): boolean {
+    if (this._class.date === '' || this._class.startTime === '') {
+      return false;
+    }
+    return moment().isBefore(
+      moment(`${this._class.date} ${this._class.startTime}`)
     );
+  }
+
+  private anyOverlappingClasses(): boolean {
+    const overlapMessage = {
+      type: 'warning',
+      message: `The selected time slot is already occupied at that venue`
+    };
+    if (
+      this._class.date === '' ||
+      this._class.startTime === '' ||
+      this._class.endTime === ''
+    ) {
+      return null;
+    } else {
+      let found = false;
+      for (const c of this.classes) {
+        if (
+          this._class.venue === c.venue &&
+          this._class.location === c.location._id
+        ) {
+          const classStart = moment(`${c.date} ${c.startTime}`);
+          const classEnd = moment(`${c.date} ${c.endTime}`);
+          const otherStart = moment(
+            `${this._class.date} ${this._class.startTime}`
+          );
+          const otherEnd = moment(`${this._class.date} ${this._class.endTime}`);
+          if (
+            otherStart.isBetween(classStart, classEnd) ||
+            otherEnd.isBetween(classStart, classEnd)
+          ) {
+            found = true;
+            if (
+              this.messages.find(m => m.message === overlapMessage.message) ===
+              undefined
+            ) {
+              this.messages.push(overlapMessage);
+            }
+            break;
+          }
+        }
+      }
+      if (!found) {
+        const exisingMessage = this.messages.find(
+          m => m.message === overlapMessage.message
+        );
+        if (exisingMessage) {
+          this.messages.splice(this.messages.indexOf(exisingMessage), 1);
+        }
+      }
+      return found;
+    }
+  }
+
+  private isWithinOpenHours() {
+    let validTime = null;
+    const classDay = moment(this._class.date).format('dddd');
+    const location = this.locations.find(l => l._id === this._class.location);
+
+    if (location && classDay) {
+      const invalidTimeMessage = {
+        type: 'warning',
+        message: `The selected date and time is not within the open hours of ${
+          location.name
+        }`
+      };
+      const dayOfWeek = location.openHours.find(
+        day => day.day === classDay.toLowerCase()
+      );
+      if (dayOfWeek.isOpen === false) {
+        validTime = false;
+      } else {
+        const start = moment(`${this._class.date} ${this._class.startTime}`);
+        const end = moment(`${this._class.date} ${this._class.endTime}`);
+        const open = moment(`${this._class.date} ${dayOfWeek.open}`);
+        const close = moment(`${this._class.date} ${dayOfWeek.close}`);
+        validTime = start.isBetween(open, close) && end.isBetween(open, close);
+      }
+
+      if (validTime === true) {
+        this.messages = [];
+      } else {
+        const existingMessage = this.messages.find(
+          m => m.message === invalidTimeMessage.message
+        );
+        if (!existingMessage) {
+          this.messages.push(invalidTimeMessage);
+        }
+      }
+
+      return validTime;
+    } else {
+      return null;
+    }
+  }
+
+  formIsValid(): boolean {
+    const overlaps = this.anyOverlappingClasses();
+    const validTime = this.isWithinOpenHours();
+    return (
+      this.isValidDate() && !this.anyFieldsEmpty() && !overlaps && validTime
+    );
+  }
+
+  saveClass() {
+    if (this.formIsValid()) {
+      this._dataService.insertClass(this._class).subscribe(
+        res => {
+          this.router.navigate(['/admin/classes']);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    } else {
+    }
   }
 }
