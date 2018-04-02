@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const SkillSchema = new Schema({
-  name: String,
-  description: String
+  name: { type: String, required: true },
+  description: { type: String, default: '' }
 });
 
 module.exports = SkillSchema;

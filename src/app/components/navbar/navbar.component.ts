@@ -22,7 +22,7 @@ export class NavbarComponent {
     this.watchLoginStatus();
   }
 
-  // Subscribes to authService, which notifies of status every second
+  // Subscribes to authService, which notifies of status every 250ms
   watchLoginStatus(): void {
     this.authService.watchLoginStatus().subscribe(
       value => {

@@ -19,6 +19,18 @@ router.get('/', (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
+router.get('/:id', (req, res) => {
+  Skill.findById(req.params.id)
+    .then(skill => {
+      if (!skill) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, skill);
+      }
+    })
+    .catch(err => Response.ERROR(res, err));
+});
+
 router.post('/', authenticate, hasRole(['admin']), (req, res) => {
   let { name, description } = req.body;
 
@@ -34,18 +46,6 @@ router.post('/', authenticate, hasRole(['admin']), (req, res) => {
         Response.ERROR(res, 'An error occurred whilst inserting new skill');
       } else {
         Response.CREATED(res, newSkill);
-      }
-    })
-    .catch(err => Response.ERROR(res, err));
-});
-
-router.get('/:id', (req, res) => {
-  Skill.findById(req.params.id)
-    .then(skill => {
-      if (!skill) {
-        Response.NOT_FOUND(res);
-      } else {
-        Response.OK(res, skill);
       }
     })
     .catch(err => Response.ERROR(res, err));
