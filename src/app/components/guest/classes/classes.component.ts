@@ -154,11 +154,9 @@ export class ClassesComponent implements OnInit {
    */
   filterClasses(category, value): void {
     this[category] = value;
-    console.log(this.filteredClasses);
-    console.log(typeof this.selectedDate);
+
     this.filteredClasses = this.classes
       .filter(c => {
-        console.log(c.date);
         return (
           (this.selectedDate !== '' ? c.date === this.selectedDate : true) &&
           (this.customer
@@ -179,7 +177,6 @@ export class ClassesComponent implements OnInit {
           ? 1
           : -1;
       });
-    console.log(this.filteredClasses);
   }
 
   resetFilters(): void {

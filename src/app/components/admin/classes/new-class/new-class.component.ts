@@ -193,13 +193,22 @@ export class NewClassComponent implements OnInit {
   }
 
   earliestEndTime(): string {
-    return this._class.startTime || '';
+    if (this._class.startTime === '') {
+      return '';
+    } else {
+      return this._class.startTime;
+    }
   }
 
   private anyFieldsEmpty(): boolean {
     for (const f in this._class) {
       if (this._class.hasOwnProperty(f)) {
-        if (this._class[f] === '') {
+        if (
+          this._class[f] === '' ||
+          this._class[f] === 0 ||
+          this._class[f] === null ||
+          this._class[f] === undefined
+        ) {
           return true;
         }
       }
@@ -216,43 +225,44 @@ export class NewClassComponent implements OnInit {
     );
   }
 
+  private classesOverlap(a, b): boolean {
+    const start = moment(`${a.date} ${a.startTime}`);
+    const end = moment(`${a.date} ${a.endTime}`);
+    const otherStart = moment(`${b.date} ${b.startTime}`);
+    const otherEnd = moment(`${b.date} ${b.endTime}`);
+    return (
+      start.isBetween(otherStart, otherEnd) ||
+      end.isBetween(otherStart, otherEnd) ||
+      otherStart.isBetween(start, end) ||
+      otherEnd.isBetween(start, end)
+    );
+  }
+
   private anyOverlappingClasses(): boolean {
     const overlapMessage = {
       type: 'warning',
       message: `The selected time slot is already occupied at that venue`
     };
     if (
-      this._class.date === '' ||
-      this._class.startTime === '' ||
-      this._class.endTime === ''
+      this._class.date !== '' &&
+      this._class.startTime !== '' &&
+      this._class.endTime !== ''
     ) {
-      return null;
-    } else {
       let found = false;
       for (const c of this.classes) {
         if (
           this._class.venue === c.venue &&
-          this._class.location === c.location._id
+          this._class.location === c.location._id &&
+          this.classesOverlap(this._class, c)
         ) {
-          const classStart = moment(`${c.date} ${c.startTime}`);
-          const classEnd = moment(`${c.date} ${c.endTime}`);
-          const otherStart = moment(
-            `${this._class.date} ${this._class.startTime}`
-          );
-          const otherEnd = moment(`${this._class.date} ${this._class.endTime}`);
+          found = true;
           if (
-            otherStart.isBetween(classStart, classEnd) ||
-            otherEnd.isBetween(classStart, classEnd)
+            this.messages.find(m => m.message === overlapMessage.message) ===
+            undefined
           ) {
-            found = true;
-            if (
-              this.messages.find(m => m.message === overlapMessage.message) ===
-              undefined
-            ) {
-              this.messages.push(overlapMessage);
-            }
-            break;
+            this.messages.push(overlapMessage);
           }
+          break;
         }
       }
       if (!found) {
@@ -264,10 +274,35 @@ export class NewClassComponent implements OnInit {
         }
       }
       return found;
+    } else {
+      return null;
     }
   }
 
-  private isWithinOpenHours() {
+  private tutorHasAnotherClass(): boolean {
+    const otherClasses = this.classes.filter(c => {
+      return (
+        this._class.tutor === c.tutor._id && this.classesOverlap(this._class, c)
+      );
+    });
+
+    const message =
+      'The selected tutor is already teaching a class at that time';
+
+    const existingMessage = this.messages.find(m => m.message === message);
+    if (otherClasses.length > 0) {
+      if (!existingMessage) {
+        this.messages.push({ message, type: 'warning' });
+      }
+    } else {
+      if (existingMessage) {
+        this.messages.splice(this.messages.indexOf(existingMessage), 1);
+      }
+    }
+    return otherClasses.length > 0;
+  }
+
+  private isWithinOpenHours(): boolean {
     let validTime = null;
     const classDay = moment(this._class.date).format('dddd');
     const location = this.locations.find(l => l._id === this._class.location);
@@ -309,11 +344,31 @@ export class NewClassComponent implements OnInit {
     }
   }
 
+  private startIsBeforeEnd(): boolean {
+    return moment(`${this._class.date} ${this._class.startTime}`).isBefore(
+      `${this._class.date} ${this._class.endTime}`
+    );
+  }
+
+  private priceIsValid(): boolean {
+    const price = this._class.price;
+    return price >= 0;
+  }
+
   formIsValid(): boolean {
+    const validDate = this.isValidDate();
+    const emptyFields = this.anyFieldsEmpty();
     const overlaps = this.anyOverlappingClasses();
-    const validTime = this.isWithinOpenHours();
+    const validTime = this.isWithinOpenHours() && this.startIsBeforeEnd();
+    const tutorTeaching = this.tutorHasAnotherClass();
+    const validPrice = this.priceIsValid();
     return (
-      this.isValidDate() && !this.anyFieldsEmpty() && !overlaps && validTime
+      validDate === true &&
+      emptyFields === false &&
+      overlaps === false &&
+      validTime === true &&
+      tutorTeaching === false &&
+      validPrice === true
     );
   }
 
@@ -327,7 +382,6 @@ export class NewClassComponent implements OnInit {
           console.log(err);
         }
       );
-    } else {
     }
   }
 }

@@ -32,11 +32,11 @@ export class RegisterComponent implements OnInit {
   private createForm() {
     const nameRegex = RegExp(/^[A-z ]+$/);
     this.registerForm = this.fb.group({
-      email: ['niledaley@outlook.com', [Validators.required, Validators.email]],
-      password: ['blah', Validators.required],
-      confirmPassword: ['blah', Validators.required],
-      forename: ['Nile', [Validators.required, Validators.pattern(nameRegex)]],
-      surname: ['Daley', [Validators.required, Validators.pattern(nameRegex)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+      forename: ['', [Validators.required, Validators.pattern(nameRegex)]],
+      surname: ['', [Validators.required, Validators.pattern(nameRegex)]],
       gender: ['', [Validators.required]]
     });
   }
