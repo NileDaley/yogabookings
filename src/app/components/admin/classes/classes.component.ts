@@ -83,8 +83,8 @@ export class ClassesComponent implements OnInit {
 
   selectTime(e) {
     let { start, end } = e.detail;
-    start = moment(start).format('YYYY-MM-DD HH:mm:ss');
-    end = moment(end).format('YYYY-MM-DD HH:mm:ss');
+    start = moment(start).format('YYYY-MM-DD HH:mm');
+    end = moment(end).format('YYYY-MM-DD HH:mm');
     if (moment().isBefore(start)) {
       this.router.navigate(['/admin/classes/new'], {
         queryParams: { start, end }

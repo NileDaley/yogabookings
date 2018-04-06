@@ -58,10 +58,10 @@ export class DashboardComponent implements OnInit {
       ]
     },
     {
-      name: 'Centre Management',
+      name: 'Location Management',
       links: [
         {
-          text: 'Manage Centres',
+          text: 'Manage Locations',
           url: '/admin/locations',
           icon: { style: 'fas', code: 'building' }
         }

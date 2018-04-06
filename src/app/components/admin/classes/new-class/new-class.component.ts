@@ -226,15 +226,15 @@ export class NewClassComponent implements OnInit {
   }
 
   private classesOverlap(a, b): boolean {
-    const start = moment(`${a.date} ${a.startTime}`);
-    const end = moment(`${a.date} ${a.endTime}`);
-    const otherStart = moment(`${b.date} ${b.startTime}`);
-    const otherEnd = moment(`${b.date} ${b.endTime}`);
+    const aStart = moment(`${a.date} ${a.startTime}`);
+    const aEnd = moment(`${a.date} ${a.endTime}`);
+    const bStart = moment(`${b.date} ${b.startTime}`);
+    const bEnd = moment(`${b.date} ${b.endTime}`);
     return (
-      start.isBetween(otherStart, otherEnd) ||
-      end.isBetween(otherStart, otherEnd) ||
-      otherStart.isBetween(start, end) ||
-      otherEnd.isBetween(start, end)
+      aStart.isBetween(bStart, bEnd) ||
+      aEnd.isBetween(bStart, bEnd) ||
+      bStart.isBetween(aStart, aEnd) ||
+      bEnd.isBetween(aStart, aEnd)
     );
   }
 
@@ -355,6 +355,17 @@ export class NewClassComponent implements OnInit {
     return price >= 0;
   }
 
+  private isValidClassSize(): boolean {
+    if (this._class.location !== '' && this._class.venue !== '') {
+      const location = this.locations.find(l => l._id === this._class.location);
+      const venue = location.venues.find(v => v.name === this._class.venue);
+
+      return parseInt(this._class.classSize, 10) <= venue.capacity;
+    } else {
+      return false;
+    }
+  }
+
   formIsValid(): boolean {
     const validDate = this.isValidDate();
     const emptyFields = this.anyFieldsEmpty();
@@ -362,13 +373,15 @@ export class NewClassComponent implements OnInit {
     const validTime = this.isWithinOpenHours() && this.startIsBeforeEnd();
     const tutorTeaching = this.tutorHasAnotherClass();
     const validPrice = this.priceIsValid();
+    const validClassSize = this.isValidClassSize();
     return (
       validDate === true &&
       emptyFields === false &&
       overlaps === false &&
       validTime === true &&
       tutorTeaching === false &&
-      validPrice === true
+      validPrice === true &&
+      validClassSize === true
     );
   }
 
