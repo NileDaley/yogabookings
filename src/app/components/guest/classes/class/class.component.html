@@ -5,13 +5,13 @@
       <div class="columns">
         <div class="column is-8 is-offset-2">
           <div class="box">
-
+            <app-messages [messages]="messages"></app-messages>
             <h1 class="subtitle is-size-4">{{_class.type.name}}</h1>
 
             <div class="columns">
 
               <div id="classDetails-left"
-                   class="column">
+                class="column">
 
                 <p>
                   <span class='icon'>
@@ -52,23 +52,41 @@
 
                 <div *ngIf="canDeleteClass()">
                   <br>
-                  <div class="columns">
-                    <div class="column is-6 is-offset-3">
-                      <a class="button is-danger is-fullwidth"
-                         (click)="toggleModal()">Cancel class</a>
-                    </div>
+                  <div class="buttons is-centered">
+                    <span *ngIf="identity.role === 20"
+                      class="button is-info"
+                      (click)="toggleModal('addCustomer')">
+                      <span class="icon">
+                        <i class="fas fa-user-plus"></i>
+                      </span>
+                      <span>Add Customer</span>
+                    </span>
+                    <span *ngIf="identity.role === 20"
+                      class="button is-warning"
+                      (click)="toggleModal('removeCustomer')">
+                      <span class="icon">
+                        <i class="fas fa-users"></i>
+                      </span>
+                      <span>Attendees</span>
+                    </span>
+                    <span class="button is-danger"
+                      (click)="toggleModal('cancelClass')">
+                      <span class="icon">
+                        <i class="far fa-trash-alt"></i>
+                      </span>
+                      <span>Cancel class</span>
+                    </span>
                   </div>
                 </div>
-
               </div>
 
               <div class="is-divider-vertical is-hidden-mobile"></div>
 
               <div id="classDetails-right"
-                   class="column is-one-third has-text-centered">
+                class="column is-one-third has-text-centered">
 
                 <div class="box"
-                     id="tutorDetails">
+                  id="tutorDetails">
 
                   <h2 class="subtitle">
                     <span class='icon'>
@@ -115,57 +133,104 @@
   </div>
   <!-- Booking Modal -->
   <div class="modal"
-       *ngIf="modalActive"
-       [class.is-active]="modalActive">
+    *ngIf="modalActive"
+    [class.is-active]="modalActive">
     <div class="modal-background"
-         (click)="toggleModal()"></div>
+      (click)="toggleModal()"></div>
     <div class="modal-content">
       <div class="box">
         <div class="columns has-text-centered">
           <div class="column is-10 is-offset-1">
+            <div *ngIf="modalView === 'cancelClass'">
 
-            <p class="subtitle has-text-centered">Cancel class</p>
-            <p class="has-text-centered">This action cannot be undone. If you wish to continue, please enter the tutor's name in the box below and clicking
-              a button to confirm.</p>
-            <input type="text"
-                   class="input is-static has-text-weight-semibold has-text-centered"
-                   readonly="readonly"
-                   value="{{_class.tutor.forename}} {{_class.tutor.surname}}">
-
-            <div class="field">
+              <p class="subtitle has-text-centered">Cancel class</p>
+              <p class="has-text-centered">This action cannot be undone. If you wish to continue, please enter the tutor's name in the box below and clicking a button to confirm.</p>
               <input type="text"
-                     class="input has-text-centered"
-                     placeholder="confirm tutor name"
-                     [(ngModel)]="confirmTutorName">
-            </div>
+                class="input is-static has-text-weight-semibold has-text-centered"
+                readonly="readonly"
+                value="{{_class.tutor.forename}} {{_class.tutor.surname}}">
 
-            <div class="columns">
-              <div class="column">
-                <button class="button is-danger is-fullwidth"
-                        (click)="deleteClasses()"
-                        [disabled]="!tutorNameMatches()">
-                  Cancel single class
-                </button>
+              <div class="field">
+                <input type="text"
+                  class="input has-text-centered"
+                  placeholder="confirm tutor name"
+                  [(ngModel)]="confirmTutorName">
               </div>
-              <div class="is-divider-vertical"
-                   *ngIf="_class.classGroup !== null"
-                   data-content="OR"></div>
-              <div class="column"
-                   *ngIf="_class.classGroup !== null">
-                <button class="button is-danger is-fullwidth"
-                        (click)="deleteClasses(true)"
-                        [disabled]="!tutorNameMatches()">
-                  Cancel entire group
-                </button>
-              </div>
-            </div>
 
+              <div class="columns">
+                <div class="column">
+                  <button class="button is-danger is-fullwidth"
+                    (click)="deleteClasses()"
+                    [disabled]="!tutorNameMatches()">
+                    Cancel single class
+                  </button>
+                </div>
+                <div class="is-divider-vertical"
+                  *ngIf="_class.classGroup !== null"
+                  data-content="OR"></div>
+                <div class="column"
+                  *ngIf="_class.classGroup !== null">
+                  <button class="button is-danger is-fullwidth"
+                    (click)="deleteClasses(true)"
+                    [disabled]="!tutorNameMatches()">
+                    Cancel entire group
+                  </button>
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf="modalView === 'addCustomer'">
+              <p class="subtitle has-text-centered">Add Customer</p>
+              <div class="field">
+                <label for="customerName"
+                  class="label">Search Customers</label>
+                <input type="text"
+                  class="input has-text-centered"
+                  #customerName
+                  (keyup)="filterCustomers(customerName.value)"
+                  placeholder="Tom Smith"
+                  id="customerName">
+              </div>
+              <table class="table is-fullwidth is-hoverable is-striped">
+                <tr>
+                  <th>Forename</th>
+                  <th>Surname</th>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let cust of filteredCustomers">
+                  <td>{{cust.forename}}</td>
+                  <td>{{cust.surname}}</td>
+                  <td>
+                    <a class="button is-info is-fullwidth"
+                      (click)="bookClassForCustomer(cust._id)">Book</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div *ngIf="modalView === 'removeCustomer'">
+              <p class="subtitle has-text-centered">Class Attendees</p>
+              <table class="table is-fullwidth is-hoverable is-striped">
+                <tr>
+                  <th>Forename</th>
+                  <th>Surname</th>
+                  <th></th>
+                </tr>
+                <tr *ngFor="let cust of this._class.attendees">
+                  <td>{{cust.forename}}</td>
+                  <td>{{cust.surname}}</td>
+                  <td>
+                    <a class="button is-danger is-fullwidth"
+                      (click)="removeCustomer(cust)">Remove</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <button (click)="toggleModal()"
-            class="modal-close is-large"
-            aria-label="close"></button>
+      class="modal-close is-large"
+      aria-label="close"></button>
   </div>
 </ng-template>
