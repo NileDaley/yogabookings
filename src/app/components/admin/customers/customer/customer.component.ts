@@ -3,13 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../../../../services/data.service';
 import { Customer } from '../../../../models/customer';
 import { User } from '../../../../models/user';
-import { Payment } from '../../../../models/payment';
-import { PaymentMethods } from '../../../../models/payment-methods';
 
 @Component({
   selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.scss']
+  templateUrl: './customer.component.html'
 })
 export class CustomerComponent implements OnInit {
   loading = false;

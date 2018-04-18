@@ -3,8 +3,7 @@ import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-status',
-  templateUrl: './status.component.html',
-  styleUrls: ['./status.component.scss']
+  templateUrl: './status.component.html'
 })
 export class StatusComponent implements OnInit {
   users: Array<any>;

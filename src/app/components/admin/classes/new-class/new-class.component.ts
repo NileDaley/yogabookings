@@ -13,8 +13,7 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-new-class',
-  templateUrl: './new-class.component.html',
-  styleUrls: ['./new-class.component.scss']
+  templateUrl: './new-class.component.html'
 })
 export class NewClassComponent implements OnInit {
   loading: boolean;

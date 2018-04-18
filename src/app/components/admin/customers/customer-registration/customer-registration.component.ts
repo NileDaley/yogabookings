@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../../../services/data.service';
 import { Customer } from '../../../../models/customer';
 import { User } from '../../../../models/user';
-import { PaymentMethods } from '../../../../models/payment-methods';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-registration',
-  templateUrl: './customer-registration.component.html',
-  styleUrls: ['./customer-registration.component.scss']
+  templateUrl: './customer-registration.component.html'
 })
 export class CustomerRegistrationComponent implements OnInit {
   customer: Customer;

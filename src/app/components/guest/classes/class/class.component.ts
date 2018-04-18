@@ -10,8 +10,7 @@ import { User, Role } from 'app/models/user';
 
 @Component({
   selector: 'app-class',
-  templateUrl: './class.component.html',
-  styleUrls: ['./class.component.scss']
+  templateUrl: './class.component.html'
 })
 export class ClassComponent implements OnInit {
   _class: Class;

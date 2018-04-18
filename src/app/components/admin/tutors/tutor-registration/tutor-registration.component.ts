@@ -6,8 +6,7 @@ import { Role, User } from '../../../../models/user';
 
 @Component({
   selector: 'app-tutor-registration',
-  templateUrl: './tutor-registration.component.html',
-  styleUrls: ['./tutor-registration.component.scss']
+  templateUrl: './tutor-registration.component.html'
 })
 export class TutorRegistrationComponent implements OnInit {
   tutor: Tutor;

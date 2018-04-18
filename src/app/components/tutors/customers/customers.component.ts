@@ -5,8 +5,7 @@ import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss']
+  templateUrl: './customers.component.html'
 })
 export class CustomersComponent implements OnInit {
   customers: Array<Customer>;

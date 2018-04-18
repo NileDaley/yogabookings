@@ -8,8 +8,7 @@ import { Skill } from '../../models/skill';
 
 @Component({
   selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
   title = 'app';

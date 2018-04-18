@@ -3,8 +3,7 @@ import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-index',
-  templateUrl: './index.component.html',
-  styleUrls: ['./index.component.scss']
+  templateUrl: './index.component.html'
 })
 export class IndexComponent {
   constructor() {}

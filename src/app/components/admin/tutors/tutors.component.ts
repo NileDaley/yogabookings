@@ -7,8 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tutors',
-  templateUrl: './tutors.component.html',
-  styleUrls: ['./tutors.component.scss']
+  templateUrl: './tutors.component.html'
 })
 export class TutorsComponent implements OnInit {
   tutors: Array<Tutor>;
