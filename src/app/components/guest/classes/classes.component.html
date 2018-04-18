@@ -1,0 +1,304 @@
+<app-loading *ngIf="loading; else content"></app-loading>
+<ng-template #content>
+  <div class="section"
+       (keydown.esc)="modalActive = false">
+    <div class="container">
+      <div class="columns">
+
+        <!-- Filters -->
+        <div class="column is-offset-1 is-narrow">
+          <div class="box">
+
+            <p id="filterHeader"
+               class="subtitle">Filter Classes</p>
+
+            <div id="dateFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="dateSelect">Date</label>
+                <div class="control">
+                  <input type="date"
+                         class="input"
+                         id="dateSelect"
+                         [min]="minimumDate"
+                         (change)="filterClasses('selectedDate', dateSelect.value)"
+                         #dateSelect>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div id="classFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="class">Class</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="class"
+                            (change)="filterClasses('selectedClassType', classTypeSelect.value)"
+                            #classTypeSelect>
+                      <option value="">All Classes</option>
+                      <option *ngFor="let class of classTypes"
+                              value="{{class.id}}">{{class.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div id="locationFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="location">Location</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="location"
+                            (change)="filterClasses('selectedLocation', locationSelect.value)"
+                            #locationSelect>
+                      <option value="">All Locations</option>
+                      <option *ngFor="let location of locations"
+                              value="{{location._id}}">{{location.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div id="tutorFilter">
+              <div class="field">
+                <label class="has-text-weight-semibold"
+                       for="tutor">Tutor</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="tutor"
+                            (change)="filterClasses('selectedTutor', tutorSelect.value)"
+                            #tutorSelect>
+                      <option value="">All Tutors</option>
+                      <option *ngFor="let tutor of tutors"
+                              value="{{tutor._id}}">{{tutor.forename}} {{tutor.surname}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Classes -->
+        <div class="column is-offset-1">
+          <div class="box">
+            <h1 class="subtitle is-size-4">Classes</h1>
+            <app-messages [messages]="messages"
+                          class='has-text-centered'></app-messages>
+            <div *ngIf="!isLoggedIn"
+                 class="notification is-warning has-text-centered">
+              <span class="has-text-weight-semibold">Please note:</span> Customers must be logged in to book a class
+            </div>
+            <div class="box"
+                 *ngFor="let c of filteredClasses">
+
+              <div class="columns">
+                <div class="column">
+                  <p class="has-text-weight-semibold is-capitalized">
+                    <span class="icon"></span>
+                    {{c.type.name}} -
+                    <span class="icon">
+                      <i class="fas fa-user"></i>
+                    </span>
+                    {{c.tutor.forename}} {{c.tutor.surname}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-calendar-alt"></i>
+                    </span> {{c.date}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span> {{c.startTime}} - {{c.endTime}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-building"></i>
+                    </span> {{c.location.name}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-users"></i>
+                    </span> {{c.attendees.length}} / {{c.classSize}}
+                  </p>
+                  <div *ngIf="c.classGroup"
+                       class="tags has-addons"
+                       style="margin-top: 5px; margin-left: 32px;">
+                    <span class="tag is-dark">Repeats every</span>
+                    <span class="tag is-info is-capitalized">{{c.classGroup.interval}}</span>
+                  </div>
+                </div>
+                <div class="is-divider-vertical is-hidden-mobile"
+                     style="padding: 1em;"></div>
+                <div class="column is-3 center-vertical">
+                  <div style="width: 100%">
+                    <button class="button is-fullwidth"
+                            [routerLink]="getClassLink(c._id)"
+                            style="margin-bottom: 1em;">More details</button>
+                    <button (click)="showBookingModal(c)"
+                            class="button is-link is-fullwidth"
+                            [disabled]="!isLoggedIn || this.role !== 0"
+                            [title]="isLoggedIn ? '' : 'You must be logged in to book a class'">
+                      £{{c.price}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf="filteredClasses.length === 0"
+                 class="has-text-centered">
+              <p class="has-text-centered has-text-weight-semibold">No classes avaliable</p>
+              <br>
+              <a (click)="resetFilters()"
+                 class="button is-link is-outlined">Reset Filters</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacing helper -->
+        <div class="column is-1"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div class="modal"
+       *ngIf="modalActive"
+       [class.is-active]="modalActive">
+    <div class="modal-background"
+         (click)="closeModal()"></div>
+    <div class="modal-content">
+      <div class="box">
+        <div class="columns">
+          <div class="column is-10 is-offset-1">
+
+            <p class="subtitle has-text-centered">{{selectedClass.type.name}}</p>
+
+            <div class="tabs is-centered">
+              <ul>
+                <li [class.is-active]="bookingView === 'single'">
+                  <a (click)="toggleBookingView('single')">Single</a>
+                </li>
+                <li [class.is-active]="bookingView === 'multiple'">
+                  <a (click)="toggleBookingView('multiple')">Multiple</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Single Booking View -->
+            <div *ngIf="bookingView === 'single'; else multipleBookings">
+
+              <div class="columns">
+                <!-- Single Booking - Left Column -->
+                <div class="column"
+                     id="classDetails">
+                  <p class="is-capitalized">
+                    <span class="icon">
+                      <i class="fas fa-graduation-cap"></i>
+                    </span> {{selectedClass.tutor.forename}} {{selectedClass.tutor.surname}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-calendar-alt"></i>
+                    </span> {{selectedClass.date}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span> {{selectedClass.startTime}} - {{selectedClass.endTime}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-building"></i>
+                    </span> {{selectedClass.location.name}}
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-users"></i>
+                    </span> {{selectedClass.attendees.length}} / {{selectedClass.classSize}}
+                  </p>
+
+                </div>
+
+                <div class="is-divider-vertical is-hidden-mobile"></div>
+
+                <!-- Single Booking - Right Column -->
+                <div class="column center-vertical">
+                  <div class="has-text-centered"
+                       style="width:100%">
+                    <p class="subtitle">£{{selectedClass.price}}</p>
+                    <a class="button is-fullwidth is-info"
+                       (click)="bookClasses([selectedClass])">Confirm Booking</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <ng-template #multipleBookings>
+              <div class="columns">
+                <div class="column">
+                  <div>
+                    <p class="label has-text-centered">Available Dates</p>
+                    <div class="buttons is-centered has-addons">
+                      <a class="button is-small is-success"
+                         (click)="addAllRepeatBookings()">Select All</a>
+                      <a class="button is-small is-danger"
+                         (click)="removeRepeatBookings()">Remove All</a>
+                    </div>
+                    <div *ngFor="let c of getClassesByGroup(selectedClass.classGroup)">
+                      <div class="tags has-addons"
+                           style="padding: 5px">
+                        <div class="tag"
+                             [class.is-info]="!repeatBookings.includes(c._id)"
+                             [class.is-danger]="repeatBookings.includes(c._id)">
+                          <a class="has-text-white"
+                             (click)="toggleRepeatBooking(c)">
+                            {{repeatBookings.includes(c._id) ? 'remove' : 'select'}}
+                          </a>
+                        </div>
+                        <div class="tag">{{c.date}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="is-divider-vertical is-hidden-mobile"></div>
+
+                <div class="column center-vertical">
+                  <div class="has-text-centered"
+                       style="width:100%">
+                    <p class="subtitle">£{{ selectedClass.price * repeatBookings.length}}</p>
+                    <button class="button is-fullwidth is-info"
+                            (click)="bookClasses(getRepeatClasses())"
+                            [disabled]="repeatBookings.length === 0">Confirm Booking</button>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <button (click)="closeModal()"
+            class="modal-close is-large"
+            aria-label="close"></button>
+  </div>
+</ng-template>

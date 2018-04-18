@@ -1,15 +1,16 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class DataService {
-
   baseURL = '/api';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
+  /*
+   * Customers
+   */
   getCustomers() {
     return this.http.get(`${this.baseURL}/users/customers`);
   }
@@ -23,13 +24,16 @@ export class DataService {
   }
 
   updateCustomer(id, values) {
-    return this.http.patch(`${this.baseURL}/users/customers/`, values);
+    return this.http.patch(`${this.baseURL}/users/customers/${id}`, values);
   }
 
   deleteCustomer(id) {
     return this.http.delete(`${this.baseURL}/users/customers/${id}`);
   }
 
+  /*
+   * Locations
+   */
   getLocations(): Observable<any> {
     return this.http.get(`${this.baseURL}/locations`);
   }
@@ -42,6 +46,9 @@ export class DataService {
     return this.http.patch(`${this.baseURL}/locations/${_id}`, newValues);
   }
 
+  /*
+   * Tutors
+   */
   getTutors() {
     return this.http.get(`${this.baseURL}/users/tutors/`);
   }
@@ -58,6 +65,9 @@ export class DataService {
     return this.http.post(`${this.baseURL}/users/tutors/`, values);
   }
 
+  /*
+   * Skills
+   */
   getSkills() {
     return this.http.get(`${this.baseURL}/users/tutors/skills`);
   }
@@ -74,4 +84,71 @@ export class DataService {
     return this.http.post(`${this.baseURL}/users/tutors/skills/`, skill);
   }
 
+  /*
+   * Classes
+   */
+  getClasses() {
+    return this.http.get(`${this.baseURL}/classes`);
+  }
+
+  getClass(id) {
+    return this.http.get(`${this.baseURL}/classes/${id}`);
+  }
+
+  getClassesByGroup(groupID) {
+    return this.http.get(`${this.baseURL}/classes/groups/${groupID}`);
+  }
+
+  insertClass(newClass) {
+    return this.http.post(`${this.baseURL}/classes`, newClass);
+  }
+
+  updateClass(id, newValues) {
+    return this.http.patch(`${this.baseURL}/classes/${id}`, newValues);
+  }
+
+  deleteClass(id) {
+    return this.http.delete(`${this.baseURL}/classes/${id}`);
+  }
+
+  /*
+   * Class Groups
+  */
+  deleteClassGroup(groupID) {
+    return this.http.delete(`${this.baseURL}/classes/groups/${groupID}`);
+  }
+
+  /*
+   * Class Types
+   */
+  getClassTypes() {
+    return this.http.get(`${this.baseURL}/classes/types`);
+  }
+
+  getClassType(id) {
+    return this.http.get(`${this.baseURL}/classes/types/${id}`);
+  }
+
+  insertClassType(newClassType) {
+    return this.http.post(`${this.baseURL}/classes/types`, newClassType);
+  }
+
+  updateClassType(id, newValues) {
+    return this.http.patch(`${this.baseURL}/classes/types/${id}`, newValues);
+  }
+
+  deleteClassType(id) {
+    return this.http.delete(`${this.baseURL}/classes/types/${id}`);
+  }
+
+  /*
+   * Bookings
+   */
+  insertBookings(bookings) {
+    return this.http.post(`${this.baseURL}/bookings/`, bookings);
+  }
+
+  cancelBookings(bookings) {
+    return this.http.post(`${this.baseURL}/bookings/cancel`, bookings);
+  }
 }

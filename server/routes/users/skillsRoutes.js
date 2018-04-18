@@ -1,78 +1,81 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const Response = require('../../Response');
+const { hasRole, authenticate } = require('../../middleware/authentication');
 
 const SkillSchema = require('../../schemas/Users/SkillSchema');
-
-// Error handling
-const sendError = (err, res) => {
-  response.status = 501;
-  response.data = [];
-  response.message = typeof err === 'object' ? err.message : err;
-  res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-  status: 200,
-  data: [],
-  message: null
-};
+let Skill = mongoose.model('Skill', SkillSchema);
 
 router.get('/', (req, res) => {
-  let Skill = mongoose.model('Skill', SkillSchema);
   Skill.find()
-    .then(data => {
-      response.data = data;
-      res.send(response);
+    .then(skills => {
+      if (!skills) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, skills);
+      }
     })
-});
-
-router.post('/', (req, res) => {
-  let Skill = mongoose.model('Skill', SkillSchema);
-  let {name, description} = req.body;
-  let skill = new Skill({
-    name, description
-  });
-  skill.save()
-    .then(newSkill => {
-
-      response.data = newSkill;
-      response.status = 201;
-      res.send(response);
-
-      response.status = 200;
-    }).catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 router.get('/:id', (req, res) => {
-  let Skill = mongoose.model('Skill', SkillSchema);
   Skill.findById(req.params.id)
-    .then(data => {
-      response.data = data;
-      res.send(response);
+    .then(skill => {
+      if (!skill) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, skill);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
-router.patch('/:id', (req, res) => {
+router.post('/', authenticate, hasRole(['admin']), (req, res) => {
+  let { name, description } = req.body;
 
-  let Skill = mongoose.model('Skill', SkillSchema);
-  let {_id, name, description} = req.body;
-  Skill.update({_id}, {
-    $set: {
-      name,
-      description
+  let skill = new Skill({
+    name,
+    description
+  });
+
+  skill
+    .save()
+    .then(newSkill => {
+      if (!newSkill) {
+        Response.ERROR(res, 'An error occurred whilst inserting new skill');
+      } else {
+        Response.CREATED(res, newSkill);
+      }
+    })
+    .catch(err => Response.ERROR(res, err));
+});
+
+router.patch('/:id', hasRole(['admin']), (req, res) => {
+  let { _id, name, description } = req.body;
+
+  Skill.update(
+    { _id },
+    {
+      $set: {
+        name,
+        description
+      }
     }
-  }).then(data => {
-    response.data = {
-      status: data['n'] > 0 && data['nModified'] > 0,
-      matched: data['n'],
-      modified: data['nModified']
-    };
-    res.json(response);
-  }).catch(err => sendError(err, res));
-
+  )
+    .then(updatedSkill => {
+      if (!updatedSkill) {
+        Response.ERROR(res, 'An error occurred whilst updating the skill');
+      } else {
+        const status = {
+          status: updatedSkill['n'] > 0 && updatedSkill['nModified'] > 0,
+          matched: updatedSkill['n'],
+          modified: updatedSkill['nModified']
+        };
+        Response.OK(res, status);
+      }
+    })
+    .catch(err => Response.ERROR(res, err));
 });
 
 module.exports = router;

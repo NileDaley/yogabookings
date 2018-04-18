@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {DataService} from '../../../../services/data.service';
-import {Skill} from '../../../../models/skill';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../../../services/data.service';
+import { Skill } from '../../../../models/skill';
 
 @Component({
   selector: 'app-skills',
@@ -8,28 +8,29 @@ import {Skill} from '../../../../models/skill';
   styleUrls: ['./skills.component.scss']
 })
 export class SkillsComponent implements OnInit {
-
   skills: any[];
   filteredSkills: any[];
   isAddingSkill = false;
   newSkill: Skill;
 
-  constructor(private _dataService: DataService) {
-  }
+  constructor(private _dataService: DataService) {}
 
   ngOnInit() {
     this.getSkills();
   }
 
   private getSkills() {
-    this._dataService.getSkills().subscribe(res => {
-      const data = res['data'];
-      this.skills = data.map(skill => new Skill(skill._id, skill.name, skill.description));
-      this.filteredSkills = this.skills;
-      this.newSkill = new Skill('', '', '');
-    }, () => {
-
-    });
+    this._dataService.getSkills().subscribe(
+      res => {
+        const data = res['data'];
+        this.skills = data.map(
+          skill => new Skill(skill._id, skill.name, skill.description)
+        );
+        this.filteredSkills = this.skills;
+        this.newSkill = new Skill('', '', '');
+      },
+      () => {}
+    );
   }
 
   filter(criteria: String) {
@@ -38,7 +39,10 @@ export class SkillsComponent implements OnInit {
       this.filteredSkills = this.skills;
     } else {
       this.filteredSkills = this.skills.filter(skill => {
-        return skill.name.toLowerCase().includes(criteria) || skill.description.toLowerCase().includes(criteria);
+        return (
+          skill.name.toLowerCase().includes(criteria) ||
+          skill.description.toLowerCase().includes(criteria)
+        );
       });
     }
   }
@@ -49,14 +53,13 @@ export class SkillsComponent implements OnInit {
   }
 
   saveNewSkill() {
-    this._dataService.insertSkill(this.newSkill)
-      .subscribe(res => {
+    this._dataService.insertSkill(this.newSkill).subscribe(
+      res => {
         // reset the new skill, get all skills and toggle isAddingSkill
         this.getSkills();
         this.isAddingSkill = false;
-      }, err => {
-
-      });
+      },
+      err => {}
+    );
   }
-
 }

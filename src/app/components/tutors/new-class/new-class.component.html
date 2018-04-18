@@ -1,0 +1,276 @@
+<div class="columns">
+  <div class="column is-10 is-offset-1">
+    <div class="box">
+
+
+      <h1 class="subtitle is-size-3 has-text-centered">New Class</h1>
+
+      <app-messages [messages]="messages"></app-messages>
+      <app-loading *ngIf="loading; else content"></app-loading>
+
+      <ng-template #content>
+
+        <div class="columns">
+
+          <div class="column is-8 is-offset-2">
+
+            <div class="is-divider"
+                 data-content="WHAT"></div>
+
+            <div class="columns">
+              <div class="column is-6">
+                <div class="field">
+                  <label for="classType"
+                         class="label">Class Type</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <span class="fas fa-list"></span>
+                    </span>
+                    <div class="select is-fullwidth">
+                      <select (change)="setValue('classType', ct.value)"
+                              #ct
+                              id="classType">
+                        <option value=""
+                                selected>Select a type</option>
+                        <option *ngFor="let type of classTypes"
+                                [value]="type.id">{{type.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="field">
+                  <label for="price"
+                         class="label">Price</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="fas fa-pound-sign"></i>
+                    </span>
+                    <input (change)="setValue('price', price.value)"
+                           id="price"
+                           type="number"
+                           min="0"
+                           class="input"
+                           #price>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="is-divider"
+                 data-content="WHEN"></div>
+
+            <div class="columns">
+              <div class="column is-6">
+                <div class="field">
+                  <label for="startDate"
+                         class="label">Date</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <input class="input"
+                           type="date"
+                           id="startDate"
+                           [value]="_class.date"
+                           [min]="earliestClassDate()"
+                           (change)="setValue('date', date.value )"
+                           pattern="\d{4}-\d{2}-\d{2}"
+                           placeholder="yyyy-mm-dd"
+                           #date>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="field">
+                  <label for="repeatClass"
+                         class="label">Repeating Class</label>
+                  <div class="control"
+                       id="repeatClass">
+                    <div class="buttons has-addons">
+                      <span class="button"
+                            (click)="_class.repeating = true"
+                            [ngClass]="{'is-selected is-success': _class.repeating }"
+                            style="width: 50%;">Yes</span>
+                      <span class="button is-danger is-selected"
+                            (click)="_class.repeating = false"
+                            [ngClass]="{'is-selected is-danger': !_class.repeating }"
+                            style="width: 50%;">No</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns">
+              <div class="column is-6">
+                <div class="field">
+                  <label for="startTime"
+                         class="label">Start Time</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span>
+                    <input (change)="setValue('startTime', startTime.value)"
+                           type="time"
+                           id="startTime"
+                           class="input"
+                           [value]="_class.startTime"
+                           pattern="[0-9]{2}:[0-9]{2}"
+                           step="300"
+                           placeholder="hh:mm"
+                           #startTime>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="field">
+                  <label for="endTime"
+                         class="label">End Time</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span>
+                    <input (change)="setValue('endTime', endTime.value)"
+                           type="time"
+                           id="endTime"
+                           class="input"
+                           [value]="_class.endTime"
+                           pattern="[0-9]{2}:[0-9]{2}"
+                           step="300"
+                           placeholder="hh:mm"
+                           [min]="earliestEndTime()"
+                           #endTime>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns"
+                 *ngIf="_class.repeating">
+              <div class="column is-6">
+                <div class="field">
+                  <label for="repeatInterval"
+                         class="label">Repeat Every</label>
+                  <div class="select is-fullwidth">
+                    <select id="repeatInterval"
+                            (change)="setValue('repeatInterval', repeatInterval.value)"
+                            #repeatInterval>
+                      <option value="week">Week</option>
+                      <option value="fortnight">Fortnight</option>
+                      <option value="month">Month</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <label for="repeatCount"
+                       class="label">For</label>
+                <div class="field has-addons">
+                  <p class="control">
+                    <input class="input"
+                           id="repeatCount"
+                           type="number"
+                           min="2"
+                           placeholder="10"
+                           (change)="setValue('repeatCount', repeatCount.value)"
+                           #repeatCount>
+                  </p>
+                  <p class="control">
+                    <a class="button is-static">
+                      {{_class.repeatInterval}}s
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="is-divider"
+                 data-content="WHERE"></div>
+
+            <div class="columns">
+              <div class="column is-6">
+                <div class="field">
+                  <label for="location"
+                         class="label">Location</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="fas fa-building"></i>
+                    </span>
+                    <div class="select is-fullwidth">
+                      <select (change)="setValue('location', location.value)"
+                              #location
+                              id="location">
+                        <option value="">Select a location</option>
+                        <option *ngFor="let loc of locations"
+                                [value]="loc._id">{{loc.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-6">
+                <div class="field">
+                  <label for="venue"
+                         class="label">Venue</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="fas fa-list"></i>
+                    </span>
+                    <div class="select is-fullwidth">
+                      <select (change)="setValue('venue', venue.value)"
+                              id="venue"
+                              [disabled]="location.value === ''"
+                              #venue>
+                        <option value="">Select a venue</option>
+                        <option *ngFor="let venue of venues"
+                                [value]="venue.name">{{venue.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns">
+
+              <div class="column is-6 is-offset-6">
+                <div class="field">
+                  <label class="label"
+                         for="classSize">Class Size</label>
+                  <div class="control has-icons-left">
+                    <span class="icon">
+                      <i class="fas fa-users"></i>
+                    </span>
+                    <input (change)="setValue('classSize', classSize.value)"
+                           id="classSize"
+                           type="number"
+                           min="1"
+                           [max]="maxClassSize"
+                           class="input"
+                           [disabled]="venue.value === '' || venue.disabled"
+                           #classSize>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="columns">
+              <div class="column is-6 is-offset-3">
+                <a (click)="saveClass()"
+                   class="button is-success is-fullwidth">
+                  <span class="icon">
+                    <i class="fas fa-save"></i>
+                  </span>
+                  <span>Save Details</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </ng-template>
+
+    </div>
+  </div>
+</div>

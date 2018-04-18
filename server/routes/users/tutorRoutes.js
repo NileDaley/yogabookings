@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const Response = require('../../Response');
+const { hasRole, authenticate } = require('../../middleware/authentication');
 
 const SkillsRoutes = require('./skillsRoutes');
 
@@ -8,109 +11,95 @@ const TutorSchema = require('../../schemas/Users/TutorSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
 const SkillSchema = require('../../schemas/Users/SkillSchema');
 
-// Error handling
-const sendError = (err, res) => {
-  response.status = 501;
-  response.data = [];
-  response.message = typeof err === 'object' ? err.message : err;
-  res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-  status: 200,
-  data: [],
-  message: null
-};
+let Tutor = mongoose.model('Tutor', TutorSchema);
+let User = mongoose.model('User', UserSchema);
+let Skill = mongoose.model('Skill', SkillSchema);
 
 router.use('/skills', SkillsRoutes);
 
 // Get all tutors
-router.get('/', (req, res) => {
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
-
+router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   Tutor.find()
     .populate('user skills')
-    .then(data => {
-      response.data = data;
-      res.send(response);
+    .then(tutor => {
+      if (!tutor) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, tutor);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
-router.post('/', (req, res) => {
-
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
-
+router.post('/', authenticate, hasRole(['admin']), (req, res) => {
   let values = req.body;
-  let {forename, surname, gender, phone} = values;
-
-  let user = new User(values.user);
-  user.save()
+  let { forename, surname, gender, phone, user } = values;
+  let { email, password, role } = user;
+  const encryptedPassword = bcrypt.hashSync(password, 10);
+  User.create({ email, password: encryptedPassword, role })
     .then(newUser => {
+      if (!newUser) {
+        Response.ERROR(res, 'An error occurred whilst inserting the new user');
+      } else {
+        const userID = mongoose.Types.ObjectId(newUser._id);
+        const skills = values.skills.map(skill =>
+          mongoose.Types.ObjectId(skill._id)
+        );
 
-      const userID = mongoose.Types.ObjectId(newUser._id);
-      const skills = values.skills.map(skill => mongoose.Types.ObjectId(skill._id));
+        let tutor = new Tutor({
+          forename,
+          surname,
+          gender,
+          phone,
+          skills,
+          user: userID
+        });
 
-      let tutor = new Tutor({
-        forename,
-        surname,
-        gender,
-        phone,
-        skills,
-        user: userID
-      });
-
-      tutor.save()
-        .then(newTutor => {
-
-          response.data = newTutor;
-          response.status = 201;
-          res.send(response);
-
-          // Reset the response code, otherwise future responses would be 201
-          response.status = 200;
-        })
-        .catch(err => {
-          sendError(err, res);
-        })
-
+        tutor
+          .save()
+          .then(newTutor => {
+            if (!newTutor) {
+              Response.ERROR(
+                res,
+                'An error occurred whilst inserting the new tutor'
+              );
+            } else {
+              Response.CREATED(res, newTutor);
+            }
+          })
+          .catch(err => {
+            Response.ERROR(res, err);
+          });
+      }
     })
-    .catch(err => sendError(err, res));
-
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Get single tutor
 router.get('/:id', (req, res) => {
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
   Tutor.findById(req.params.id)
     .populate('user skills')
-    .then(data => {
-      response.data = data;
-      res.send(response);
+    .then(tutors => {
+      if (!tutors) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, tutors);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Update tutor
-router.patch('/:id', (req, res) => {
-  let Tutor = mongoose.model('Tutor', TutorSchema);
-  let User = mongoose.model('User', UserSchema);
-  let Skill = mongoose.model('Skill', SkillSchema);
-
+// TODO: isSelf
+router.patch('/:id', authenticate, hasRole(['admin']), (req, res) => {
   let newValues = req.body;
   let skills = newValues.skills.map(s => mongoose.Types.ObjectId(s._id));
   let user = mongoose.Types.ObjectId(newValues.user._id);
 
-  let {forename, surname, phone, gender} = newValues;
+  let { forename, surname, phone, gender } = newValues;
 
-  Tutor.update({_id: req.params.id},
+  Tutor.update(
+    { _id: req.params.id },
     {
       $set: {
         skills,
@@ -120,16 +109,21 @@ router.patch('/:id', (req, res) => {
         phone,
         gender
       }
+    }
+  )
+    .then(updatedTutor => {
+      if (!updatedTutor) {
+        Response.ERROR(res, 'An error occurred whilst updating the tutor');
+      } else {
+        const status = {
+          status: updatedTutor['n'] > 0 && updatedTutor['nModified'] > 0,
+          matched: updatedTutor['n'],
+          modified: updatedTutor['nModified']
+        };
+        Response.OK(res, status);
+      }
     })
-    .then(data => {
-      response.data = {
-        status: data['n'] > 0 && data['nModified'] > 0,
-        matched: data['n'],
-        modified: data['nModified']
-      };
-      res.json(response);
-    }).catch(err => sendError(err, res));
-
+    .catch(err => Response.ERROR(res, err));
 });
 
 module.exports = router;

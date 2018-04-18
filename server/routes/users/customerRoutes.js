@@ -1,149 +1,142 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const Response = require('../../Response');
+const { hasRole, authenticate } = require('../../middleware/authentication');
 
 const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
 
-// Error handling
-const sendError = (err, res) => {
-  response.status = 501;
-  response.data = [];
-  response.message = typeof err === 'object' ? err.message : err;
-  res.status(501).json(response);
-};
-
-// Response handling
-let response = {
-  status: 200,
-  data: [],
-  message: null
-};
+let Customer = mongoose.model('Customer', CustomerSchema);
+let User = mongoose.model('User', UserSchema);
 
 // Get all customers
-router.get('/', (req, res) => {
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
+router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   Customer.find()
     .populate('user')
-    .then(users => {
-      response.data = users;
-      res.send(response);
+    .then(customers => {
+      if (!customers) {
+        Response.NOT_FOUND(res);
+      } else {
+        Response.OK(res, customers);
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Insert customer
 router.post('/', (req, res) => {
-
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
-
-  let {forename, surname, gender, phone} = req.body;
-  let userValues = req.body.user;
-
-  let user = new User(userValues);
-  user.save()
+  let { forename, surname, gender, phone, user } = req.body;
+  let { email, password, role } = user;
+  const encryptedPassword = bcrypt.hashSync(password, 10);
+  User.create({
+    email,
+    password: encryptedPassword,
+    role
+  })
     .then(newUser => {
+      if (!newUser) {
+        Response.ERROR(
+          res,
+          'An error occurred whilst inserting the user record'
+        );
+      } else {
+        let customer = new Customer({
+          forename,
+          surname,
+          gender,
+          phone,
+          user: mongoose.Types.ObjectId(newUser._id)
+        });
 
-      let customer = new Customer({
-        forename,
-        surname,
-        gender,
-        phone,
-        user: mongoose.Types.ObjectId(newUser._id)
-      });
-
-      customer.save()
-        .then(newCustomer => {
-
-          response.data = newCustomer;
-          response.status = 201;
-          res.json(response);
-
-          response.status = 200;
-        })
-        .catch(err => sendError(err, res));
-
+        customer
+          .save()
+          .then(newCustomer => {
+            if (!newCustomer) {
+              Response.ERROR(
+                res,
+                'An error occurred whilst inserting the customer record'
+              );
+            } else {
+              Response.CREATED(res, newCustomer);
+            }
+          })
+          .catch(err => Response.ERROR(res, err));
+      }
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Get single customer
-router.get('/:id', (req, res) => {
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
-
+// TODO: isSelf
+router.get('/:id', authenticate, hasRole(['admin']), (req, res) => {
   Customer.findById(req.params.id)
     .populate('user')
     .then(user => {
-      response.data = user;
-      res.send(response);
+      Response.OK(res, user);
     })
-    .catch(err => sendError(err, res));
+    .catch(err => Response.ERROR(res, err));
 });
 
-// Update customer
-router.patch('/:id', (req, res) => {
-
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
-
-  let {forename, surname, phone, gender, user} = req.body;
-
-  User.update(
-    {_id: user._id},
+router.patch('/:id', authenticate, hasRole(['admin'], true), (req, res) => {
+  let { forename, surname, phone, gender, user } = req.body;
+  User.findByIdAndUpdate(
+    user._id,
     {
       $set: {
         email: user.email,
-        password: user.password
+        password: user.password,
+        role: user.role
       }
-    }
-  ).then(updatedUser => {
-
-    Customer.update({_id: req.params.id},
-      {
-        $set: {
-          forename,
-          surname,
-          phone,
-          gender,
-          user: mongoose.Types.ObjectId(updatedUser._id)
-        }
-      })
-      .then(updatedCustomer => {
-        response.data = updatedCustomer;
-        res.json(response);
-      })
-      .catch(err => sendError(err, res));
-
-  }).catch(err => sendError(err, res));
-
-
+    },
+    { new: true }
+  )
+    .then(updatedUser => {
+      if (!updatedUser) {
+        Response.ERROR(res, 'An error occurred whilst updating the user');
+      } else {
+        Customer.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: {
+              forename,
+              surname,
+              phone,
+              gender,
+              user: mongoose.Types.ObjectId(updatedUser._id)
+            }
+          },
+          { new: true }
+        )
+          .then(updatedCustomer => {
+            Response.OK(res, updatedCustomer);
+          })
+          .catch(err => Response.ERROR(res, err));
+      }
+    })
+    .catch(err => Response.ERROR(res, err));
 });
 
 // Delete customer
-router.delete('/:id', (req, res) => {
-
-  let Customer = mongoose.model('Customer', CustomerSchema);
-  let User = mongoose.model('User', UserSchema);
-
-  Customer.findById(req.params.id)
-    .then(cust => {
-
+router.delete('/:id', authenticate, hasRole(['admin']), (req, res) => {
+  Customer.findById(req.params.id).then(cust => {
+    if (!cust) {
+      Response.ERROR(res, 'Could not retrieve the customer to be deleted');
+    } else {
       let userID = cust.user;
 
-      User.remove({_id: userID})
+      User.remove({ _id: userID })
         .then(() => {
-          Customer.remove({_id: req.params.id})
+          Customer.remove({ _id: req.params.id })
             .then(() => {
-              res.send(response);
+              Response.OK(res);
             })
-            .catch(err => sendError(err, res));
+            .catch(err => Response.ERROR(res, err));
         })
-        .catch(err => sendError(err, res));
-    });
-
+        .catch(err => Response.ERROR(res, err));
+    }
+  });
 });
 
 module.exports = router;

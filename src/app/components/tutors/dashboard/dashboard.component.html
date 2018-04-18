@@ -1,0 +1,31 @@
+<div class="section">
+  <div class="columns">
+    <div id="tutor-navigation" class="column is-narrow is-offset-1 is-hidden-touch">
+      <aside class="menu">
+        <ng-container *ngFor="let item of dashboardItems">
+          <p class="menu-label">
+            {{item.name}}
+          </p>
+          <ul class="menu-list">
+            <li *ngFor="let link of item.links">
+              <a [routerLink]=link.url routerLinkActive="has-text-info" [routerLinkActiveOptions]="{'exact': true}">
+                <span class="icon">
+                  <i class="{{link.icon.style}} fa-{{link.icon.code}}"></i>
+                </span>
+                {{link.text}}
+              </a>
+            </li>
+          </ul>
+        </ng-container>
+
+      </aside>
+
+    </div>
+    <div class="column">
+      <div class="section">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+
+</div>

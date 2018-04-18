@@ -8,28 +8,59 @@ import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.
 import { AdminRoutingModule } from 'app/routing/admin-routing.module';
 import { StatusComponent } from 'app/components/status/status.component';
 import { LocationsComponent } from 'app/components/guest/locations/locations.component';
+import { TutorRoutingModule } from './tutor-routing.module';
+import { ForbiddenComponent } from '../components/forbidden/forbidden.component';
+import { ClassesComponent } from '../components/guest/classes/classes.component';
+import { CustomerRoutingModule } from './customer-routing.module';
+import { ClassComponent } from '../components/guest/classes/class/class.component';
+import { RegisterComponent } from '../components/guest/register/register.component';
 
 const appRoutes: Routes = [
   {
-    path: '', component: IndexComponent
+    path: '',
+    component: IndexComponent
   },
   {
-    path: 'login', component: LoginComponent
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path: 'locations', component: LocationsComponent
+    path: 'register',
+    component: RegisterComponent
   },
   {
-    path: 'status', component: StatusComponent
+    path: 'classes/:id',
+    component: ClassComponent
   },
   {
-    path: '**', component: PagenotfoundComponent
+    path: 'classes',
+    component: ClassesComponent
+  },
+  {
+    path: 'locations',
+    component: LocationsComponent
+  },
+  {
+    path: 'status',
+    component: StatusComponent
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent
+  },
+  {
+    path: '**',
+    component: PagenotfoundComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes), AdminRoutingModule],
+  imports: [
+    RouterModule.forRoot(appRoutes),
+    AdminRoutingModule,
+    TutorRoutingModule,
+    CustomerRoutingModule
+  ],
   exports: [RouterModule]
 })
-
-export class AppRoutingModule { }
+export class AppRoutingModule {}
