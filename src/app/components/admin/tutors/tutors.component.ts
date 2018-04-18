@@ -19,8 +19,9 @@ export class TutorsComponent implements OnInit {
   }
 
   private getTutors() {
-    this._dataService.getTutors().subscribe(
-      res => {
+    this._dataService
+      .getTutors()
+      .then(res => {
         const data: Array<any> = res['data'];
         this.tutors = data.map(t => {
           return new Tutor(
@@ -33,8 +34,7 @@ export class TutorsComponent implements OnInit {
             t.skills
           );
         });
-      },
-      error => console.log(error)
-    );
+      })
+      .catch(error => console.error(error));
   }
 }

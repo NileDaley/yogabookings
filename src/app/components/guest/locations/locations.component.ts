@@ -12,7 +12,7 @@ export class LocationsComponent implements OnInit {
   constructor(private _dataService: DataService) {}
 
   ngOnInit() {
-    this._dataService.getLocations().subscribe(res => {
+    this._dataService.getLocations().then(res => {
       this.locations = res['data'];
       this.loading = false;
     });

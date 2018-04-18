@@ -10,7 +10,7 @@ export class StatusComponent implements OnInit {
   constructor(private _dataService: DataService) {}
 
   ngOnInit() {
-    this._dataService.getCustomers().subscribe(res => {
+    this._dataService.getCustomers().then(res => {
       this.users = res['data'];
     });
   }

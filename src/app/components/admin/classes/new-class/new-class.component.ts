@@ -77,70 +77,58 @@ export class NewClassComponent implements OnInit {
   }
 
   private getTutors(): Promise<any> {
-    return this._dataService
-      .getTutors()
-      .toPromise()
-      .then(res => {
-        const data = res['data'];
-        this.tutors = data.map(t => {
-          return new Tutor(
-            t._id,
-            t.forename,
-            t.surname,
-            t.gender,
-            t.phone,
-            new User(t.user._id, t.user.email, null, t.user.role),
-            t.skills.map(s => new Skill(s._id, s.name, s.description))
-          );
-        });
+    return this._dataService.getTutors().then(res => {
+      const data = res['data'];
+      this.tutors = data.map(t => {
+        return new Tutor(
+          t._id,
+          t.forename,
+          t.surname,
+          t.gender,
+          t.phone,
+          new User(t.user._id, t.user.email, null, t.user.role),
+          t.skills.map(s => new Skill(s._id, s.name, s.description))
+        );
       });
+    });
   }
 
   private getLocations(): Promise<any> {
-    return this._dataService
-      .getLocations()
-      .toPromise()
-      .then(res => {
-        const data = res['data'];
-        this.locations = data.map(l => {
-          return new Location(
-            l._id,
-            l.name,
-            l.address,
-            l.email,
-            l.phone,
-            l.openHours.map(o => {
-              return new OpenHours(o.day, o.isOpen, o.open, o.close);
-            }),
-            l.venues.map(v => {
-              return new Venue(v.name, v.capacity);
-            })
-          );
-        });
+    return this._dataService.getLocations().then(res => {
+      const data = res['data'];
+      this.locations = data.map(l => {
+        return new Location(
+          l._id,
+          l.name,
+          l.address,
+          l.email,
+          l.phone,
+          l.openHours.map(o => {
+            return new OpenHours(o.day, o.isOpen, o.open, o.close);
+          }),
+          l.venues.map(v => {
+            return new Venue(v.name, v.capacity);
+          })
+        );
       });
+    });
   }
 
   private getClassTypes(): Promise<any> {
-    return this._dataService
-      .getClassTypes()
-      .toPromise()
-      .then(res => {
-        const data = res['data'];
-        this.classTypes = data.map(ct => {
-          return new ClassType(ct._id, ct.name, ct.description);
-        });
+    return this._dataService.getClassTypes().then(res => {
+      const data = res['data'];
+      this.classTypes = data.map(ct => {
+        return new ClassType(ct._id, ct.name, ct.description);
       });
+    });
   }
 
   private getAllClasses(): Promise<any> {
-    return this._dataService
-      .getClasses()
-      .toPromise()
-      .then(response => {
-        this.classes = response['data'].filter(c =>
-          moment().isBefore(`${c.date} ${c.startTime}`)
-        );
-      });
+    return this._dataService.getClasses().then(response => {
+      this.classes = response['data'].filter(c =>
+        moment().isBefore(`${c.date} ${c.startTime}`)
+      );
+    });
   }
 
   setValue(field: string, val: string) {
@@ -386,14 +374,12 @@ export class NewClassComponent implements OnInit {
 
   saveClass() {
     if (this.formIsValid()) {
-      this._dataService.insertClass(this._class).subscribe(
-        res => {
+      this._dataService
+        .insertClass(this._class)
+        .then(res => {
           this.router.navigate(['/admin/classes']);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+        })
+        .catch(error => console.error(error));
     }
   }
 }

@@ -29,7 +29,6 @@ export class NavbarComponent {
         if (this.isLoggedIn === true && this.identity === null) {
           this.authService
             .getIdentity()
-            .toPromise()
             .then(response => {
               const data = response['data'];
               switch (data.user.role) {

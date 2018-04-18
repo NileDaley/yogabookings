@@ -56,8 +56,9 @@ export class ClassesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.authService.getIdentity().subscribe(
-      response => {
+    this.authService
+      .getIdentity()
+      .then(response => {
         const t = response['data'];
         this.tutor = new Tutor(
           t._id,
@@ -68,15 +69,15 @@ export class ClassesComponent implements OnInit {
           t.user,
           t.skills
         );
-      },
-      error => console.log(error)
-    );
+      })
+      .catch(error => console.error(error));
     this.getClasses();
   }
 
   private getClasses() {
-    this._dataService.getClasses().subscribe(
-      res => {
+    this._dataService
+      .getClasses()
+      .then(res => {
         const data = res['data'];
         this.classes = data
           // .filter(c => {
@@ -87,11 +88,8 @@ export class ClassesComponent implements OnInit {
           });
         this.initCalendar();
         this.loading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   private initCalendar() {

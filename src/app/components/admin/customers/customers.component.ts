@@ -13,7 +13,8 @@ export class CustomersComponent implements OnInit {
   ngOnInit() {
     this._dataService
       .getCustomers()
-      .subscribe(res => (this.customers = res['data']));
+      .then(res => (this.customers = res['data']))
+      .catch(error => console.error(error));
   }
 
   filterCustomers(criteria) {}

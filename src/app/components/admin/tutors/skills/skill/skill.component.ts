@@ -24,24 +24,24 @@ export class SkillComponent implements OnInit {
   }
 
   private getSkill(id) {
-    this._dataService.getSkill(id).subscribe(
-      res => {
+    this._dataService
+      .getSkill(id)
+      .then(res => {
         const data = res['data'];
         this.skill = new Skill(data._id, data.name, data.description);
         this.loading = false;
-      },
-      err => {
+      })
+      .catch(err => {
         this.messages.push({
           message:
             'An error occured whilst retrieving the skill from the database',
           type: 'error'
         });
-      }
-    );
+      });
   }
 
   saveSkill() {
-    this._dataService.updateSkill(this.skill._id, this.skill).subscribe(
+    this._dataService.updateSkill(this.skill._id, this.skill).then(
       res => {
         let type, message;
 

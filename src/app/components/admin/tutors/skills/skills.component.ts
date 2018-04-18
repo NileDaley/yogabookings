@@ -20,17 +20,14 @@ export class SkillsComponent implements OnInit {
   }
 
   private getSkills() {
-    this._dataService.getSkills().subscribe(
-      res => {
-        const data = res['data'];
-        this.skills = data.map(
-          skill => new Skill(skill._id, skill.name, skill.description)
-        );
-        this.filteredSkills = this.skills;
-        this.newSkill = new Skill('', '', '');
-      },
-      () => {}
-    );
+    this._dataService.getSkills().then(res => {
+      const data = res['data'];
+      this.skills = data.map(
+        skill => new Skill(skill._id, skill.name, skill.description)
+      );
+      this.filteredSkills = this.skills;
+      this.newSkill = new Skill('', '', '');
+    });
   }
 
   filter(criteria: String) {
@@ -53,13 +50,10 @@ export class SkillsComponent implements OnInit {
   }
 
   saveNewSkill() {
-    this._dataService.insertSkill(this.newSkill).subscribe(
-      res => {
-        // reset the new skill, get all skills and toggle isAddingSkill
-        this.getSkills();
-        this.isAddingSkill = false;
-      },
-      err => {}
-    );
+    this._dataService.insertSkill(this.newSkill).then(res => {
+      // reset the new skill, get all skills and toggle isAddingSkill
+      this.getSkills();
+      this.isAddingSkill = false;
+    });
   }
 }

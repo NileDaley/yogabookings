@@ -34,7 +34,6 @@ export class CustomerProfileComponent implements OnInit {
   getCustomer(): Promise<any> {
     return this._authService
       .getIdentity()
-      .toPromise()
       .then(response => {
         const data = response['data'];
         this.customer = new Customer(
@@ -50,17 +49,17 @@ export class CustomerProfileComponent implements OnInit {
   }
 
   getClasses(): void {
-    this._dataService.getClasses().subscribe(
-      response => {
+    this._dataService
+      .getClasses()
+      .then(response => {
         const classes = response['data'];
         this.allClasses = classes.filter(c =>
           c.attendees.map(a => a._id).includes(this.customer._id)
         );
         this.filterUpcomingClasses();
         this.loading = false;
-      },
-      error => console.error(error)
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   toggleActiveView(): void {
@@ -90,12 +89,10 @@ export class CustomerProfileComponent implements OnInit {
   saveChanges(): void {
     this._dataService
       .updateCustomer(this.customer._id, this.customer)
-      .subscribe(
-        response => {
-          this.isEditingProfile = false;
-        },
-        error => console.error(error)
-      );
+      .then(response => {
+        this.isEditingProfile = false;
+      })
+      .catch(error => console.error(error));
   }
 
   cancelBookings(bookings): void {
@@ -104,8 +101,9 @@ export class CustomerProfileComponent implements OnInit {
       classes: bookings
     };
     console.log(payload);
-    this._dataService.cancelBookings(payload).subscribe(
-      response => {
+    this._dataService
+      .cancelBookings(payload)
+      .then(response => {
         this.getClasses();
         const message = {
           message: 'Class successfully deleted',
@@ -115,14 +113,13 @@ export class CustomerProfileComponent implements OnInit {
         setTimeout(() => {
           this.messages.splice(this.messages.indexOf(message), 1);
         }, 2000);
-      },
-      error => {
+      })
+      .catch(error => {
         const message = {
           message: 'An error occured whilst trying to delete a class',
           type: 'error'
         };
         this.messages.push(message);
-      }
-    );
+      });
   }
 }

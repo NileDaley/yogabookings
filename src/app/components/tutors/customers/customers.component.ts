@@ -20,7 +20,6 @@ export class CustomersComponent implements OnInit {
   private getCustomers() {
     this._dataService
       .getCustomers()
-      .toPromise()
       .then(response => {
         const customers = response['data'];
         this.filteredCustomers = this.customers = customers.map(c => {

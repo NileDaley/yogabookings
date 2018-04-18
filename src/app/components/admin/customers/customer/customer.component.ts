@@ -26,8 +26,9 @@ export class CustomerComponent implements OnInit {
   }
 
   getCustomer(id) {
-    this._dataService.getCustomer(id).subscribe(
-      res => {
+    this._dataService
+      .getCustomer(id)
+      .then(res => {
         console.log(res);
         const data = res['data'];
         this.customer = new Customer(
@@ -44,10 +45,7 @@ export class CustomerComponent implements OnInit {
           )
         );
         this.loading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      })
+      .catch(error => console.error(error));
   }
 }

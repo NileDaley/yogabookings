@@ -18,15 +18,13 @@ export class CustomerRegistrationComponent implements OnInit {
   }
 
   insertCustomer() {
-    this._dataService.insertCustomer(this.customer).subscribe(
-      res => {
+    this._dataService
+      .insertCustomer(this.customer)
+      .then(res => {
         console.log(res['data']);
         this.router.navigate(['/admin/customers']);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   discardEdit() {

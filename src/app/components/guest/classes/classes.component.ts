@@ -73,7 +73,6 @@ export class ClassesComponent implements OnInit {
   private getClasses(): Promise<any> {
     return this.dataService
       .getClasses()
-      .toPromise()
       .then(response => {
         const classes = response['data'];
         this.filteredClasses = this.classes = classes
@@ -111,8 +110,9 @@ export class ClassesComponent implements OnInit {
   }
 
   private setCustomer(): void {
-    this.authService.getIdentity().subscribe(
-      response => {
+    this.authService
+      .getIdentity()
+      .then(response => {
         const cust = response['data'];
         this.customer = new Customer(
           cust._id,
@@ -125,9 +125,8 @@ export class ClassesComponent implements OnInit {
         this.classes = this.filteredClasses = this.filteredClasses.filter(c => {
           return !c.attendees.map(a => a._id).includes(this.customer._id);
         });
-      },
-      error => console.log(error)
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   private getUniques(source, element, identifier): Array<any> {
@@ -233,47 +232,40 @@ export class ClassesComponent implements OnInit {
 
   bookClasses(classes): void {
     this.dataService
-      .insertBookings({
-        classes,
-        customer: this.customer
-      })
-      .subscribe(
-        response => {
-          const data = response['data'];
-          if (data.length > 0) {
-            this.messages.push({
-              message: 'Congratulations, your booking has been confirmed!',
-              type: 'success'
-            });
-            this.modalActive = false;
-            this.selectedClass = null;
-            this.repeatBookings = [];
+      .insertBookings({ classes, customer: this.customer })
+      .then(response => {
+        const data = response['data'];
+        if (data.length > 0) {
+          this.messages.push({
+            message: 'Congratulations, your booking has been confirmed!',
+            type: 'success'
+          });
+          this.modalActive = false;
+          this.selectedClass = null;
+          this.repeatBookings = [];
 
-            /* Filter the classes to remove ones the customer just booked*/
-            data.forEach(c => {
-              const index = this.classes
-                .map(_class => _class._id)
-                .indexOf(c._id);
-              this.classes.splice(index, 1);
-            });
+          /* Filter the classes to remove ones the customer just booked*/
+          data.forEach(c => {
+            const index = this.classes.map(_class => _class._id).indexOf(c._id);
+            this.classes.splice(index, 1);
+          });
 
-            this.resetFilters();
-          } else {
-            this.messages.push({
-              message:
-                'A problem occurred whilst making your booking, please try again.',
-              type: 'error'
-            });
-          }
-        },
-        error => {
+          this.resetFilters();
+        } else {
           this.messages.push({
             message:
               'A problem occurred whilst making your booking, please try again.',
             type: 'error'
           });
         }
-      );
+      })
+      .catch(error => {
+        this.messages.push({
+          message:
+            'A problem occurred whilst making your booking, please try again.',
+          type: 'error'
+        });
+      });
   }
 
   getClassLink(class_id) {

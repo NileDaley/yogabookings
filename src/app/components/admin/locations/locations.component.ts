@@ -21,7 +21,7 @@ export class LocationsComponent implements OnInit {
   }
 
   private getLocations(): void {
-    this._dataService.getLocations().subscribe(res => {
+    this._dataService.getLocations().then(res => {
       const data: Array<any> = res['data'];
       this.locations = data.map(
         l =>
