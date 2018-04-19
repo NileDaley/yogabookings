@@ -6,7 +6,6 @@ import { LoginComponent } from 'app/components/login/login.component';
 
 import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.component';
 import { AdminRoutingModule } from 'app/routing/admin-routing.module';
-import { StatusComponent } from 'app/components/status/status.component';
 import { LocationsComponent } from 'app/components/guest/locations/locations.component';
 import { TutorRoutingModule } from './tutor-routing.module';
 import { ForbiddenComponent } from '../components/forbidden/forbidden.component';
@@ -39,10 +38,6 @@ const appRoutes: Routes = [
   {
     path: 'locations',
     component: LocationsComponent
-  },
-  {
-    path: 'status',
-    component: StatusComponent
   },
   {
     path: 'forbidden',

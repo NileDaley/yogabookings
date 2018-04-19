@@ -58,6 +58,7 @@
         <div class="navbar-dropdown">
           <a routerLink="/tutor/classes"
              routerLinkActive="has-text-info"
+             [routerLinkActiveOptions]="{exact: true}"
              class="navbar-item">
             <span class="icon">
               <i class="fas fa-calendar-alt"></i>
@@ -66,6 +67,7 @@
           </a>
           <a routerLink="/tutor/classes/new"
              routerLinkActive="has-text-info"
+             [routerLinkActiveOptions]="{exact: true}"
              class="navbar-item">
             <span class="icon">
               <i class="fas fa-calendar-plus"></i>
@@ -79,14 +81,6 @@
               <i class="fas fa-users"></i>
             </span>
             <span>Customers</span>
-          </a>
-          <a routerLink="/tutor/reports"
-             routerLinkActive="has-text-info"
-             class="navbar-item">
-            <span class="icon">
-              <i class="fas fa-chart-line"></i>
-            </span>
-            <span>Reports</span>
           </a>
         </div>
       </div>
@@ -125,13 +119,6 @@
             <span class="icon">
               <i class="fa fa-building"></i>
             </span> Locations</a>
-          <hr class="navbar-divider">
-          <a routerLink="/status"
-             routerLinkActive="has-text-info"
-             class="navbar-item">
-            <span class="icon">
-              <i class="fas fa-tachometer-alt"></i>
-            </span> System Status</a>
         </div>
       </div>
 

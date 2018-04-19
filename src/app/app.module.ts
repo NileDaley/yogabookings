@@ -14,7 +14,6 @@ import { NavbarComponent } from 'app/components/navbar/navbar.component';
 import { IndexComponent } from 'app/components/index/index.component';
 import { LoginComponent } from 'app/components/login/login.component';
 import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.component';
-import { StatusComponent } from './components/status/status.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { MessagesComponent } from './components/shared/messages/messages.component';
 
@@ -71,7 +70,6 @@ import { CustomersComponent } from './components/tutors/customers/customers.comp
     AdminTutors,
     AdminTutorSkills,
     AdminTutorSkill,
-    StatusComponent,
     GuestLocations,
     AdminSingleTutor,
     AdminTutorRegistration,
