@@ -29,8 +29,9 @@ export class LocationComponent implements OnInit {
   private getLocation(): void {
     const id: string = this.route.snapshot.paramMap.get('id');
 
-    this._dataService.getLocation(id).subscribe(
-      res => {
+    this._dataService
+      .getLocation(id)
+      .then(res => {
         const data = res['data'];
 
         this.location = new Location(
@@ -46,16 +47,15 @@ export class LocationComponent implements OnInit {
         );
 
         this.loading = false;
-      },
-      err => {
+      })
+      .catch(err => {
         this.messages.push({
           message:
             'There was an error retrieving this location from the database',
           type: 'error'
         });
         this.loading = false;
-      }
-    );
+      });
   }
 
   toggleEdit(): void {
@@ -77,30 +77,28 @@ export class LocationComponent implements OnInit {
       'venues'
     ]);
 
-    this._dataService
-      .updateLocation(this.location._id, newValues)
-      .subscribe(res => {
-        let message, type;
+    this._dataService.updateLocation(this.location._id, newValues).then(res => {
+      let message, type;
 
-        if (res['data']['status'] === false) {
-          if (res['data']['matched'] === 0) {
-            message = `${
-              newValues.name
-            } could not be found in the database, please refresh the page and try again.`;
-            type = 'error';
-          } else if (res['data']['modified'] === 0) {
-            message = `None of the details for ${newValues.name} were changed`;
-            type = 'warning';
-          }
-        } else {
-          this.getLocation();
-          message = `${newValues.name} was updated successfully`;
-          type = 'success';
+      if (res['data']['status'] === false) {
+        if (res['data']['matched'] === 0) {
+          message = `${
+            newValues.name
+          } could not be found in the database, please refresh the page and try again.`;
+          type = 'error';
+        } else if (res['data']['modified'] === 0) {
+          message = `None of the details for ${newValues.name} were changed`;
+          type = 'warning';
         }
+      } else {
+        this.getLocation();
+        message = `${newValues.name} was updated successfully`;
+        type = 'success';
+      }
 
-        this.toggleEdit();
-        this.messages.push({ message: message, type: type });
-      });
+      this.toggleEdit();
+      this.messages.push({ message: message, type: type });
+    });
   }
 
   // Used in the template to resolve bug with editing address lines

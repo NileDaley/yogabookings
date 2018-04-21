@@ -1,0 +1,112 @@
+<div class="box">
+  <app-loading *ngIf="loading; else content"></app-loading>
+  <ng-template #content>
+    <h1 class="subtitle is-size-4 has-text-centered">Class Types</h1>
+    <div class="columns">
+      <div class="column is-offset-4 is-4">
+        <div class="tabs is-centered">
+          <ul>
+            <li [class.is-active]="activeView === 'all'">
+              <a (click)="toggleView('all')">All</a>
+            </li>
+            <li [class.is-active]="activeView === 'new'">
+              <a (click)="toggleView('new')">New</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="columns"
+         *ngIf="activeView === 'new'">
+      <div class="column is-4 is-offset-4">
+        <input type="text"
+               class="input"
+               [(ngModel)]="newClassName"
+               placeholder="Class name"
+               style="margin-bottom: 1em;">
+
+        <textarea class="textarea"
+                  placeholder="Class description"
+                  [(ngModel)]="newClassDescription"
+                  style="margin-bottom: 1em;"></textarea>
+
+        <div class="buttons is-centered">
+          <span class="button is-success"
+                (click)="insertClassType()">
+            <span class="icon">
+              <i class="fas fa-plus"></i>
+            </span>
+            <span>Add Class Type</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-mobile is-multiline is-centered"
+         *ngIf="activeView === 'all'">
+
+      <div class="column is-4"
+           *ngFor="let ct of classTypes">
+        <div class="box">
+          <input type="text"
+                 class="input is-static has-text-centered has-text-weight-semibold"
+                 [class.is-static]="ct.editing === false"
+                 [(ngModel)]="ct.name"
+                 [readonly]="ct.editing === false"
+                 style="margin-bottom: 1em;">
+
+          <div id="description"
+               style="margin-bottom: 1em;">
+            <p class="has-text-centered"
+               *ngIf="!ct.editing">{{ct.description}}</p>
+            <textarea *ngIf="ct.editing"
+                      class="textarea has-text-centered"
+                      [(ngModel)]="ct.description"></textarea>
+          </div>
+
+          <div class="buttons is-centered">
+
+            <span *ngIf="!ct.editing"
+                  class="button is-warning"
+                  (click)="deleteClassType(ct._id)">
+              <span class="icon">
+                <i class="fas fa-trash-alt"></i>
+              </span>
+              <span>Delete</span>
+            </span>
+            <span *ngIf="!ct.editing"
+                  class="button is-info"
+                  (click)="toggleEdit(ct)">
+              <span class="icon">
+                <i class="fas fa-edit"></i>
+              </span>
+              <span>Edit</span>
+            </span>
+
+            <span *ngIf="ct.editing"
+                  class="button is-warning"
+                  (click)="discard()">
+              <span class="icon">
+                <i class="fas fa-times"></i>
+              </span>
+              <span>Cancel</span>
+            </span>
+            <span *ngIf="ct.editing"
+                  class="button is-success"
+                  (click)="saveClassType(ct._id)">
+              <span class="icon">
+                <i class="fas fa-save"></i>
+              </span>
+              <span>Save</span>
+            </span>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

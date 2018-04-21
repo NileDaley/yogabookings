@@ -14,8 +14,7 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-new-class',
-  templateUrl: './new-class.component.html',
-  styleUrls: ['./new-class.component.scss']
+  templateUrl: './new-class.component.html'
 })
 export class NewClassComponent implements OnInit {
   loading = true;
@@ -74,58 +73,49 @@ export class NewClassComponent implements OnInit {
   }
 
   private getIdentity(): Promise<any> {
-    return this._authService
-      .getIdentity()
-      .toPromise()
-      .then(response => {
-        const identity = response['data'];
-        this.tutor = new Tutor(
-          identity._id,
-          identity.forename,
-          identity.surname,
-          identity.phone,
-          identity.phone,
-          new User(identity.user._id, identity.user.email, null, 10),
-          identity.skills.map(s => new Skill(s._id, s.name, s.description))
-        );
-        this._class.tutor = this.tutor._id;
-      });
+    return this._authService.getIdentity().then(response => {
+      const identity = response['data'];
+      this.tutor = new Tutor(
+        identity._id,
+        identity.forename,
+        identity.surname,
+        identity.phone,
+        identity.phone,
+        new User(identity.user._id, identity.user.email, null, 10),
+        identity.skills.map(s => new Skill(s._id, s.name, s.description))
+      );
+      this._class.tutor = this.tutor._id;
+    });
   }
 
   private getLocations(): Promise<any> {
-    return this._dataService
-      .getLocations()
-      .toPromise()
-      .then(res => {
-        const data = res['data'];
-        this.locations = data.map(l => {
-          return new Location(
-            l._id,
-            l.name,
-            l.address,
-            l.email,
-            l.phone,
-            l.openHours.map(o => {
-              return new OpenHours(o.day, o.isOpen, o.open, o.close);
-            }),
-            l.venues.map(v => {
-              return new Venue(v.name, v.capacity);
-            })
-          );
-        });
+    return this._dataService.getLocations().then(res => {
+      const data = res['data'];
+      this.locations = data.map(l => {
+        return new Location(
+          l._id,
+          l.name,
+          l.address,
+          l.email,
+          l.phone,
+          l.openHours.map(o => {
+            return new OpenHours(o.day, o.isOpen, o.open, o.close);
+          }),
+          l.venues.map(v => {
+            return new Venue(v.name, v.capacity);
+          })
+        );
       });
+    });
   }
 
   private getClassTypes(): Promise<any> {
-    return this._dataService
-      .getClassTypes()
-      .toPromise()
-      .then(res => {
-        const data = res['data'];
-        this.classTypes = data.map(
-          ct => new ClassType(ct._id, ct.name, ct.description)
-        );
-      });
+    return this._dataService.getClassTypes().then(res => {
+      const data = res['data'];
+      this.classTypes = data.map(
+        ct => new ClassType(ct._id, ct.name, ct.description)
+      );
+    });
   }
 
   setValue(field: string, val: string): void {
@@ -173,17 +163,17 @@ export class NewClassComponent implements OnInit {
   }
 
   saveClass(): void {
-    this._dataService.insertClass(this._class).subscribe(
-      res => {
+    this._dataService
+      .insertClass(this._class)
+      .then(res => {
         this.router.navigate(['/tutor']);
-      },
-      err => {
+      })
+      .catch(err => {
         this.messages.push({
           type: 'error',
           message:
             'An error occurred whilst booking that class. Please try again'
         });
-      }
-    );
+      });
   }
 }

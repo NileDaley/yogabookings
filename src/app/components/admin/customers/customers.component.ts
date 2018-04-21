@@ -3,8 +3,7 @@ import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss']
+  templateUrl: './customers.component.html'
 })
 export class CustomersComponent implements OnInit {
   customers: Array<any>;
@@ -14,7 +13,8 @@ export class CustomersComponent implements OnInit {
   ngOnInit() {
     this._dataService
       .getCustomers()
-      .subscribe(res => (this.customers = res['data']));
+      .then(res => (this.customers = res['data']))
+      .catch(error => console.error(error));
   }
 
   filterCustomers(criteria) {}

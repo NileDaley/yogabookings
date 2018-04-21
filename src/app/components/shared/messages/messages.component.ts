@@ -6,7 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./messages.component.scss']
 })
 export class MessagesComponent {
-  @Input() messages;
-
+  @Input() messages: Array<Object>;
   constructor() {}
 }

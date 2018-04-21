@@ -79,44 +79,107 @@ router.get('/:id', authenticate, hasRole(['admin']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.patch('/:id', authenticate, hasRole(['admin'], true), (req, res) => {
-  let { forename, surname, phone, gender, user } = req.body;
-  User.findByIdAndUpdate(
-    user._id,
-    {
-      $set: {
-        email: user.email,
-        password: user.password,
-        role: user.role
-      }
-    },
-    { new: true }
-  )
-    .then(updatedUser => {
-      if (!updatedUser) {
-        Response.ERROR(res, 'An error occurred whilst updating the user');
-      } else {
-        Customer.findByIdAndUpdate(
-          req.params.id,
-          {
-            $set: {
-              forename,
-              surname,
-              phone,
-              gender,
-              user: mongoose.Types.ObjectId(updatedUser._id)
-            }
-          },
-          { new: true }
-        )
-          .then(updatedCustomer => {
-            Response.OK(res, updatedCustomer);
-          })
-          .catch(err => Response.ERROR(res, err));
-      }
-    })
-    .catch(err => Response.ERROR(res, err));
-});
+router.patch(
+  '/:id',
+  authenticate,
+  hasRole(['admin', 'customer']),
+  (req, res) => {
+    const {
+      forename,
+      surname,
+      phone,
+      gender,
+      user,
+      passwordGuess,
+      newPassword
+    } = req.body;
+    if (!passwordGuess && !newPassword) {
+      Response.OK(res, 'Nothing changed with passwords');
+      User.findByIdAndUpdate(
+        user._id,
+        {
+          $set: {
+            email: user.email,
+            password: user.password,
+            role: 0
+          }
+        },
+        { new: true }
+      )
+        .then(updatedUser => {
+          if (!updatedUser) {
+            Response.ERROR(res, 'An error occurred whilst updating the user');
+          } else {
+            Customer.findByIdAndUpdate(
+              req.params.id,
+              {
+                $set: {
+                  forename,
+                  surname,
+                  phone,
+                  gender,
+                  user: mongoose.Types.ObjectId(updatedUser._id)
+                }
+              },
+              { new: true }
+            )
+              .then(updatedCustomer => {
+                Response.OK(res, updatedCustomer);
+              })
+              .catch(err => Response.ERROR(res, err));
+          }
+        })
+        .catch(err => Response.ERROR(res, err));
+    } else {
+      console.log(user);
+      User.findById(user._id).then(foundUser => {
+        if (bcrypt.compareSync(passwordGuess, foundUser.password)) {
+          const newHashedPassword = bcrypt.hashSync(newPassword, 10);
+          User.findByIdAndUpdate(
+            user._id,
+            {
+              $set: {
+                email: user.email,
+                password: newHashedPassword,
+                role: 0
+              }
+            },
+            { new: true }
+          )
+            .then(updatedUser => {
+              if (!updatedUser) {
+                Response.ERROR(
+                  res,
+                  'An error occurred whilst updating the user'
+                );
+              } else {
+                Customer.findByIdAndUpdate(
+                  req.params.id,
+                  {
+                    $set: {
+                      forename,
+                      surname,
+                      phone,
+                      gender,
+                      user: mongoose.Types.ObjectId(updatedUser._id)
+                    }
+                  },
+                  { new: true }
+                )
+                  .then(updatedCustomer => {
+                    Response.OK(res, updatedCustomer);
+                  })
+                  .catch(err => Response.ERROR(res, err));
+              }
+            })
+            .catch(err => Response.ERROR(res, err));
+        } else {
+          Response.FORBIDDEN(res, 'Existing passwords do not match');
+        }
+      });
+    }
+  }
+);
 
 // Delete customer
 router.delete('/:id', authenticate, hasRole(['admin']), (req, res) => {

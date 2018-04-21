@@ -3,8 +3,7 @@ import { DataService } from 'app/services/data.service';
 
 @Component({
   selector: 'app-locations',
-  templateUrl: './locations.component.html',
-  styleUrls: ['./locations.component.scss']
+  templateUrl: './locations.component.html'
 })
 export class LocationsComponent implements OnInit {
   locations: Array<any>;
@@ -13,7 +12,7 @@ export class LocationsComponent implements OnInit {
   constructor(private _dataService: DataService) {}
 
   ngOnInit() {
-    this._dataService.getLocations().subscribe(res => {
+    this._dataService.getLocations().then(res => {
       this.locations = res['data'];
       this.loading = false;
     });

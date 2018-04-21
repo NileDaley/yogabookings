@@ -51,7 +51,7 @@ router.post('/', authenticate, hasRole(['admin']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
-router.patch('/:id', hasRole(['admin']), (req, res) => {
+router.patch('/:id', authenticate, hasRole(['admin']), (req, res) => {
   let { _id, name, description } = req.body;
 
   Skill.update(

@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let OpenHoursSchema = new Schema({
-  isOpen: Boolean,
-  day: String,
+  isOpen: { type: Boolean, required: true },
+  day: { type: String, required: true },
   open: String,
   close: String
 });

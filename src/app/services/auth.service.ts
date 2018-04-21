@@ -10,7 +10,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email, password) {
-    return this.http.post('/api/auth/login', { email, password });
+    return this.http.post('/api/auth/login', { email, password }).toPromise();
   }
 
   logout() {
@@ -46,6 +46,6 @@ export class AuthService {
   getIdentity() {
     const token = localStorage.getItem('token');
     const decoded = JSON.parse(jwtDecode(token)['data']);
-    return this.http.post('/api/users/identity', decoded);
+    return this.http.post('/api/users/identity', decoded).toPromise();
   }
 }

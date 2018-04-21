@@ -34,19 +34,17 @@ export class ClassesComponent implements OnInit {
   }
 
   private getClasses() {
-    this._dataService.getClasses().subscribe(
-      res => {
+    this._dataService
+      .getClasses()
+      .then(res => {
         const data = res['data'];
         this.classes = data.map(c => {
           return getInstance(c);
         });
         this.initCalendar();
         this.loading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   private initCalendar() {

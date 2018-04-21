@@ -14,7 +14,6 @@ import { NavbarComponent } from 'app/components/navbar/navbar.component';
 import { IndexComponent } from 'app/components/index/index.component';
 import { LoginComponent } from 'app/components/login/login.component';
 import { PagenotfoundComponent } from 'app/components/pagenotfound/pagenotfound.component';
-import { StatusComponent } from './components/status/status.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { MessagesComponent } from './components/shared/messages/messages.component';
 
@@ -56,6 +55,7 @@ import { ClassComponent } from './components/guest/classes/class/class.component
 import { NewClassComponent as TutorNewClass } from './components/tutors/new-class/new-class.component';
 import { RegisterComponent } from './components/guest/register/register.component';
 import { CustomersComponent } from './components/tutors/customers/customers.component';
+import { ClassTypesComponent } from './components/admin/classes/class-types/class-types.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,7 +71,6 @@ import { CustomersComponent } from './components/tutors/customers/customers.comp
     AdminTutors,
     AdminTutorSkills,
     AdminTutorSkill,
-    StatusComponent,
     GuestLocations,
     AdminSingleTutor,
     AdminTutorRegistration,
@@ -89,7 +88,8 @@ import { CustomersComponent } from './components/tutors/customers/customers.comp
     ClassComponent,
     TutorNewClass,
     RegisterComponent,
-    CustomersComponent
+    CustomersComponent,
+    ClassTypesComponent
   ],
   imports: [
     BrowserModule,

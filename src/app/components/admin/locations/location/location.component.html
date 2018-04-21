@@ -6,16 +6,17 @@
   <div class="card">
 
     <!-- Display details -->
-    <div class="card-content" *ngIf="!editing; else editingCard">
+    <div class="card-content"
+         *ngIf="!editing; else editingCard">
 
-      <h2 class="subtitle is-4 has-text-centered"> {{location.name}}</h2>
+      <h2 class="subtitle is-size-4 has-text-centered"> {{location.name}}</h2>
 
       <div class="columns">
 
         <div class="column is-4-widescreen is-offset-2-widescreen">
 
           <div class="field">
-            <p class="label">
+            <p class="label has-text-weight-semibold">
               <span class="icon">
                 <i class="fas fa-building"></i>
               </span> Address</p>
@@ -25,28 +26,31 @@
           </div>
 
           <div class="field">
-            <p class="label">
+            <p class="label has-text-weight-semibold">
               <span class="icon">
                 <i class="fas fa-envelope"></i>
               </span> Email Address</p>
-            <a class="link" href="mailto:{{location.email}}">
+            <a class="link"
+               href="mailto:{{location.email}}">
               {{location.email}}
             </a>
           </div>
 
           <div class="field">
-            <p class="label">
+            <p class="label has-text-weight-semibold">
               <span class="icon">
                 <i class="fas fa-phone"></i>
               </span>Phone Number</p>
-            <a class="link" href="tel:{{location.phone}}">
+            <a class="link"
+               href="tel:{{location.phone}}">
               {{location.phone}}
             </a>
           </div>
 
           <div class="field">
-            <p class="label">Venues</p>
-            <div class="columns" *ngFor="let venue of location.venues">
+            <p class="label has-text-weight-semibold">Venues</p>
+            <div class="columns"
+                 *ngFor="let venue of location.venues">
               <div class="column">{{venue.name}}</div>
               <div class="column">
                 <span class="icon">
@@ -68,7 +72,8 @@
                 </p>
               </div>
               <div class="column">
-                <p *ngIf="day.isOpen; else closed" class="has-text-centered">{{day.open}} - {{day.close}}</p>
+                <p *ngIf="day.isOpen; else closed"
+                   class="has-text-centered">{{day.open}} - {{day.close}}</p>
                 <ng-template #closed>
                   <p class="has-text-centered">closed</p>
                 </ng-template>
@@ -82,7 +87,8 @@
       <!-- Edit button -->
       <div class="columns">
         <div class="column is-4 is-offset-4">
-          <a (click)="toggleEdit()" class="button is-link is-rounded is-fullwidth">
+          <a (click)="toggleEdit()"
+             class="button is-link is-rounded is-fullwidth">
             <span>Edit</span>
             <span class="icon">
               <i class="fas fa-edit"></i>
@@ -103,43 +109,57 @@
           <!-- Name, Address, Email + Phone -->
           <div class="column is-4 is-offset-1">
             <div class="field">
-              <p class="label">Name</p>
-              <input class="input form-control" type="text" [(ngModel)]="location.name" />
+              <p class="label has-text-weight-semibold">Name</p>
+              <input class="input form-control"
+                     type="text"
+                     [(ngModel)]="location.name" />
             </div>
             <div class="field">
-              <p class="label">Address</p>
+              <p class="label has-text-weight-semibold">Address</p>
               <ng-container *ngFor="let line of location.address; let i = index; trackBy:trackByFn">
-                <input class="input form-control" type="text" [(ngModel)]="location.address[i]" />
+                <input class="input form-control"
+                       type="text"
+                       [(ngModel)]="location.address[i]" />
               </ng-container>
             </div>
             <div class="field">
-              <p class="label">Email Address</p>
-              <input class="input form-control" type="email" [(ngModel)]="location.email" />
+              <p class="label has-text-weight-semibold">Email Address</p>
+              <input class="input form-control"
+                     type="email"
+                     [(ngModel)]="location.email" />
             </div>
             <div class="field">
-              <p class="label">Phone Number</p>
-              <input class="input form-control" type="phone" [(ngModel)]="location.phone">
+              <p class="label has-text-weight-semibold">Phone Number</p>
+              <input class="input form-control"
+                     type="phone"
+                     [(ngModel)]="location.phone">
             </div>
-            <p class="label">Venues
-              <span (click)="newVenue()" class="icon has-text-success">
+            <p class="label has-text-weight-semibold">Venues
+              <span (click)="newVenue()"
+                    class="icon has-text-success">
                 <i class="fas fa-plus"></i>
               </span>
             </p>
             <ng-container *ngFor="let venue of location.venues; let count = index; trackBy: trackByFn">
               <div class="columns">
                 <div class="column">
-                  <input [(ngModel)]="location.venues[count].name" type="text" class="input form-control">
+                  <input [(ngModel)]="location.venues[count].name"
+                         type="text"
+                         class="input form-control">
                 </div>
                 <div class="column is-4">
                   <div class="control has-icons-left">
-                    <input [(ngModel)]="location.venues[count].capacity" type="number" class="input form-control">
+                    <input [(ngModel)]="location.venues[count].capacity"
+                           type="number"
+                           class="input form-control">
                     <span class="icon is-small is-left">
                       <i class="fas fa-users"></i>
                     </span>
                   </div>
                 </div>
                 <div class="column is-1">
-                  <a (click)="removeVenue(location.venues[count])" class="delete is-small"></a>
+                  <a (click)="removeVenue(location.venues[count])"
+                     class="delete is-small"></a>
                 </div>
               </div>
             </ng-container>
@@ -160,14 +180,28 @@
                 <div class="columns is-mobile">
                   <div class="column is-1 is-2-mobile">
                     <span class="checkbox has-text-centered">
-                      <input [checked]="location.openHours[count].isOpen" (change)="toggleOpen(location.openHours[count])" type="checkbox">
+                      <input [checked]="location.openHours[count].isOpen"
+                             (change)="toggleOpen(location.openHours[count])"
+                             type="checkbox">
                     </span>
                   </div>
                   <div class="column">
-                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].open" (keyup)="checkOpenHours(location.openHours[count])" placeholder="Open" type="text" maxlength="4" class="input has-text-centered">
+                    <input [disabled]="!location.openHours[count].isOpen"
+                           [(ngModel)]="location.openHours[count].open"
+                           (keyup)="checkOpenHours(location.openHours[count])"
+                           placeholder="Open"
+                           type="text"
+                           maxlength="4"
+                           class="input has-text-centered">
                   </div>
                   <div class="column">
-                    <input [disabled]="!location.openHours[count].isOpen" [(ngModel)]="location.openHours[count].close" (keyup)="checkOpenHours(location.openHours[count])" placeholder="Close" type="text" maxlength="4" class="input has-text-centered">
+                    <input [disabled]="!location.openHours[count].isOpen"
+                           [(ngModel)]="location.openHours[count].close"
+                           (keyup)="checkOpenHours(location.openHours[count])"
+                           placeholder="Close"
+                           type="text"
+                           maxlength="4"
+                           class="input has-text-centered">
                   </div>
                 </div>
               </div>
@@ -180,7 +214,8 @@
         <!-- Save/Discard buttons -->
         <div class="columns">
           <div class="column is-3-widescreen is-offset-3-widescreen">
-            <a (click)="updateLocation()" class="button is-success is-rounded is-fullwidth">
+            <a (click)="updateLocation()"
+               class="button is-success is-rounded is-fullwidth">
               <span class="icon">
                 <i class="fas fa-check"></i>
               </span>
@@ -188,7 +223,8 @@
             </a>
           </div>
           <div class="column is-3-widescreen">
-            <a (click)="discardEdit()" class="button is-danger is-rounded is-fullwidth">
+            <a (click)="discardEdit()"
+               class="button is-danger is-rounded is-fullwidth">
               <span>Discard Changes</span>
               <span class="icon">
                 <i class="fas fa-times"></i>

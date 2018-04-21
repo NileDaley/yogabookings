@@ -1,6 +1,4 @@
 import { User } from 'app/models/user';
-import { PaymentMethods } from 'app/models/payment-methods';
-import { Payment } from './payment';
 
 export class Customer {
   _id: string;
@@ -9,8 +7,6 @@ export class Customer {
   phone: string;
   gender: string;
   user: User;
-  // paymentMethods: PaymentMethods;
-  // payments: Array<Payment>;
 
   constructor(
     id: string,

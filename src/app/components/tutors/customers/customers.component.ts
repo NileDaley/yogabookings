@@ -5,8 +5,7 @@ import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss']
+  templateUrl: './customers.component.html'
 })
 export class CustomersComponent implements OnInit {
   customers: Array<Customer>;
@@ -21,7 +20,6 @@ export class CustomersComponent implements OnInit {
   private getCustomers() {
     this._dataService
       .getCustomers()
-      .toPromise()
       .then(response => {
         const customers = response['data'];
         this.filteredCustomers = this.customers = customers.map(c => {

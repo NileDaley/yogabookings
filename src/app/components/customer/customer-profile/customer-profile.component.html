@@ -4,27 +4,45 @@
       <div class="column is-8 is-offset-2">
         <app-loading *ngIf="loading; else content"></app-loading>
         <ng-template #content>
-          <div class="box">
 
-            <h1 class="subtitle is-size-3">Profile</h1>
+          <div class="columns">
 
-            <div class="columns">
+            <div class="column is-8 is-offset-2">
 
-              <div class="column">
+              <h1 class="subtitle is-size-4 has-text-centered">Customer Profile</h1>
 
-                <div class="tabs">
-                  <ul>
-                    <li [class.is-active]="activeView === 'upcoming'">
-                      <a (click)="toggleActiveView()">Upcoming</a>
-                    </li>
-                    <li [class.is-active]="activeView === 'history'">
-                      <a (click)="toggleActiveView()">History</a>
-                    </li>
-                  </ul>
-                </div>
+              <div class="tabs is-centered">
+                <ul>
+                  <li [class.is-active]="activeView === 'upcoming'">
+                    <a (click)="toggleActiveView('upcoming')">
+                      <span class="icon">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                      <span class="is-hidden-mobile">My Classes</span>
+                    </a>
+                  </li>
+                  <li [class.is-active]="activeView === 'history'">
+                    <a (click)="toggleActiveView('history')">
+                      <span class="icon">
+                        <i class="fas fa-history"></i>
+                      </span>
+                      <span class="is-hidden-mobile">Class History</span>
+                    </a>
+                  </li>
+                  <li [class.is-active]="activeView === 'details'">
+                    <a (click)="toggleActiveView('details')">
+                      <span class="icon">
+                        <i class="far fa-user"></i>
+                      </span>
+                      <span class="is-hidden-mobile">My Details</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
-                <app-messages [messages]="messages"></app-messages>
+              <app-messages [messages]="messages"></app-messages>
 
+              <div *ngIf="['history', 'upcoming'].includes(activeView)">
                 <div *ngIf="filteredClasses.length > 0; else noClasses">
                   <div class="box"
                        *ngFor="let c of filteredClasses">
@@ -62,90 +80,253 @@
                 <ng-template #noClasses>
                   <p class="has-text-centered">No classes available</p>
                 </ng-template>
-
               </div>
 
-              <div class="is-divider-vertical is-hidden-mobile"></div>
-
-              <div class="column is-narrow">
+              <div *ngIf="activeView === 'details'">
                 <div class="box">
-                  <p class="subtitle">
-                    <span class="icon">
-                      <i class="far fa-user"></i>
-                    </span>
-                    <span>
-                      {{customer.forename}} {{customer.surname}}
-                    </span>
-                  </p>
-                  <p class="control has-icons-left">
-                    <span class="icon is-left">
-                      <i class="fas fa-venus-mars"></i>
-                    </span>
-                    <input class="input"
-                           [class.is-static]="!isEditingProfile"
-                           [(ngModel)]="customer.gender"
-                           type="text"
-                           [readonly]="!isEditingProfile">
-                  </p>
-                  <p class="control has-icons-left">
-                    <span class="icon is-left">
-                      <i class="fas fa-phone"></i>
-                    </span>
-                    <input class="input"
-                           [class.is-static]="!isEditingProfile"
-                           [(ngModel)]="customer.phone"
-                           type="tel"
-                           [readonly]="!isEditingProfile">
-                  </p>
-                  <p class="control has-icons-left">
-                    <span class="icon is-left">
-                      <i class="fas fa-envelope"></i>
-                    </span>
-                    <input class="input"
-                           [class.is-static]="!isEditingProfile"
-                           [(ngModel)]="customer.user.email"
-                           type="email"
-                           [readonly]="!isEditingProfile">
-                  </p>
-                  <p class="control has-icons-left">
-                    <span class="icon is-left">
-                      <i class="fas fa-key"></i>
-                    </span>
-                    <input class="input"
-                           [class.is-static]="!isEditingProfile"
-                           [(ngModel)]="customer.user.password"
-                           type="password"
-                           [readonly]="!isEditingProfile">
-                  </p>
-                  <br>
-                  <div *ngIf="isEditingProfile === false">
-                    <a class="button is-link is-fullwidth is-outlined"
-                       (click)="isEditingProfile = true">Edit</a>
+                  <div class="columns">
+                    <div class="column is-8 is-offset-2">
+                      <div *ngIf="!isEditingProfile; else editDetails"
+                           #details>
+                        <p class="subtitle">
+                          <span class="icon">
+                            <i class="far fa-user"></i>
+                          </span>
+                          <span>
+                            {{customer.forename}} {{customer.surname}}
+                          </span>
+                        </p>
+                        <p class="is-capitalized">
+                          <span class="icon is-left">
+                            <i class="fas fa-venus-mars"></i>
+                          </span>
+                          <span>{{customer.gender}}</span>
+                        </p>
+                        <p>
+                          <span class="icon is-left">
+                            <i class="fas fa-phone"></i>
+                          </span>
+                          <span>{{customer.phone || '-'}}</span>
+                        </p>
+                        <p>
+                          <span class="icon is-left">
+                            <i class="fas fa-envelope"></i>
+                          </span>
+                          <span>{{customer.user.email}}</span>
+                        </p>
+
+                      </div>
+
+                    </div>
                   </div>
-                  <div *ngIf="isEditingProfile === true">
-                    <a class="button is-danger is-fullwidth"
-                       (click)="discardEdit()">
+
+                  <div class="buttons is-centered">
+                    <span *ngIf="!isEditingProfile"
+                          class="button is-link is-outlined"
+                          (click)="isEditingProfile = true">
                       <span class="icon">
-                        <i class="fas fa-times"></i>
+                        <i class="far fa-edit"></i>
                       </span>
-                      <span>Discard</span>
-                    </a>
-                    <br>
-                    <a class="button is-success is-fullwidth"
-                       (click)="saveChanges()">
-                      <span class="icon">
-                        <i class="fas fa-save"></i>
+                      <span>Edit Details</span>
+                    </span>
+                    <ng-container *ngIf="isEditingProfile">
+                      <span class="button is-danger is-outlined"
+                            (click)="discardEdit()">
+                        <span class="icon">
+                          <i class="fas fa-times"></i>
+                        </span>
+                        <span>Discard</span>
                       </span>
-                      <span>Save</span>
-                    </a>
+                      <span class="button is-success is-outlined"
+                            (click)="saveChanges()">
+                        <span class="icon">
+                          <i class="fas fa-save"></i>
+                        </span>
+                        <span>Save</span>
+                      </span>
+                    </ng-container>
                   </div>
                 </div>
               </div>
+
             </div>
 
           </div>
+
         </ng-template>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #editDetails>
+  <form [formGroup]="detailsForm"
+        novalidate>
+
+    <div class="field">
+      <label for="forename"
+             class="label has-text-weight-semibold">Forename</label>
+      <div class="control">
+        <input type="text"
+               class="input"
+               formControlName="forename"
+               placeholder="Forename"
+               id="forename">
+      </div>
+      <ng-container *ngIf="forename.errors">
+        <p class="help is-danger"
+           *ngIf="forename.errors.required">
+          Forename field is required
+        </p>
+        <p class="help is-danger"
+           *ngIf="forename.errors.pattern">
+          Please enter a valid forename
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="field">
+      <label for="surname"
+             class="label has-text-weight-semibold">Surname</label>
+      <div class="control">
+        <input type="text"
+               class="input"
+               formControlName="surname"
+               placeholder="Surname"
+               id="surname">
+      </div>
+      <ng-container *ngIf="surname.errors">
+        <p class="help is-danger"
+           *ngIf="surname.errors.required">
+          Surname field is required
+        </p>
+        <p class="help is-danger"
+           *ngIf="surname.errors.pattern">
+          Please enter a valid surname
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="field">
+      <label for="email"
+             class="label has-text-weight-semibold">Email</label>
+      <div class="control">
+        <input type="email"
+               class="input"
+               formControlName="email"
+               placeholder="Forename"
+               id="email">
+      </div>
+      <ng-container *ngIf="email.errors">
+        <p class="help is-danger"
+           *ngIf="email.errors.required">
+          Email field is required
+        </p>
+        <p class="help is-danger"
+           *ngIf="email.errors.email">
+          Please enter a valid email address
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="field">
+      <label for="gender"
+             class="label has-text-weight-semibold">Gender</label>
+      <div class="control">
+        <div class="select">
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="phone"
+             class="label has-text-weight-semibold">Phone</label>
+      <div class="control">
+        <input type="phone"
+               class="input"
+               formControlName="phone"
+               placeholder="Phone"
+               id="phone">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="changePassword"
+             class="label has-text-weight-semibold">Change Password?</label>
+      <div class="control">
+        <label class="radio">
+          <input type="radio"
+                 name="question"
+                 (change)="toggleNewPassword(false)"
+                 checked> No
+        </label>
+        <label class="radio">
+          <input type="radio"
+                 name="question"
+                 (change)="toggleNewPassword(true)"> Yes
+        </label>
+      </div>
+    </div>
+
+    <div *ngIf="changePassword">
+
+      <div class="field">
+        <label for="currentPassword"
+               class="label has-text-weight-semibold">Current Password</label>
+        <div class="control">
+          <input type="password"
+                 class="input"
+                 formControlName="currentPassword"
+                 placeholder="Current Password"
+                 id="currentPassword">
+        </div>
+        <p class="help is-danger"
+           *ngIf="detailsForm.get('currentPassword').value.trim().length === 0">
+          Current password is required
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="newPassword"
+               class="label has-text-weight-semibold">New Password</label>
+        <div class="control">
+          <input type="password"
+                 class="input"
+                 formControlName="newPassword"
+                 placeholder="New Password"
+                 id="newPassword">
+        </div>
+        <p class="help is-danger"
+           *ngIf="detailsForm.get('newPassword').value.trim().length === 0">
+          New password is required
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="confirmNewPassword"
+               class="label has-text-weight-semibold">Confirm New Password</label>
+        <div class="control">
+          <input type="password"
+                 class="input"
+                 formControlName="confirmNewPassword"
+                 placeholder="Confirm New Password"
+                 id="confirmNewPassword">
+        </div>
+        <p class="help is-danger"
+           *ngIf="detailsForm.get('confirmNewPassword').value.trim().length === 0">
+          Confirm new password is required
+        </p>
+        <p class="help is-danger"
+           *ngIf="detailsForm.get('confirmNewPassword').value !== detailsForm.get('newPassword').value">
+          New passwords do not match
+        </p>
+      </div>
+
+    </div>
+  </form>
+
+</ng-template>

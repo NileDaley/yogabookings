@@ -6,8 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tutor',
-  templateUrl: './tutor.component.html',
-  styleUrls: ['./tutor.component.scss']
+  templateUrl: './tutor.component.html'
 })
 export class TutorComponent implements OnInit {
   loading = false;
@@ -28,8 +27,9 @@ export class TutorComponent implements OnInit {
   }
 
   private getTutor(id: string) {
-    this._dataService.getTutor(id).subscribe(
-      res => {
+    this._dataService
+      .getTutor(id)
+      .then(res => {
         const data = res['data'];
         this.tutor = new Tutor(
           data._id,
@@ -43,19 +43,19 @@ export class TutorComponent implements OnInit {
 
         this.getAllSkills();
         this.loading = false;
-      },
-      () => {
+      })
+      .catch(() => {
         this.messages.push({
           message: 'An error occurred while retrieving tutor skills',
           type: 'error'
         });
-      }
-    );
+      });
   }
 
   private getAllSkills() {
-    this._dataService.getSkills().subscribe(
-      res => {
+    this._dataService
+      .getSkills()
+      .then(res => {
         let data = res['data'];
         data = data.map(
           skill => new Skill(skill._id, skill.name, skill.description)
@@ -70,14 +70,13 @@ export class TutorComponent implements OnInit {
         });
 
         this.availableSkills = data;
-      },
-      () => {
+      })
+      .catch(() => {
         this.messages.push({
           message: 'An error occurred while retrieving tutor skills',
           type: 'error'
         });
-      }
-    );
+      });
   }
 
   toggleEdit() {
@@ -100,34 +99,31 @@ export class TutorComponent implements OnInit {
   }
 
   saveTutor() {
-    this._dataService.updateTutor(this.tutor._id, this.tutor).subscribe(
-      res => {
-        let type, message;
+    this._dataService.updateTutor(this.tutor._id, this.tutor).then(res => {
+      let type, message;
 
-        if (res['data']['status'] === false) {
-          if (res['data']['matched'] === 0) {
-            message = `${this.tutor.forename} ${
-              this.tutor.surname
-            } could not be found in the database, please refresh the page and try again.`;
-            type = 'error';
-          } else if (res['data']['modified'] === 0) {
-            message = `None of the details for ${this.tutor.forename} ${
-              this.tutor.surname
-            } were changed`;
-            type = 'warning';
-          }
-        } else {
-          this.getTutor(this.tutor._id);
+      if (res['data']['status'] === false) {
+        if (res['data']['matched'] === 0) {
           message = `${this.tutor.forename} ${
             this.tutor.surname
-          } was updated successfully`;
-          type = 'success';
+          } could not be found in the database, please refresh the page and try again.`;
+          type = 'error';
+        } else if (res['data']['modified'] === 0) {
+          message = `None of the details for ${this.tutor.forename} ${
+            this.tutor.surname
+          } were changed`;
+          type = 'warning';
         }
+      } else {
+        this.getTutor(this.tutor._id);
+        message = `${this.tutor.forename} ${
+          this.tutor.surname
+        } was updated successfully`;
+        type = 'success';
+      }
 
-        this.toggleEdit();
-        this.messages.push({ message: message, type: type });
-      },
-      () => {}
-    );
+      this.toggleEdit();
+      this.messages.push({ message: message, type: type });
+    });
   }
 }

@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -34,8 +33,9 @@ export class LoginComponent {
 
     const email = this.loginForm.get('email').value;
     const password = this.loginForm.get('password').value;
-    this._authService.login(email, password).subscribe(
-      response => {
+    this._authService
+      .login(email, password)
+      .then(response => {
         const data = response['data'];
         const { token, expiresIn } = data;
         const expiresAt = moment()
@@ -48,8 +48,8 @@ export class LoginComponent {
         const decoded = JSON.parse(jwtDecode(token)['data']);
         const paths = ['customer', 'tutor', 'admin'];
         this.router.navigate([paths[decoded.role / 10]]);
-      },
-      error => {
+      })
+      .catch(error => {
         const message = {
           type: 'error',
           message: 'Invalid username or password, please try again'
@@ -57,7 +57,6 @@ export class LoginComponent {
         this.messages.push(message);
         const messageIndex = this.messages.indexOf(message);
         setTimeout(() => this.messages.splice(messageIndex, 1), 2000);
-      }
-    );
+      });
   }
 }

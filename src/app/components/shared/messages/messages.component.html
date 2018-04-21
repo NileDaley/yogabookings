@@ -8,6 +8,6 @@
     <button class="delete"
             aria-label="delete"
             (click)="messages.splice(messages.indexOf(m),1)"></button>
-    {{m.message}}
+    <span class="messageText">{{m.message}}</span>
   </div>
 </div>

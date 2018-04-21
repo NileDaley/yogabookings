@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-class',
-  templateUrl: './class.component.html',
-  styleUrls: ['./class.component.scss']
+  templateUrl: './class.component.html'
 })
 export class ClassComponent implements OnInit {
   constructor() {}

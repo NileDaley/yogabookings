@@ -31,16 +31,6 @@ export class DashboardComponent implements OnInit {
           icon: { style: 'fas', code: 'users' }
         }
       ]
-    },
-    {
-      name: 'Reports',
-      links: [
-        {
-          text: 'All Reports',
-          url: '/tutor/reports',
-          icon: { style: 'fas', code: 'chart-line' }
-        }
-      ]
     }
   ];
 

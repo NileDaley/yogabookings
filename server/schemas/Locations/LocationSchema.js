@@ -4,12 +4,12 @@ const OpenHoursSchema = require('./OpenHoursSchema');
 const VenueSchema = require('./VenueSchema');
 
 let LocationSchema = new Schema({
-  name: String,
-  address: [String],
-  email: String,
+  name: { type: String, required: true },
+  address: { type: [String], required: true },
+  email: { type: String, required: true },
   phone: String,
-  openHours: [OpenHoursSchema],
-  venues: [VenueSchema]
+  openHours: { type: [OpenHoursSchema], required: true },
+  venues: { type: [VenueSchema], required: true }
 });
 
 module.exports = LocationSchema;

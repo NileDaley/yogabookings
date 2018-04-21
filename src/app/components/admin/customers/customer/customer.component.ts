@@ -3,13 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../../../../services/data.service';
 import { Customer } from '../../../../models/customer';
 import { User } from '../../../../models/user';
-import { Payment } from '../../../../models/payment';
-import { PaymentMethods } from '../../../../models/payment-methods';
 
 @Component({
   selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.scss']
+  templateUrl: './customer.component.html'
 })
 export class CustomerComponent implements OnInit {
   loading = false;
@@ -29,8 +26,9 @@ export class CustomerComponent implements OnInit {
   }
 
   getCustomer(id) {
-    this._dataService.getCustomer(id).subscribe(
-      res => {
+    this._dataService
+      .getCustomer(id)
+      .then(res => {
         console.log(res);
         const data = res['data'];
         this.customer = new Customer(
@@ -47,10 +45,7 @@ export class CustomerComponent implements OnInit {
           )
         );
         this.loading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      })
+      .catch(error => console.error(error));
   }
 }

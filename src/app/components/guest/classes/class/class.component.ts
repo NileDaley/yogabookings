@@ -10,8 +10,7 @@ import { User, Role } from 'app/models/user';
 
 @Component({
   selector: 'app-class',
-  templateUrl: './class.component.html',
-  styleUrls: ['./class.component.scss']
+  templateUrl: './class.component.html'
 })
 export class ClassComponent implements OnInit {
   _class: Class;
@@ -53,7 +52,6 @@ export class ClassComponent implements OnInit {
     const classID = this.route.snapshot.paramMap.get('id');
     return this._dataService
       .getClass(classID)
-      .toPromise()
       .then(response => {
         const data = response['data'];
         this._class = getInstance(data);
@@ -65,7 +63,6 @@ export class ClassComponent implements OnInit {
   private getCustomers(): Promise<void> {
     return this._dataService
       .getCustomers()
-      .toPromise()
       .then(res => {
         const data = res['data'];
         this.filteredCustomers = this.customers = data
@@ -128,7 +125,6 @@ export class ClassComponent implements OnInit {
     if (deleteClassGroup === true) {
       this._dataService
         .deleteClassGroup(this._class.classGroup._id)
-        .toPromise()
         .then(response => {
           this.router.navigate(['/classes']);
         })
@@ -136,7 +132,6 @@ export class ClassComponent implements OnInit {
     } else {
       this._dataService
         .deleteClass(this._class._id)
-        .toPromise()
         .then(response => {
           this.router.navigate(['/classes']);
         })
@@ -163,8 +158,9 @@ export class ClassComponent implements OnInit {
       classes: [this._class],
       customer: this.customers.find(c => c._id === _id)
     };
-    this._dataService.insertBookings(payload).subscribe(
-      res => {
+    this._dataService
+      .insertBookings(payload)
+      .then(res => {
         this.toggleModal();
         this.loading = true;
         this.getClass().then(() =>
@@ -173,9 +169,8 @@ export class ClassComponent implements OnInit {
             message: 'Customer added to class'
           })
         );
-      },
-      error => console.error(error)
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   removeCustomer(customer: Customer) {
@@ -186,7 +181,6 @@ export class ClassComponent implements OnInit {
         classes: [this._class],
         customer
       })
-      .toPromise()
       .then(() => {
         this.getClass()
           .then(() => {

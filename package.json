@@ -5,12 +5,12 @@
   "main": "server.js",
   "scripts": {
     "ng": "ng",
-    "start": "nodemon server -w server/ --config nodemon.json",
-    "build": "ng build",
+    "serve": "nodemon server -w server/ --config nodemon.json",
+    "build": "ng build --aot --prod",
     "test": "ng test",
     "lint": "ng lint",
     "watch": "ng build --watch",
-    "dev": "run-p watch start",
+    "dev": "run-p watch serve",
     "postinstall": "ng build --aot --prod"
   },
   "engines": {

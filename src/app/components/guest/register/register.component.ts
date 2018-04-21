@@ -10,8 +10,7 @@ import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  templateUrl: './register.component.html'
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
@@ -66,11 +65,11 @@ export class RegisterComponent implements OnInit {
     );
     this._dataService
       .insertCustomer(newCustomer)
-      .toPromise()
       .then(response => {
         if (response['status'] === 201) {
-          this._authService.login(email, password).subscribe(
-            loginResponse => {
+          this._authService
+            .login(email, password)
+            .then(loginResponse => {
               const data = loginResponse['data'];
               const { token, expiresIn } = data;
               const expiresAt = moment()
@@ -83,8 +82,8 @@ export class RegisterComponent implements OnInit {
               const decoded = JSON.parse(jwtDecode(token)['data']);
               const paths = ['customer', 'tutor', 'admin'];
               this.router.navigate([paths[decoded.role / 10]]);
-            },
-            error => {
+            })
+            .catch(error => {
               const message = {
                 type: 'error',
                 message: 'Invalid username or password, please try again'
@@ -92,12 +91,11 @@ export class RegisterComponent implements OnInit {
               this.messages.push(message);
               const messageIndex = this.messages.indexOf(message);
               setTimeout(() => this.messages.splice(messageIndex, 1), 2000);
-            }
-          );
+            });
         } else {
-          console.log('An error occurred whilst creating user record');
+          console.error('An error occurred whilst creating user record');
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   }
 }

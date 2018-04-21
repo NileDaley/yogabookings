@@ -68,12 +68,15 @@ router.patch('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
   )
     .then(updatedClassType => {
       if (!updatedClassType) {
+        console.log('this is causing an error');
         Response.ERROR(res, 'An error occurred whilst updating the class type');
       } else {
-        Response.OK(updatedClassType);
+        Response.OK(res, updatedClassType);
       }
     })
-    .catch(err => Response.ERROR(res, err));
+    .catch(err => {
+      Response.ERROR(res, err);
+    });
 });
 
 router.delete('/:id', authenticate, hasRole(['admin', 'tutor']), (req, res) => {

@@ -6,8 +6,7 @@ import { Role, User } from '../../../../models/user';
 
 @Component({
   selector: 'app-tutor-registration',
-  templateUrl: './tutor-registration.component.html',
-  styleUrls: ['./tutor-registration.component.scss']
+  templateUrl: './tutor-registration.component.html'
 })
 export class TutorRegistrationComponent implements OnInit {
   tutor: Tutor;
@@ -35,8 +34,9 @@ export class TutorRegistrationComponent implements OnInit {
   }
 
   private getSkills() {
-    this._dataService.getSkills().subscribe(
-      res => {
+    this._dataService
+      .getSkills()
+      .then(res => {
         let data = res['data'];
         data = data.map(
           skill => new Skill(skill._id, skill.name, skill.description)
@@ -53,16 +53,14 @@ export class TutorRegistrationComponent implements OnInit {
 
         this.availableSkills = data;
         this.loading = false;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      })
+      .catch(error => console.error(error));
   }
 
   insertTutor(): void {
-    this._dataService.insertTutor(this.tutor).subscribe(
-      res => {
+    this._dataService
+      .insertTutor(this.tutor)
+      .then(res => {
         const newTutor = res['data'];
         this.messages.push({
           message: `${newTutor.forename} ${
@@ -73,16 +71,15 @@ export class TutorRegistrationComponent implements OnInit {
 
         this.initializeTutor();
         this.getSkills();
-      },
-      () => {
+      })
+      .catch(() => {
         this.messages.push({
           message: `An error occured while trying to register ${
             this.tutor.forename
           } ${this.tutor.surname}`,
           type: 'error'
         });
-      }
-    );
+      });
   }
 
   removeSkill(skill) {
