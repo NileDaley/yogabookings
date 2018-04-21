@@ -61,6 +61,7 @@ export class ClassesComponent implements OnInit {
             this.role = null;
             this.customer = null;
           }
+          this.loading = false;
         },
         error => console.log(error)
       );
@@ -92,7 +93,6 @@ export class ClassesComponent implements OnInit {
             // Map classes to Class objects
             return getInstance(c);
           });
-        this.loading = false;
       })
       .catch(err => console.log(err));
   }

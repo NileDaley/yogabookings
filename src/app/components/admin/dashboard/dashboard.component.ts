@@ -19,6 +19,11 @@ export class DashboardComponent implements OnInit {
           text: 'Create Class',
           url: '/admin/classes/new',
           icon: { style: 'far', code: 'calendar-plus' }
+        },
+        {
+          text: 'Manage Class Types',
+          url: '/admin/classes/types',
+          icon: { style: 'fas', code: 'sliders-h' }
         }
       ]
     },

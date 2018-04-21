@@ -1,46 +1,64 @@
 <div class="card">
   <div class="card-content">
-    <h1 class="subtitle is-4 has-text-centered">Customer Registration</h1>
+    <h1 class="subtitle is-size-4 has-text-centered">Customer Registration</h1>
 
     <div class="columns">
       <div class="column is-6 is-offset-3">
 
         <div class="field">
-          <p class="label">Forename</p>
-          <input [(ngModel)]="customer.forename" type="text" class="input">
+          <p class="label has-text-weight-semibold">Forename</p>
+          <input [(ngModel)]="customer.forename"
+                 type="text"
+                 class="input">
         </div>
         <div class="field">
-          <p class="label">Surname</p>
-          <input [(ngModel)]="customer.surname" type="text" class="input">
+          <p class="label has-text-weight-semibold">Surname</p>
+          <input [(ngModel)]="customer.surname"
+                 type="text"
+                 class="input">
         </div>
         <div class="field">
-          <p class="label">Gender</p>
-          <input [(ngModel)]="customer.gender" type="text" class="input">
+          <p class="label has-text-weight-semibold">Gender</p>
+          <input [(ngModel)]="customer.gender"
+                 type="text"
+                 class="input">
         </div>
         <div class="field">
-          <p class="label">Phone</p>
-          <input [(ngModel)]="customer.phone" type="text" class="input">
+          <p class="label has-text-weight-semibold">Phone</p>
+          <input [(ngModel)]="customer.phone"
+                 type="text"
+                 class="input">
         </div>
         <div class="field">
-          <p class="label">Email</p>
-          <input [(ngModel)]="customer.user.email" type="email" class="input">
+          <p class="label has-text-weight-semibold">Email</p>
+          <input [(ngModel)]="customer.user.email"
+                 type="email"
+                 class="input">
         </div>
         <div class="field">
-          <p class="label">Password</p>
-          <input [(ngModel)]="customer.user.password" type="password" class="input">
+          <p class="label has-text-weight-semibold">Password</p>
+          <input [(ngModel)]="customer.user.password"
+                 type="password"
+                 class="input">
         </div>
 
         <div class="columns">
           <div class="column is-6">
-            <a (click)="insertCustomer()" class="button is-success is-rounded is-fullwidth">
-              <span class="icon"><span class="fas fa-check"></span></span>
+            <a (click)="insertCustomer()"
+               class="button is-success is-rounded is-fullwidth">
+              <span class="icon">
+                <span class="fas fa-check"></span>
+              </span>
               <span>Save</span>
             </a>
           </div>
           <div class="column is-6">
-            <a (click)="discardEdit()" class="button is-danger is-rounded is-fullwidth">
+            <a (click)="discardEdit()"
+               class="button is-danger is-rounded is-fullwidth">
               <span>Discard</span>
-              <span class="icon"><span class="fas fa-times"></span></span>
+              <span class="icon">
+                <span class="fas fa-times"></span>
+              </span>
             </a>
           </div>
         </div>

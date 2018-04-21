@@ -2,7 +2,7 @@
   <div class="column is-10 is-offset-1">
     <div class="box">
 
-      <h1 class="subtitle is-3 has-text-centered">New Class</h1>
+      <h1 class="subtitle is-size-4 has-text-centered">New Class</h1>
 
       <app-messages [messages]="messages"></app-messages>
       <app-loading *ngIf="loading; else content"></app-loading>
@@ -20,7 +20,7 @@
               <div class="column is-6 is-offset-3">
                 <div class="field">
                   <label for="tutor"
-                         class="label">Class Tutor</label>
+                         class="label has-text-weight-semibold">Class Tutor</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <span class="fas fa-graduation-cap"></span>
@@ -47,7 +47,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="classType"
-                         class="label">Class Type</label>
+                         class="label has-text-weight-semibold">Class Type</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <span class="fas fa-list"></span>
@@ -68,7 +68,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="price"
-                         class="label">Price</label>
+                         class="label has-text-weight-semibold">Price</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <i class="fas fa-pound-sign"></i>
@@ -91,7 +91,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="location"
-                         class="label">Location</label>
+                         class="label has-text-weight-semibold">Location</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <i class="fas fa-building"></i>
@@ -111,7 +111,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="venue"
-                         class="label">Venue</label>
+                         class="label has-text-weight-semibold">Venue</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <i class="fas fa-list"></i>
@@ -134,7 +134,7 @@
             <div class="columns">
               <div class="column is-6 is-offset-3">
                 <div class="field">
-                  <label class="label"
+                  <label class="label has-text-weight-semibold"
                          for="classSize">Class Size</label>
                   <div class="control has-icons-left">
                     <span class="icon">
@@ -160,7 +160,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="startDate"
-                         class="label">Date</label>
+                         class="label has-text-weight-semibold">Date</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <i class="fas fa-calendar-alt"></i>
@@ -180,7 +180,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="repeatClass"
-                         class="label">Repeating Class</label>
+                         class="label has-text-weight-semibold">Repeating Class</label>
                   <div class="control"
                        id="repeatClass">
                     <div class="buttons has-addons">
@@ -202,7 +202,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="startTime"
-                         class="label">Start Time</label>
+                         class="label has-text-weight-semibold">Start Time</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <i class="far fa-clock"></i>
@@ -222,7 +222,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="endTime"
-                         class="label">End Time</label>
+                         class="label has-text-weight-semibold">End Time</label>
                   <div class="control has-icons-left">
                     <span class="icon">
                       <i class="far fa-clock"></i>
@@ -247,7 +247,7 @@
               <div class="column is-6">
                 <div class="field">
                   <label for="repeatInterval"
-                         class="label">Repeat Every</label>
+                         class="label has-text-weight-semibold">Repeat Every</label>
                   <div class="select is-fullwidth">
                     <select id="repeatInterval"
                             (change)="setValue('repeatInterval', repeatInterval.value)"
@@ -261,7 +261,7 @@
               </div>
               <div class="column is-6">
                 <label for="repeatCount"
-                       class="label">For</label>
+                       class="label has-text-weight-semibold">For</label>
                 <div class="field has-addons">
                   <p class="control">
                     <input class="input"

@@ -21,6 +21,7 @@ import { ClassComponent as SingleClass } from '../components/admin/classes/class
 import { NewClassComponent as NewClass } from '../components/admin/classes/new-class/new-class.component';
 
 import { RouterGuard } from '../routing/router.guard';
+import { ClassTypesComponent } from '../components/admin/classes/class-types/class-types.component';
 const adminRoutes: Routes = [
   {
     path: 'admin',
@@ -80,6 +81,10 @@ const adminRoutes: Routes = [
       {
         path: 'classes/new',
         component: NewClass
+      },
+      {
+        path: 'classes/types',
+        component: ClassTypesComponent
       },
       {
         path: 'classes/:id',

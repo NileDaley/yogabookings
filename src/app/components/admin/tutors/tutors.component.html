@@ -1,39 +1,48 @@
-<h1 class="subtitle is-3 has-text-centered">Tutors</h1>
-<div class="columns">
-  <div class="column is-3 is-offset-3">
-    <a routerLink="/admin/tutors/register" class="button is-link is-fullwidth">
-      <span class="icon"><i class="fas fa-user-plus"></i></span>
-      <span>Register new tutor</span>
-    </a>
+<div class="box">
+  <h1 class="subtitle is-size-4 has-text-centered">Tutors</h1>
+  <div class="columns">
+    <div class="column is-3 is-offset-3">
+      <a routerLink="/admin/tutors/register"
+         class="button is-link is-fullwidth">
+        <span class="icon">
+          <i class="fas fa-user-plus"></i>
+        </span>
+        <span>Register new tutor</span>
+      </a>
+    </div>
+    <div class="column is-3">
+      <a routerLink="/admin/tutors/skills"
+         class="button is-link is-fullwidth">
+        <span class="icon">
+          <i class="fas fa-lightbulb"></i>
+        </span>
+        <span>Manage Skills</span>
+      </a>
+    </div>
   </div>
-  <div class="column is-3">
-    <a routerLink="/admin/tutors/skills" class="button is-link is-fullwidth">
-      <span class="icon"><i class="fas fa-lightbulb"></i></span>
-      <span>Manage Skills</span>
-    </a>
-  </div>
-</div>
 
-<table class="table is-striped is-hoverable is-fullwidth">
-  <tr>
-    <th>Forename</th>
-    <th>Surname</th>
-    <th>Phone</th>
-    <th>Email</th>
-    <th></th>
-  </tr>
-  <ng-container *ngFor="let tutor of tutors">
+  <table class="table is-striped is-hoverable is-fullwidth">
     <tr>
-      <td class="is-capitalized">{{tutor.forename}}</td>
-      <td class="is-capitalized">{{tutor.surname}}</td>
-      <td>{{tutor.phone}}</td>
-      <td>{{tutor.user.email}}</td>
-      <td class="has-text-centered">
-        <a routerLink="/admin/tutors/{{tutor._id}}" class="button is-link is-rounded">
-          <span>More Details</span>
-        </a>
-      </td>
+      <th class="has-text-weight-semibold">Forename</th>
+      <th class="has-text-weight-semibold">Surname</th>
+      <th class="has-text-weight-semibold">Phone</th>
+      <th class="has-text-weight-semibold">Email</th>
+      <th></th>
     </tr>
-  </ng-container>
-</table>
+    <ng-container *ngFor="let tutor of tutors">
+      <tr>
+        <td class="is-capitalized">{{tutor.forename}}</td>
+        <td class="is-capitalized">{{tutor.surname}}</td>
+        <td>{{tutor.phone}}</td>
+        <td>{{tutor.user.email}}</td>
+        <td class="has-text-centered">
+          <a routerLink="/admin/tutors/{{tutor._id}}"
+             class="button is-link is-rounded">
+            <span>More Details</span>
+          </a>
+        </td>
+      </tr>
+    </ng-container>
+  </table>
 
+</div>
