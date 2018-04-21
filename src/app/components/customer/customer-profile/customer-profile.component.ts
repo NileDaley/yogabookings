@@ -165,7 +165,7 @@ export class CustomerProfileComponent implements OnInit {
       const phone = this['phone'].value;
       const gender = this['gender'].value;
       const user = {
-        _id: this.customer.user._id;
+        _id: this.customer.user._id,
         email: this['email'].value,
         password: this.customer.user.password,
         role: 0
