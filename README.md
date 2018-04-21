@@ -55,6 +55,27 @@ OR
 yarn serve
 ```
 
+Visit [localhost:3000](http://localhost:3000/) to view the application in the browser
+
+## User Credentials
+
+Customer accounts can be created within the system through the [registration](http://localhost:3000/register) page. 
+
+A sample tutor account can be accessed by using the following credentials: 
+
+```
+email:    tutor@tutor.com
+password: tutor
+```
+
+Likewise, an administrator account can be accessed using the credentials: 
+
+```
+email:    admin@admin.com
+password: admin
+```
+
+
 ## Development
 
 Run the application and watch for all changes
@@ -84,3 +105,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * [Moment](https://github.com/moment/moment) - JavaScript date library
 * [Moment-recur](https://github.com/c-trimm/moment-recur) - Moment plugin to generate recurring events
 * [NgFullcalendar](https://github.com/Jamaks/ng-fullcalendar) - Angular wrapper of the [FullCalendar](https://github.com/fullcalendar/fullcalendar) JavaScript calendar library
+
+Special thanks to [Jeremy Thomas](https://github.com/jgthms) and all maintainers of the [Bulma](https://github.com/jgthms/bulma) CSS framework, for providing such an elegant and easy to write CSS framework.
