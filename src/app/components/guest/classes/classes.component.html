@@ -194,7 +194,8 @@
                 <li [class.is-active]="bookingView === 'single'">
                   <a (click)="toggleBookingView('single')">Single</a>
                 </li>
-                <li [class.is-active]="bookingView === 'multiple'">
+                <li *ngIf="getClassesByGroup(selectedClass.classGroup).length > 0"
+                    [class.is-active]="bookingView === 'multiple'">
                   <a (click)="toggleBookingView('multiple')">Multiple</a>
                 </li>
               </ul>
