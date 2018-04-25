@@ -1,3 +1,148 @@
 <app-messages [messages]="messages"></app-messages>
 <app-loading *ngIf="loading; else content"></app-loading>
-<ng-template #content></ng-template>
+<ng-template #content>
+  <div class="columns">
+    <div class="column is-8 is-offset-2">
+      <div class="box">
+        <h1 class="subtitle is-size-4 has-text-centered is-capitalized">{{customer.forename + ' ' + customer.surname}}</h1>
+        <!-- Inner-box spacing -->
+        <div class="columns">
+          <div class="column is-10 is-offset-1">
+
+            <div class="tabs is-centered">
+              <ul>
+                <li [class.is-active]="activeView === 'details'">
+                  <a (click)="toggleActiveView('details')">
+                    <span class="icon">
+                      <i class="far fa-user"></i>
+                    </span>
+                    <span class="is-hidden-mobile">Details</span>
+                  </a>
+                </li>
+                <li [class.is-active]="activeView === 'classes'">
+                  <a (click)="toggleActiveView('classes')">
+                    <span class="icon">
+                      <i class="far fa-calendar-alt"></i>
+                    </span>
+                    <span class="is-hidden-mobile">Classes</span>
+                  </a>
+                </li>
+                <li [class.is-active]="activeView === 'history'">
+                  <a (click)="toggleActiveView('history')">
+                    <span class="icon">
+                      <i class="fas fa-history"></i>
+                    </span>
+                    <span class="is-hidden-mobile">History</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Personal details -->
+            <div *ngIf="activeView === 'details'">
+              <p class="is-capitalized">
+                <span class="icon">
+                  <i class="fas fa-venus-mars"></i>
+                </span>
+                <span>{{customer.gender}}</span>
+              </p>
+              <p>
+                <span class="icon">
+                  <i class="fas fa-phone"></i>
+                </span>
+                <span>{{customer.phone || '-'}}</span>
+              </p>
+              <p>
+                <span class="icon">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span>{{customer.user.email}}</span>
+              </p>
+            </div>
+
+            <div *ngIf="activeView === 'classes'">
+              <div *ngIf="currentClasses().length > 0">
+                <div class="box"
+                     *ngFor="let c of currentClasses()">
+                  <div class="columns">
+                    <div class="column">
+                      <p class="label has-text-weight-semibold">{{c.type.name}}</p>
+                      <p>
+                        <span class="icon">
+                          <i class="far fa-user"></i>
+                        </span>
+                        <span>{{c.tutor.forename + ' ' + c.tutor.surname}}</span>
+                      </p>
+                      <p>
+                        <span class="icon">
+                          <i class="far fa-calendar-alt"></i>
+                        </span>
+                        <span>{{c.date}}</span>
+                      </p>
+                      <p>
+                        <span class="icon">
+                          <i class="far fa-clock"></i>
+                        </span>
+                        <span>{{c.startTime + ' - ' + c.endTime}}</span>
+                      </p>
+                      <p>
+                        <span class="icon">
+                          <i class="fas fa-pound-sign"></i>
+                        </span>
+                        <span>{{c.price}}</span>
+                      </p>
+                    </div>
+                    <div class="column is-narrow center-vertical">
+                      <a [routerLink]="getClassLink(c._id)"
+                         class="button is-info is-fullwidth has-text-centered">Info</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p *ngIf="currentClasses().length === 0"
+                 class="has-text-centered">{{customer.forename + ' ' + customer.surname}} has no upcoming classes</p>
+            </div>
+
+            <div *ngIf="activeView === 'history'">
+              <div *ngIf="pastClasses().length > 0">
+                <div class="box"
+                     *ngFor="let c of pastClasses()">
+                  <p class="label has-text-weight-semibold">{{c.type.name}}</p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-user"></i>
+                    </span>
+                    <span>{{c.tutor.forename + ' ' + c.tutor.surname}}</span>
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-calendar-alt"></i>
+                    </span>
+                    <span>{{c.date}}</span>
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="far fa-clock"></i>
+                    </span>
+                    <span>{{c.startTime + ' - ' + c.endTime}}</span>
+                  </p>
+                  <p>
+                    <span class="icon">
+                      <i class="fas fa-pound-sign"></i>
+                    </span>
+                    <span>{{c.price}}</span>
+                  </p>
+                </div>
+              </div>
+              <p *ngIf="pastClasses().length === 0">
+                {{customer.forename + ' ' + customer.surname}} has no previous classes
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

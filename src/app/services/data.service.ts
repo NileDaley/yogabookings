@@ -19,6 +19,12 @@ export class DataService {
     return this.http.get(`${this.baseURL}/users/customers/${id}`).toPromise();
   }
 
+  getClassesByCustomerID(customer_id: string) {
+    return this.http
+      .get(`${this.baseURL}/users/customers/${customer_id}/classes`)
+      .toPromise();
+  }
+
   insertCustomer(values) {
     return this.http
       .post(`${this.baseURL}/users/customers/`, values)

@@ -5,11 +5,23 @@ const bcrypt = require('bcrypt');
 const Response = require('../../Response');
 const { hasRole, authenticate } = require('../../middleware/authentication');
 
-const CustomerSchema = require('../../schemas/Users/CustomerSchema');
+const ClassSchema = require('../../schemas/Classes/ClassSchema');
+const ClassGroupSchema = require('../../schemas/Classes/ClassGroupSchema');
+const ClassTypeSchema = require('../../schemas/Classes/ClassTypeSchema');
+const LocationSchema = require('../../schemas/Locations/LocationSchema');
+const TutorSchema = require('../../schemas/Users/TutorSchema');
+const SkillSchema = require('../../schemas/Users/SkillSchema');
 const UserSchema = require('../../schemas/Users/UserSchema');
+const CustomerSchema = require('../../schemas/Users/CustomerSchema');
 
-let Customer = mongoose.model('Customer', CustomerSchema);
+let Location = mongoose.model('Location', LocationSchema);
+let Tutor = mongoose.model('Tutor', TutorSchema);
+let Skill = mongoose.model('Skill', SkillSchema);
 let User = mongoose.model('User', UserSchema);
+let Customer = mongoose.model('Customer', CustomerSchema);
+let ClassType = mongoose.model('ClassType', ClassTypeSchema);
+let Class = mongoose.model('Class', ClassSchema);
+let ClassGroup = mongoose.model('ClassGroup', ClassGroupSchema);
 
 // Get all customers
 router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
@@ -21,6 +33,35 @@ router.get('/', authenticate, hasRole(['admin', 'tutor']), (req, res) => {
       } else {
         Response.OK(res, customers);
       }
+    })
+    .catch(err => Response.ERROR(res, err));
+});
+
+router.get('/:id/classes', authenticate, hasRole(['admin']), (req, res) => {
+  Class.find({ attendees: req.params.id })
+    .populate('location classType classGroup')
+    .populate({
+      path: 'tutor',
+      populate: [
+        {
+          path: 'user',
+          select: 'email'
+        },
+        {
+          path: 'skills',
+          model: 'Skill'
+        }
+      ]
+    })
+    .populate({
+      path: 'attendees',
+      populate: {
+        path: 'user',
+        select: 'email'
+      }
+    })
+    .then(classes => {
+      Response.OK(res, classes);
     })
     .catch(err => Response.ERROR(res, err));
 });
