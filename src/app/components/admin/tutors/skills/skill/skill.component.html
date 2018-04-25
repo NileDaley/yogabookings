@@ -5,7 +5,7 @@
 <ng-template #content>
   <div class="card">
     <div class="card-body">
-      <div class="columns">
+      <div class="columns is-mobile">
         <div class="column is-6 is-offset-3">
 
           <h1 class="subtitle is-size-4 has-text-centered">Edit Skill</h1>
@@ -22,30 +22,30 @@
                       class="textarea"></textarea>
           </div>
 
-
-          <!-- Save/Discard buttons -->
-          <div class="columns">
-            <div class="column is-6-widescreen">
-              <a (click)="saveSkill()"
-                 class="button is-success is-rounded is-fullwidth">
-                <span class="icon">
-                  <i class="fas fa-check"></i>
-                </span>
-                <span>Save Changes</span>
-              </a>
-            </div>
-            <div class="column is-6-widescreen">
-              <a (click)="discardEdit()"
-                 class="button is-danger is-rounded is-fullwidth">
-                <span>Discard Changes</span>
-                <span class="icon">
-                  <i class="fas fa-times"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-
         </div>
+      </div>
+      <div class="buttons is-centered">
+        <span (click)="deleteSkill()"
+              class="button is-danger">
+          <span class="icon">
+            <i class="fas fa-trash"></i>
+          </span>
+          <span>Delete Skill</span>
+        </span>
+        <span (click)="discardEdit()"
+              class="button is-warning">
+          <span class="icon">
+            <i class="fas fa-times"></i>
+          </span>
+          <span>Discard Changes</span>
+        </span>
+        <span (click)="saveSkill()"
+              class="button is-success">
+          <span class="icon">
+            <i class="fas fa-save"></i>
+          </span>
+          <span>Save Changes</span>
+        </span>
       </div>
     </div>
   </div>

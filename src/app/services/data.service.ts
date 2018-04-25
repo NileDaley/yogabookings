@@ -106,6 +106,12 @@ export class DataService {
       .toPromise();
   }
 
+  deleteSkill(id) {
+    return this.http
+      .delete(`${this.baseURL}/users/tutors/skills/${id}`)
+      .toPromise();
+  }
+
   /*
    * Classes
    */

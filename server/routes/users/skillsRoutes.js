@@ -78,4 +78,10 @@ router.patch('/:id', authenticate, hasRole(['admin']), (req, res) => {
     .catch(err => Response.ERROR(res, err));
 });
 
+router.delete('/:id', authenticate, hasRole(['admin']), (req, res) => {
+  Skill.deleteOne({ _id: mongoose.Types.ObjectId(req.params.id) })
+    .then(() => Response.OK(res))
+    .catch(error => Response.ERROR(res, error));
+});
+
 module.exports = router;

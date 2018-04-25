@@ -75,4 +75,13 @@ export class SkillComponent implements OnInit {
   discardEdit() {
     this.router.navigate(['/admin/tutors/skills']);
   }
+
+  deleteSkill() {
+    this._dataService
+      .deleteSkill(this.skill._id)
+      .then(() => {
+        this.router.navigate(['/admin/tutors/skills']);
+      })
+      .catch(error => console.error(error));
+  }
 }

@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const ClassSchema = new Schema({
   tutor: { type: Schema.Types.ObjectId, ref: 'Tutor', required: true },
   attendees: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'Customer' }],
-    required: true
+    type: [{ type: Schema.Types.ObjectId, ref: 'Customer' }]
   },
   classSize: { type: Number, required: true },
   classType: { type: Schema.Types.ObjectId, ref: 'ClassType', required: true },
