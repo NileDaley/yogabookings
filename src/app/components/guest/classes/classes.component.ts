@@ -209,7 +209,12 @@ export class ClassesComponent implements OnInit {
   }
 
   getClassesByGroup(classGroup): Array<Class> {
-    return this.classes.filter(c => c.classGroup._id === classGroup._id);
+    return this.classes.filter(c => {
+      if (!classGroup || !c.classGroup) {
+        return false;
+      }
+      return c.classGroup._id === classGroup._id;
+    });
   }
 
   removeRepeatBookings(): void {
