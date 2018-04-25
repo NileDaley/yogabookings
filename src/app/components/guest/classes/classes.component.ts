@@ -85,9 +85,11 @@ export class ClassesComponent implements OnInit {
           })
           .sort((a, b) => {
             // Sort classes in chronological order
-            return moment(`${b.date} ${b.startTime}`).isBefore(
-              moment(`${a.date} ${a.startTime}`)
-            );
+            return moment(`${a.date} ${a.startTime}`).isBefore(
+              moment(`${b.date} ${b.startTime}`)
+            )
+              ? -1
+              : 1;
           })
           .map(c => {
             // Map classes to Class objects
@@ -170,11 +172,11 @@ export class ClassesComponent implements OnInit {
       })
       .sort((a, b) => {
         // Sort classes in chronological order
-        return moment(`${b.date} ${b.startTime}`).isBefore(
-          moment(`${a.date} ${a.startTime}`)
+        return moment(`${a.date} ${a.startTime}`).isBefore(
+          moment(`${b.date} ${b.startTime}`)
         )
-          ? 1
-          : -1;
+          ? -1
+          : 1;
       });
   }
 

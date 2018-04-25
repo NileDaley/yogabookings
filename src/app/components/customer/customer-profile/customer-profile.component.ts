@@ -93,9 +93,19 @@ export class CustomerProfileComponent implements OnInit {
       .getClasses()
       .then(response => {
         const classes = response['data'];
-        this.allClasses = classes.filter(c =>
-          c.attendees.map(a => a._id).includes(this.customer._id)
-        );
+        this.allClasses = classes
+          .filter(c => c.attendees.map(a => a._id).includes(this.customer._id))
+          .sort((a, b) => {
+            if (
+              moment(`${a.date} ${a.startTime}`).isBefore(
+                moment(`${b.date} ${b.startTime}`)
+              )
+            ) {
+              return -1;
+            } else {
+              return 1;
+            }
+          });
         this.filterUpcomingClasses();
         this.loading = false;
       })
