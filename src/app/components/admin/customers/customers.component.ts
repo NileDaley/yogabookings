@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 export class CustomersComponent implements OnInit {
   loading = true;
   customers: Array<any>;
+  filteredCustomers: Array<any>;
 
   constructor(private _dataService: DataService) {}
 
@@ -15,11 +16,22 @@ export class CustomersComponent implements OnInit {
     this._dataService
       .getCustomers()
       .then(res => {
-        this.customers = res['data'];
+        this.filteredCustomers = this.customers = res['data'];
         this.loading = false;
       })
       .catch(error => console.error(error));
   }
 
-  filterCustomers(criteria) {}
+  filterCustomers(criteria) {
+    criteria = criteria.trim().toLowerCase();
+    if (criteria === '') {
+      this.filteredCustomers = this.customers;
+    } else {
+      this.filteredCustomers = this.customers.filter(c => {
+        return [c.forename, c.surname, c.phone, c.user.email]
+          .map(el => el.toLowerCase().includes(criteria))
+          .includes(true);
+      });
+    }
+  }
 }

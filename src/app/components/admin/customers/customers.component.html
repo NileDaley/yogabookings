@@ -32,7 +32,7 @@
       <th class="has-text-weight-semibold">Phone</th>
       <th></th>
     </tr>
-    <ng-container *ngFor="let customer of customers">
+    <ng-container *ngFor="let customer of filteredCustomers">
       <tr>
         <td>{{customer.forename}}</td>
         <td>{{customer.surname}}</td>
