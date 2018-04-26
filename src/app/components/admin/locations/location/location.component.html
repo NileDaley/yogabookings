@@ -112,6 +112,7 @@
               <p class="label has-text-weight-semibold">Name</p>
               <input class="input form-control"
                      type="text"
+                     placeholder="Location Name"
                      [(ngModel)]="location.name" />
             </div>
             <div class="field">
@@ -119,6 +120,7 @@
               <ng-container *ngFor="let line of location.address; let i = index; trackBy:trackByFn">
                 <input class="input form-control"
                        type="text"
+                       [placeholder]="['Building name/number','Street name','City','Postcode'][i]"
                        [(ngModel)]="location.address[i]" />
               </ng-container>
             </div>
@@ -126,12 +128,14 @@
               <p class="label has-text-weight-semibold">Email Address</p>
               <input class="input form-control"
                      type="email"
+                     placeholder="abc@example.com"
                      [(ngModel)]="location.email" />
             </div>
             <div class="field">
               <p class="label has-text-weight-semibold">Phone Number</p>
               <input class="input form-control"
                      type="phone"
+                     placeholder="0161 000 0000"
                      [(ngModel)]="location.phone">
             </div>
             <p class="label has-text-weight-semibold">Venues
@@ -145,6 +149,7 @@
                 <div class="column">
                   <input [(ngModel)]="location.venues[count].name"
                          type="text"
+                         placeholder="Venue name"
                          class="input form-control">
                 </div>
                 <div class="column is-4">
@@ -170,7 +175,7 @@
           <div class="column is-5 is-offset-1">
 
             <label class="label has-text-centered">Open Hours</label>
-            <p class="help is-info has-text-centered">Please use hhmm format</p>
+            <p class="help is-info has-text-centered">Please use hh:mm format</p>
 
             <ng-container *ngFor="let day of location.openHours; let count = index">
               <div class="field">
@@ -191,7 +196,7 @@
                            (keyup)="checkOpenHours(location.openHours[count])"
                            placeholder="Open"
                            type="text"
-                           maxlength="4"
+                           maxlength="5"
                            class="input has-text-centered">
                   </div>
                   <div class="column">
@@ -200,7 +205,7 @@
                            (keyup)="checkOpenHours(location.openHours[count])"
                            placeholder="Close"
                            type="text"
-                           maxlength="4"
+                           maxlength="5"
                            class="input has-text-centered">
                   </div>
                 </div>

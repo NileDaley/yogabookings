@@ -11,7 +11,7 @@
             <div class="columns">
 
               <div id="classDetails-left"
-                class="column">
+                   class="column">
 
                 <p>
                   <span class='icon'>
@@ -54,23 +54,23 @@
                   <br>
                   <div class="buttons is-centered">
                     <span *ngIf="identity.role === 20"
-                      class="button is-info"
-                      (click)="toggleModal('addCustomer')">
+                          class="button is-info"
+                          (click)="toggleModal('addCustomer')">
                       <span class="icon">
                         <i class="fas fa-user-plus"></i>
                       </span>
                       <span>Add Customer</span>
                     </span>
-                    <span *ngIf="identity.role === 20"
-                      class="button is-warning"
-                      (click)="toggleModal('removeCustomer')">
+                    <span *ngIf="identity.role === 20 || identity.role === 10"
+                          class="button is-warning"
+                          (click)="toggleModal('removeCustomer')">
                       <span class="icon">
                         <i class="fas fa-users"></i>
                       </span>
                       <span>Attendees</span>
                     </span>
                     <span class="button is-danger"
-                      (click)="toggleModal('cancelClass')">
+                          (click)="toggleModal('cancelClass')">
                       <span class="icon">
                         <i class="far fa-trash-alt"></i>
                       </span>
@@ -83,10 +83,10 @@
               <div class="is-divider-vertical is-hidden-mobile"></div>
 
               <div id="classDetails-right"
-                class="column is-one-third has-text-centered">
+                   class="column is-one-third has-text-centered">
 
                 <div class="box"
-                  id="tutorDetails">
+                     id="tutorDetails">
 
                   <h2 class="subtitle">
                     <span class='icon'>
@@ -133,10 +133,10 @@
   </div>
   <!-- Booking Modal -->
   <div class="modal"
-    *ngIf="modalActive"
-    [class.is-active]="modalActive">
+       *ngIf="modalActive"
+       [class.is-active]="modalActive">
     <div class="modal-background"
-      (click)="toggleModal()"></div>
+         (click)="toggleModal()"></div>
     <div class="modal-content">
       <div class="box">
         <div class="columns has-text-centered">
@@ -144,35 +144,36 @@
             <div *ngIf="modalView === 'cancelClass'">
 
               <p class="subtitle has-text-centered">Cancel class</p>
-              <p class="has-text-centered">This action cannot be undone. If you wish to continue, please enter the tutor's name in the box below and clicking a button to confirm.</p>
+              <p class="has-text-centered">This action cannot be undone. If you wish to continue, please enter the tutor's name in the box below and clicking
+                a button to confirm.</p>
               <input type="text"
-                class="input is-static has-text-weight-semibold has-text-centered"
-                readonly="readonly"
-                value="{{_class.tutor.forename}} {{_class.tutor.surname}}">
+                     class="input is-static has-text-weight-semibold has-text-centered"
+                     readonly="readonly"
+                     value="{{_class.tutor.forename}} {{_class.tutor.surname}}">
 
               <div class="field">
                 <input type="text"
-                  class="input has-text-centered"
-                  placeholder="confirm tutor name"
-                  [(ngModel)]="confirmTutorName">
+                       class="input has-text-centered"
+                       placeholder="confirm tutor name"
+                       [(ngModel)]="confirmTutorName">
               </div>
 
               <div class="columns">
                 <div class="column">
                   <button class="button is-danger is-fullwidth"
-                    (click)="deleteClasses()"
-                    [disabled]="!tutorNameMatches()">
+                          (click)="deleteClasses()"
+                          [disabled]="!tutorNameMatches()">
                     Cancel single class
                   </button>
                 </div>
                 <div class="is-divider-vertical"
-                  *ngIf="_class.classGroup !== null"
-                  data-content="OR"></div>
+                     *ngIf="_class.classGroup !== null"
+                     data-content="OR"></div>
                 <div class="column"
-                  *ngIf="_class.classGroup !== null">
+                     *ngIf="_class.classGroup !== null">
                   <button class="button is-danger is-fullwidth"
-                    (click)="deleteClasses(true)"
-                    [disabled]="!tutorNameMatches()">
+                          (click)="deleteClasses(true)"
+                          [disabled]="!tutorNameMatches()">
                     Cancel entire group
                   </button>
                 </div>
@@ -183,13 +184,13 @@
               <p class="subtitle has-text-centered">Add Customer</p>
               <div class="field">
                 <label for="customerName"
-                  class="label">Search Customers</label>
+                       class="label">Search Customers</label>
                 <input type="text"
-                  class="input has-text-centered"
-                  #customerName
-                  (keyup)="filterCustomers(customerName.value)"
-                  placeholder="Tom Smith"
-                  id="customerName">
+                       class="input has-text-centered"
+                       #customerName
+                       (keyup)="filterCustomers(customerName.value)"
+                       placeholder="Tom Smith"
+                       id="customerName">
               </div>
               <table class="table is-fullwidth is-hoverable is-striped">
                 <tr>
@@ -202,7 +203,7 @@
                   <td>{{cust.surname}}</td>
                   <td>
                     <a class="button is-info is-fullwidth"
-                      (click)="bookClassForCustomer(cust._id)">Book</a>
+                       (click)="bookClassForCustomer(cust._id)">Book</a>
                   </td>
                 </tr>
               </table>
@@ -219,8 +220,9 @@
                   <td>{{cust.forename}}</td>
                   <td>{{cust.surname}}</td>
                   <td>
-                    <a class="button is-danger is-fullwidth"
-                      (click)="removeCustomer(cust)">Remove</a>
+                    <a *ngIf="identity.role === 20"
+                       class="button is-danger is-fullwidth"
+                       (click)="removeCustomer(cust)">Remove</a>
                   </td>
                 </tr>
               </table>
@@ -230,7 +232,7 @@
       </div>
     </div>
     <button (click)="toggleModal()"
-      class="modal-close is-large"
-      aria-label="close"></button>
+            class="modal-close is-large"
+            aria-label="close"></button>
   </div>
 </ng-template>

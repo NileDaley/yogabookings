@@ -99,7 +99,9 @@
                           class='has-text-centered'></app-messages>
             <div *ngIf="!isLoggedIn"
                  class="notification is-warning has-text-centered">
-              <span class="has-text-weight-semibold">Please note:</span> Customers must be logged in to book a class
+              <span class="has-text-weight-semibold">Please note:</span>
+              <span>Customers must be
+                <a href="/login">logged in</a> to book a class</span>
             </div>
             <div class="box"
                  *ngFor="let c of filteredClasses">
@@ -107,7 +109,6 @@
               <div class="columns">
                 <div class="column">
                   <p class="has-text-weight-semibold is-capitalized">
-                    <span class="icon"></span>
                     {{c.type.name}} -
                     <span class="icon">
                       <i class="fas fa-user"></i>

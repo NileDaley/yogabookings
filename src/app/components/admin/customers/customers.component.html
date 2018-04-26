@@ -1,5 +1,8 @@
 <div class="box">
   <h1 class="subtitle is-size-4 has-text-centered">All Customers</h1>
+  <app-loading *ngIf="loading; else content"></app-loading>
+</div>
+<ng-template #content>
   <div class="columns">
     <div class="column is-4 is-offset-4">
       <a routerLink="/admin/customers/register"
@@ -34,7 +37,9 @@
         <td>{{customer.forename}}</td>
         <td>{{customer.surname}}</td>
         <td>{{customer.gender}}</td>
-        <td>{{customer.user.email}}</td>
+        <td>
+          <a href="mailto:{{customer.user.email}}">{{customer.user.email}}</a>
+        </td>
         <td>{{customer.phone || '-'}}</td>
         <td class="has-text-centered">
           <a routerLink="/admin/customers/{{customer._id}}"
@@ -45,5 +50,4 @@
       </tr>
     </ng-container>
   </table>
-
-</div>
+</ng-template>

@@ -55,6 +55,7 @@
                  [class.is-static]="ct.editing === false"
                  [(ngModel)]="ct.name"
                  [readonly]="ct.editing === false"
+                 placeholder="Class Name"
                  style="margin-bottom: 1em;">
 
           <div id="description"
@@ -63,6 +64,7 @@
                *ngIf="!ct.editing">{{ct.description}}</p>
             <textarea *ngIf="ct.editing"
                       class="textarea has-text-centered"
+                      placeholder="Class description"
                       [(ngModel)]="ct.description"></textarea>
           </div>
 

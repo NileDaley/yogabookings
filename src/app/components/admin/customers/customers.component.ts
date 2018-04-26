@@ -6,6 +6,7 @@ import { DataService } from 'app/services/data.service';
   templateUrl: './customers.component.html'
 })
 export class CustomersComponent implements OnInit {
+  loading = true;
   customers: Array<any>;
 
   constructor(private _dataService: DataService) {}
@@ -13,7 +14,10 @@ export class CustomersComponent implements OnInit {
   ngOnInit() {
     this._dataService
       .getCustomers()
-      .then(res => (this.customers = res['data']))
+      .then(res => {
+        this.customers = res['data'];
+        this.loading = false;
+      })
       .catch(error => console.error(error));
   }
 
